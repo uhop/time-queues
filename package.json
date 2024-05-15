@@ -1,0 +1,61 @@
+{
+  "name": "time-queues",
+  "version": "1.0.0",
+  "description": "Time queues to organize multitasking and scheduled tasks.",
+  "type": "module",
+  "exports": {
+    "import": "./src/*",
+    "default": "./cjs/*"
+  },
+  "scripts": {
+    "test": "tape6 --flags FO",
+    "prepareDist": "node scripts/prepareDist.js",
+    "build": "babel src --out-dir cjs",
+    "prepublishOnly": "npm run prepareDist && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/uhop/time-queues.git"
+  },
+  "keywords": [
+    "timer",
+    "time",
+    "queue"
+  ],
+  "author": "Eugene Lazutkin <eugene.lazutkin@gmail.com> (https://www.lazutkin.com/)",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/uhop/time-queues/issues"
+  },
+  "homepage": "https://github.com/uhop/time-queues#readme",
+  "files": [
+    "/src",
+    "/cjs"
+  ],
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
+  "tape6": {
+    "tests": [
+      "/tests/test-*.*js"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.5",
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "tape-six": "^0.9.5"
+  },
+  "dependencies": {
+    "list-toolkit": "^1.0.1"
+  }
+}

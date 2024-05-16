@@ -83,7 +83,7 @@ export class Scheduler {
       task.fn(task, this);
     }
 
-    if (!this.queue.isEmpty) {
+    if (!this.paused && !this.queue.isEmpty) {
       this.handle = setTimeout(this.processTasks.bind(this), this.nextTime - Date.now());
     }
   }

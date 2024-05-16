@@ -4,17 +4,11 @@
   "description": "Time queues to organize multitasking and scheduled tasks.",
   "type": "module",
   "exports": {
-    "./*": {
-      "require": "./cjs/*",
-      "default": "./src/*"
-    }
+    "./*": "./src/*"
   },
   "scripts": {
     "test": "tape6 --flags FO",
-    "start": "tape6-server --trace",
-    "prepareDist": "node scripts/prepareDist.js",
-    "build": "babel src --out-dir cjs",
-    "prepublishOnly": "npm run prepareDist && npm run build"
+    "start": "tape6-server --trace"
   },
   "repository": {
     "type": "git",
@@ -32,30 +26,14 @@
   },
   "homepage": "https://github.com/uhop/time-queues#readme",
   "files": [
-    "/src",
-    "/cjs"
+    "/src"
   ],
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ]
-  },
   "tape6": {
     "tests": [
       "/tests/test-*.*js"
     ]
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.5",
-    "@babel/core": "^7.24.5",
-    "@babel/preset-env": "^7.24.5",
     "tape-six": "^0.9.5"
   },
   "dependencies": {

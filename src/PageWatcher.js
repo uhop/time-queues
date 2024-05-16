@@ -20,10 +20,10 @@ const getState = () => {
   return 'passive';
 };
 
-export class PageLifecycleWatcher {
+export class PageWatcher {
   constructor(started) {
     this.list = new List();
-    this.oldState = 'passive';
+    this.oldState = getState();
     this.paused = !started;
     if (started) this.resume();
   }
@@ -39,7 +39,8 @@ export class PageLifecycleWatcher {
     watchedEvents.forEach(type => addEventListener(type, this, eventHandlerOptions));
   }
 
-  enqueue(fn) {
+  enqueue(fn, initialize) {
+    if (initialize) setTimeout(fn, 0);
     const task = new MicroTask(fn);
     this.list.pushBack(task);
     return task;
@@ -85,6 +86,6 @@ export class PageLifecycleWatcher {
   }
 }
 
-export const pageLifecycleWatcher = new PageLifecycleWatcher();
+export const pageWatcher = new PageWatcher();
 
-export default pageLifecycleWatcher;
+export default pageWatcher;

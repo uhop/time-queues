@@ -1,6 +1,6 @@
 'use strict';
 
-// a helper for PageLifecycleWatcher
+// a helper for PageWatcher
 
 export const watchStates = (queue, resumeStatesList = ['active']) => {
   const resumeStates = new Set(resumeStatesList);

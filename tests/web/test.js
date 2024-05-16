@@ -4,13 +4,13 @@ import watchStates from 'time-queues/watch-states.js';
 import {whenDomLoaded, whenLoaded} from 'time-queues/when-loaded.js';
 
 import frameQueue from 'time-queues/FrameQueue.js';
-import idleQueue from 'time-queues/IdleQueue.js';
+import {defer} from 'time-queues/IdleQueue.js';
 import scheduler from 'time-queues/Scheduler.js';
 
 // reflect state in DOM
 
 const reflectState = state => {
-  idleQueue.enqueue(() => console.log('state:', state));
+  defer(() => console.log('state:', state));
   frameQueue.enqueue(() => {
     document.documentElement.className = 'state-' + state;
     document.querySelector('h1 .state').textContent = state;
@@ -44,7 +44,7 @@ const moveAndRepeat = obj => (_, scheduler) => {
 whenDomLoaded(() => {
   for (let i = 0; i < N; i++) {
     const color = colors[i];
-    idleQueue.enqueue(() => {
+    defer(() => {
       const obj = document.createElement('div');
       obj.className = 'test-object';
       obj.style.backgroundColor = color;

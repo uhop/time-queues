@@ -104,4 +104,6 @@ export class IdleQueue {
 
 export const idleQueue = new IdleQueue();
 
+export const defer = idleQueue.enqueue.bind(idleQueue);
+
 export default idleQueue;

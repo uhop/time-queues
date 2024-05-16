@@ -4,10 +4,11 @@ import List from 'list-toolkit/List.js';
 import MicroTask from './MicroTask.js';
 
 export class AnimationQueue {
-  constructor(paused) {
+  constructor(paused, batchInMs) {
     this.list = new List();
     this.paused = Boolean(paused);
     this.handle = null;
+    this.batch = batchInMs;
   }
 
   get isEmpty() {
@@ -70,12 +71,19 @@ export class AnimationQueue {
       this.handle = null;
     }
 
-    const list = this.list;
-    this.list = new List();
-
-    while (!list.isEmpty) {
-      const task = list.popFront();
-      task.fn(timeStamp, task, this);
+    if (!isNaN(this.batch)) {
+      const start = Date.now();
+      while (Date.now() - start < this.batch && !this.list.isEmpty) {
+        const task = this.list.popFront();
+        task.fn(timeStamp, task, this);
+      }
+    } else {
+      const list = this.list;
+      this.list = new List();
+      while (!list.isEmpty) {
+        const task = list.popFront();
+        task.fn(timeStamp, task, this);
+      }
     }
 
     if (!this.list.isEmpty) {

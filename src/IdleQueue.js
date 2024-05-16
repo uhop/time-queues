@@ -6,11 +6,12 @@ import MicroTask from './MicroTask.js';
 // Based on information from https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API
 
 export class IdleQueue {
-  constructor(paused, options) {
+  constructor(paused, options, timeoutBatchInMs) {
     this.list = new List();
     this.paused = Boolean(paused);
     this.handle = null;
     this.options = options;
+    this.timeoutBatch = timeoutBatchInMs;
   }
 
   get isEmpty() {
@@ -74,11 +75,19 @@ export class IdleQueue {
     }
 
     if (deadline.didTimeout) {
-      const list = this.list;
-      this.list = new List();
-      while (!list.isEmpty) {
-        const task = list.popFront();
-        task.fn(deadline, task, this);
+      if (!isNaN(this.timeoutBatch)) {
+        const start = Date.now();
+        while (Date.now() - start < this.timeoutBatch && !this.list.isEmpty) {
+          const task = this.list.popFront();
+          task.fn(deadline, task, this);
+        }
+      } else {
+        const list = this.list;
+        this.list = new List();
+        while (!list.isEmpty) {
+          const task = list.popFront();
+          task.fn(deadline, task, this);
+        }
       }
     } else {
       while (deadline.timeRemaining() > 0 && !this.list.isEmpty) {

@@ -3,7 +3,7 @@
 import List from 'list-toolkit/List.js';
 import MicroTask from './MicroTask.js';
 
-export class AnimationQueue {
+export class FrameQueue {
   constructor(paused, batchInMs) {
     this.list = new List();
     this.paused = Boolean(paused);
@@ -92,6 +92,6 @@ export class AnimationQueue {
   }
 }
 
-export const animationQueue = new AnimationQueue();
+export const frameQueue = new FrameQueue();
 
-export default animationQueue;
+export default frameQueue;

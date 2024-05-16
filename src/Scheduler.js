@@ -11,9 +11,10 @@ export class Task {
 }
 
 export class Scheduler {
-  constructor(paused) {
+  constructor(paused, tolerance = 4) {
     this.queue = new MinHeap({less: (a, b) => a.time < b.time});
     this.paused = Boolean(paused);
+    this.tolerance = tolerance;
     this.handle = null;
   }
 
@@ -88,7 +89,7 @@ export class Scheduler {
       this.handle = null;
     }
 
-    while (!this.queue.isEmpty && this.queue.top.time <= Date.now()) {
+    while (!this.queue.isEmpty && this.queue.top.time <= Date.now() + this.tolerance) {
       const task = this.queue.pop();
       task.fn(task, this);
     }

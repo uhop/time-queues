@@ -2,21 +2,27 @@
 
 import MinHeap from 'list-toolkit/MinHeap.js';
 import MicroTask from './MicroTask.js';
+import MicroTaskQueue from './MicroTaskQueue.js';
 
 export class Task extends MicroTask {
   constructor(delay, fn) {
     super(fn);
-    this.delay = delay;
-    this.time = Date.now() + delay;
+    if (delay instanceof Date) {
+      this.time = delay.getTime();
+      this.delay = this.time - Date.now();
+    } else {
+      this.time = Date.now() + delay;
+      this.delay = delay;
+    }
   }
 }
 
-export class Scheduler {
+export class Scheduler extends MicroTaskQueue {
   constructor(paused, tolerance = 4) {
+    super(paused);
     this.queue = new MinHeap({less: (a, b) => a.time < b.time});
-    this.paused = Boolean(paused);
     this.tolerance = tolerance;
-    this.handle = null;
+    this.stopQueue = null;
   }
 
   get isEmpty() {
@@ -28,10 +34,9 @@ export class Scheduler {
   }
 
   pause() {
-    this.paused = true;
-    if (this.handle) {
-      clearTimeout(this.handle);
-      this.handle = null;
+    if (!this.paused) {
+      this.paused = true;
+      if (this.stopQueue) this.stopQueue = (this.stopQueue(), null);
     }
     return this;
   }
@@ -55,8 +60,8 @@ export class Scheduler {
     const nextTime = this.nextTime;
     this.queue.push(task);
     if (nextTime > this.nextTime) {
-      if (this.handle) clearTimeout(this.handle);
-      this.handle = setTimeout(this.processTasks.bind(this), this.nextTime - Date.now());
+      if (this.stopQueue) this.stopQueue();
+      this.stopQueue = this.startQueue();
     }
 
     return task;
@@ -69,8 +74,7 @@ export class Scheduler {
       return this;
     }
 
-    // we are not paused and the task is the top
-    // remove top and restart a timer if needed
+    // we are not paused and the task is the top => remove top and restart a timer if needed
     this.pause();
     this.queue.pop();
     this.resume();
@@ -84,20 +88,27 @@ export class Scheduler {
     if (!paused) this.resume();
   }
 
-  processTasks() {
-    if (this.handle) {
-      clearTimeout(this.handle);
-      this.handle = null;
-    }
+  startQueue() {
+    const handle = setTimeout(
+      this.processTasks.bind(this),
+      Math.max(this.nextTime - Date.now(), 0)
+    );
+    return () => void clearTimeout(handle);
+  }
 
-    while (!this.queue.isEmpty && this.queue.top.time <= Date.now() + this.tolerance) {
+  processTasks() {
+    if (this.stopQueue) this.stopQueue = (this.stopQueue(), null);
+
+    while (
+      !this.queue.isEmpty &&
+      !this.paused &&
+      this.queue.top.time <= Date.now() + this.tolerance
+    ) {
       const task = this.queue.pop();
       task.fn(task, this);
     }
 
-    if (!this.paused && !this.queue.isEmpty) {
-      this.handle = setTimeout(this.processTasks.bind(this), this.nextTime - Date.now());
-    }
+    if (!this.paused && !this.queue.isEmpty) this.stopQueue = this.startQueue();
   }
 }
 

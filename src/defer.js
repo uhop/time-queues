@@ -8,8 +8,6 @@ if (typeof requestIdleCallback == 'function') {
   deferImplementation = setImmediate;
 }
 
-export const defer = fn => {
-  deferImplementation(fn);
-};
+export const defer = fn => void deferImplementation(fn);
 
 export default defer;

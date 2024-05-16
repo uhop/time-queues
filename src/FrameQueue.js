@@ -1,74 +1,23 @@
 'use strict';
 
 import List from 'list-toolkit/List.js';
-import MicroTask from './MicroTask.js';
+import ListQueue from './ListQueue.js';
 
-export class FrameQueue {
+export class FrameQueue extends ListQueue {
   constructor(paused, batchInMs) {
-    this.list = new List();
-    this.paused = Boolean(paused);
-    this.handle = null;
+    super(paused);
     this.batch = batchInMs;
   }
 
-  get isEmpty() {
-    return this.list.isEmpty;
-  }
-
-  pause() {
-    this.paused = true;
-    if (this.handle) {
-      cancelAnimationFrame(this.handle);
-      this.handle = null;
-    }
-    return this;
-  }
-
-  resume() {
-    if (this.paused) {
-      this.paused = false;
-      if (!this.list.isEmpty) {
-        this.handle = requestAnimationFrame(this.processTasks.bind(this));
-      }
-    }
-    return this;
-  }
-
-  enqueue(fn) {
-    const task = new MicroTask(fn);
-    this.list.pushBack(task);
-    if (!this.paused && !this.handle) {
-      this.handle = requestAnimationFrame(this.processTasks.bind(this));
-    }
-    return task;
-  }
-
-  dequeue(task) {
-    for (const node of this.list.getNodeIterator()) {
-      if (node.value === task) {
-        this.list.remove(node);
-        break;
-      }
-    }
-    if (!this.paused && this.handle && this.list.isEmpty) {
-      cancelAnimationFrame(this.handle);
-      this.handle = null;
-    }
-    return this;
-  }
-
-  clear() {
-    const paused = this.paused;
-    if (!paused) this.pause();
-    this.list.clear();
-    if (!paused) this.resume();
-    return this;
+  startQueue() {
+    const handle = requestAnimationFrame(this.processTasks.bind(this));
+    return () => void cancelAnimationFrame(handle);
   }
 
   processTasks(timeStamp) {
-    if (this.handle) {
-      cancelAnimationFrame(this.handle);
-      this.handle = null;
+    if (this.stopQueue) {
+      this.stopQueue();
+      this.stopQueue = null;
     }
 
     if (!isNaN(this.batch)) {
@@ -86,9 +35,7 @@ export class FrameQueue {
       }
     }
 
-    if (!this.list.isEmpty) {
-      this.handle = requestAnimationFrame(this.processTasks.bind(this));
-    }
+    if (!this.list.isEmpty) this.stopQueue = this.startQueue();
   }
 }
 

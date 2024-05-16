@@ -2,6 +2,7 @@
 
 import List from 'list-toolkit/List.js';
 import MicroTask from './MicroTask.js';
+import ListQueue from './ListQueue.js';
 
 // Based on information from https://developer.chrome.com/docs/web-platform/page-lifecycle-api
 
@@ -20,45 +21,39 @@ const getState = () => {
   return 'passive';
 };
 
-export class PageWatcher {
+export class PageWatcher extends ListQueue {
   constructor(started) {
-    this.list = new List();
+    super(!started);
     this.oldState = getState();
-    this.paused = !started;
     if (started) this.resume();
   }
 
   pause() {
     this.paused = true;
     watchedEvents.forEach(type => removeEventListener(type, this, eventHandlerOptions));
+    return super.pause();
   }
 
   resume() {
-    this.paused = false;
-    this.oldState = getState();
     watchedEvents.forEach(type => addEventListener(type, this, eventHandlerOptions));
+    return super.resume();
   }
 
   enqueue(fn, initialize) {
-    const task = new MicroTask(fn);
+    const task = super.enqueue(fn);
     if (initialize) queueMicrotask(() => fn(this.oldState, this.oldState, task, this));
-    this.list.pushBack(task);
     return task;
   }
 
-  dequeue(task) {
-    for (const node of this.list.getNodeIterator()) {
-      if (node.value === task) {
-        this.list.remove(node);
-        break;
-      }
-    }
-    return this;
-  }
+  // Implemented in ListQueue: dequeue()
 
   clear() {
     this.list.clear();
     return this;
+  }
+
+  startQueue() {
+    return null;
   }
 
   handleEvent(event) {

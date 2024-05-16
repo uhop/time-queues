@@ -59,6 +59,6 @@
     "tape-six": "^0.9.5"
   },
   "dependencies": {
-    "list-toolkit": "^1.0.1"
+    "list-toolkit": "^1.0.2"
   }
 }

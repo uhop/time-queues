@@ -1,0 +1,42 @@
+/* states */
+
+.state-active {
+  color: black;
+  background-color: white;
+}
+
+.state-passive {
+  color: black;
+  background-color: lightblue;
+}
+
+.state-hidden {
+  color: darkgray;
+  background-color: lightgray;
+}
+
+.state-frozen {
+  color: white;
+  background-color: darkgreen;
+}
+
+.state-terminated {
+  color: white;
+  background-color: darkred;
+}
+
+/* a test object */
+
+.test-object {
+  position: absolute;
+
+  width: 4rem;
+  height: 4rem;
+
+  border: 3px solid black;
+  border-radius: 2rem;
+
+  background-color: red;
+
+  transition: top 1.25s ease-in-out, left 1.25s ease-in-out;
+}

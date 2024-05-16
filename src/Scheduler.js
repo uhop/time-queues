@@ -1,11 +1,12 @@
 'use strict';
 
 import MinHeap from 'list-toolkit/MinHeap.js';
+import MicroTask from './MicroTask.js';
 
-export class Task {
+export class Task extends MicroTask {
   constructor(delay, fn) {
+    super(fn);
     this.delay = delay;
-    this.fn = fn;
     this.time = Date.now() + delay;
   }
 }

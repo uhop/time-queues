@@ -61,7 +61,17 @@ export class Scheduler {
   }
 
   dequeue(task) {
-    // TODO: remove task from queue
+    if (this.queue.isEmpty) return this;
+    if (this.paused || this.queue.top !== task) {
+      this.queue.remove(task);
+      return this;
+    }
+
+    // we are not paused and the task is the top
+    // remove top and restart a timer if needed
+    this.pause();
+    this.queue.pop();
+    this.resume();
     return this;
   }
 

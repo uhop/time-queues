@@ -26,3 +26,12 @@ scheduler.enqueue(20000, (task, scheduler) => {
   console.log(`Now we stop the queue for good at ${(Date.now() - startTime) / 1000}s...`);
   scheduler.pause().clear();
 });
+
+const prohibitedTask = scheduler.enqueue(3000, () => {
+  throw new Error('Should not be called');
+});
+
+scheduler.enqueue(2000, (_, scheduler) => {
+  console.log(`We are removing the prohibited task at ${(Date.now() - startTime) / 1000}s...`);
+  scheduler.dequeue(prohibitedTask);
+});

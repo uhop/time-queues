@@ -40,8 +40,8 @@ export class PageWatcher {
   }
 
   enqueue(fn, initialize) {
-    if (initialize) setTimeout(fn, 0);
     const task = new MicroTask(fn);
+    if (initialize) queueMicrotask(() => fn(this.oldState, this.oldState, task, this));
     this.list.pushBack(task);
     return task;
   }

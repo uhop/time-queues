@@ -4,11 +4,14 @@
   "description": "Time queues to organize multitasking and scheduled tasks.",
   "type": "module",
   "exports": {
-    "import": "./src/*",
-    "default": "./cjs/*"
+    "./*": {
+      "require": "./cjs/*",
+      "default": "./src/*"
+    }
   },
   "scripts": {
     "test": "tape6 --flags FO",
+    "start": "tape6-server --trace",
     "prepareDist": "node scripts/prepareDist.js",
     "build": "babel src --out-dir cjs",
     "prepublishOnly": "npm run prepareDist && npm run build"

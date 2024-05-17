@@ -1,7 +1,6 @@
 'use strict';
 
 import List from 'list-toolkit/List.js';
-import MicroTask from './MicroTask.js';
 import MicroTaskQueue from './MicroTaskQueue.js';
 
 export class ListQueue extends MicroTaskQueue {
@@ -43,7 +42,7 @@ export class ListQueue extends MicroTaskQueue {
   dequeue(task) {
     for (const node of this.list.getNodeIterator()) {
       if (node.value === task) {
-        this.list.remove(node);
+        List.pop(node);
         break;
       }
     }

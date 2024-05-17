@@ -329,5 +329,5 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
-* 1.0.1 Minor update in README. No need to upgrade.*
+* 1.0.1 *Minor update in README. No need to upgrade.*
 * 1.0.0 *Initial release.*

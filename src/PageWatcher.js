@@ -1,7 +1,5 @@
 'use strict';
 
-import List from 'list-toolkit/List.js';
-import MicroTask from './MicroTask.js';
 import ListQueue from './ListQueue.js';
 
 // Based on information from https://developer.chrome.com/docs/web-platform/page-lifecycle-api
@@ -24,7 +22,7 @@ const getState = () => {
 export class PageWatcher extends ListQueue {
   constructor(started) {
     super(!started);
-    this.oldState = getState();
+    this.currentState = getState();
     if (started) this.resume();
   }
 
@@ -41,7 +39,7 @@ export class PageWatcher extends ListQueue {
 
   enqueue(fn, initialize) {
     const task = super.enqueue(fn);
-    if (initialize) queueMicrotask(() => fn(this.oldState, this.oldState, task, this));
+    if (initialize) queueMicrotask(() => fn(this.currentState, this.currentState, task, this));
     return task;
   }
 
@@ -57,7 +55,7 @@ export class PageWatcher extends ListQueue {
   }
 
   handleEvent(event) {
-    let state = this.oldState;
+    let state = this.currentState;
 
     switch (event.type) {
       case 'freeze':
@@ -71,15 +69,30 @@ export class PageWatcher extends ListQueue {
         break;
     }
 
-    if (this.oldState === state) return;
+    if (this.currentState === state) return;
 
     for (const task of this.list) {
-      task.fn(state, this.oldState, task, this);
+      task.fn(state, this.currentState, task, this);
     }
 
-    this.oldState = state;
+    this.currentState = state;
   }
 }
+
+export const watchStates = (queue, resumeStatesList = ['active']) => {
+  const resumeStates = new Set(resumeStatesList);
+
+  // queues can be paused and resumed at any time
+  // so we don't need to check if queue is paused
+  // calling pause/resume multiple times is fine
+  return state => {
+    if (resumeStates.has(state)) {
+      queue.resume();
+    } else {
+      queue.pause();
+    }
+  };
+};
 
 export const pageWatcher = new PageWatcher();
 

@@ -47,7 +47,8 @@ export class ListQueue extends MicroTaskQueue {
         break;
       }
     }
-    if (!this.paused && this.list.isEmpty && this.stopQueue) this.stopQueue = (this.stopQueue(), null);
+    if (!this.paused && this.list.isEmpty && this.stopQueue)
+      this.stopQueue = (this.stopQueue(), null);
     return this;
   }
 
@@ -60,7 +61,9 @@ export class ListQueue extends MicroTaskQueue {
   }
 
   // API to be overridden in subclasses
-  startQueue() {}
+  startQueue() {
+    return null;
+  }
 }
 
 export default ListQueue;

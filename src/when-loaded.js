@@ -4,6 +4,16 @@ import List from 'list-toolkit/List.js';
 
 const waitingForLoad = new List();
 
+export const remove = fn => {
+  for (const node of waitingForLoad.getNodeIterable()) {
+    if (node.value === fn) {
+      List.pop(node);
+      return true;
+    }
+  }
+  return false;
+}
+
 const handleLoaded = () => {
   while (!waitingForLoad.isEmpty) waitingForLoad.pop()();
 };

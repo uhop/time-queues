@@ -63,7 +63,9 @@ Don't forget to look at a test web application that uses the library. For that y
 npm start
 ```
 
-And navigate to http://localhost:3000/tests/web/test.html &mdash; don't forget to open the console and play around: switch tabs, make other window active, navigate away and come back, and so on. See how queues work in `tests/web/test.js`.
+And navigate to http://localhost:3000/tests/web/test.html &mdash; don't forget to open the console and
+play around: switch tabs, make other window active, navigate away and come back, and so on.
+See how queues work in [tests/web/test.js](https://github.com/uhop/time-queues/blob/main/tests/web/test.js).
 
 ## Usage
 
@@ -71,7 +73,8 @@ The full documentation is available in the project's [wiki](https://github.com/u
 
 ### ListQueue
 
-`ListQueue` is a list-based task queue that executes tasks in the order they were added. It serves as a base class for other task queues. The following methods are available:
+`ListQueue` is a list-based task queue that executes tasks in the order they were added.
+It serves as a base class for other task queues. The following methods are available:
 
 | Method | Description |
 |:---|:---|

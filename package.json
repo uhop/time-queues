@@ -1,6 +1,6 @@
 {
   "name": "time-queues",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Time queues to organize multitasking and scheduled tasks.",
   "type": "module",
   "exports": {

@@ -1,6 +1,6 @@
 # time-queues [![NPM version][npm-img]][npm-url]
 
-[npm-img]: https://img.shields.io/npm/v/time-queus.svg
+[npm-img]: https://img.shields.io/npm/v/time-queues.svg
 [npm-url]: https://npmjs.org/package/time-queues
 
 `time-queues` is an efficient library for organizing asynchronous multitasking and scheduled tasks.
@@ -329,4 +329,5 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+* 1.0.1 Minor update in README. No need to upgrade.*
 * 1.0.0 *Initial release.*

@@ -1,7 +1,7 @@
 # time-queues [![NPM version][npm-img]][npm-url]
 
-[npm-img]:      https://img.shields.io/npm/v/time-queus.svg
-[npm-url]:      https://npmjs.org/package/time-queues
+[npm-img]: https://img.shields.io/npm/v/time-queus.svg
+[npm-url]: https://npmjs.org/package/time-queues
 
 `time-queues` is an efficient library for organizing asynchronous multitasking and scheduled tasks.
 It can be used in a browser and in server-side environments like `Node`, `Deno` and `Bun`.
@@ -10,7 +10,7 @@ It depends only on [list-toolkit](https://github.com/uhop/list-toolkit), which i
 The following features are provided:
 
 * All environments:
-  * **Scheduler**: a task queue that schedules time-based tasks in the future.
+  * **Scheduler**: a `MinHeap`-based task queue that schedules time-based tasks in the future.
     * **repeat()**: a function that creates a repeatable task.
   * **defer()**: a function that executes a task at a later time in the next tick.
 * Browsers:
@@ -33,6 +33,14 @@ Internally it uses [List Toolkit](https://github.com/uhop/list-toolkit) and leve
 * [queueMicrotask()](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)
 * [setTimeout()](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
 * Various events and properties.
+
+There are many articles on the subject that detail how to leverage the APIs writing efficient applications.
+Some of them are:
+
+* [Background Tasks API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API)
+* [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api)
+
+This package eliminates the need to write code that you'll write anyway following best practices.
 
 ## Installation
 
@@ -62,7 +70,7 @@ Subclasses should implement `startQueue()`.
 
 ### Scheduler
 
-`Scheduler` is a task queue that schedules time-based tasks in the future.
+`Scheduler` is a `MinHeap`-based task queue that schedules time-based tasks in the future.
 It can used to run periodic updates or one-time events.
 
 `Scheduler` is not based on `ListQueue`, but implements its API.

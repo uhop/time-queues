@@ -49,6 +49,22 @@ This package eliminates the need to write code that you'll write anyway followin
 npm install time-queues
 ```
 
+If you want to check out the source code, you can use the following command:
+
+```sh
+git clone https://github.com/uhop/time-queues.git
+cd time-queues
+npm install
+```
+
+Don't forget to look at a test web application that uses the library. For that you should start a server:
+
+```sh
+npm start
+```
+
+And navigate to http://localhost:3000/tests/web/test.html &mdash; don't forget to open the console and play around: switch tabs, make other window active, navigate away and come back, and so on. See how queues work in `tests/web/test.js`.
+
 ## Usage
 
 The full documentation is available in the project's [wiki](https://github.com/uhop/time-queues/wiki). Below is a cheat sheet of the API.

@@ -30,29 +30,35 @@ const colors = ['red', 'green', 'blue', 'yellow', 'orange', 'cyan', 'magenta'],
   sizeX = 300,
   sizeY = 300;
 
-const moveObjectRandomly = obj => {
-  obj.style.left = `${shiftX + Math.random() * sizeX}px`;
-  obj.style.top = `${shiftY + Math.random() * sizeY}px`;
+const moveRandomly = element => {
+  element.style.left = `${shiftX + Math.random() * sizeX}px`;
+  element.style.top = `${shiftY + Math.random() * sizeY}px`;
 };
 
-const moveAndRepeat = obj => repeat(() => moveObjectRandomly(obj), 1000);
+const createTestObject = color => {
+  const element = document.createElement('div');
+  element.className = 'test-object';
+  element.style.backgroundColor = color;
+  moveRandomly(element);
+  return element;
+};
 
 // create objects
 whenDomLoaded(() => {
   for (let i = 0; i < N; i++) {
     const color = colors[i];
+
     defer(() => {
-      const obj = document.createElement('div');
-      obj.className = 'test-object';
-      obj.style.backgroundColor = color;
-      moveObjectRandomly(obj);
+      const element = createTestObject(color);
+
       frameQueue.enqueue(() => {
-        document.documentElement.appendChild(obj);
-        scheduler.enqueue(moveAndRepeat(obj), 20);
+        document.documentElement.appendChild(element);
+        scheduler.enqueue(repeat(() => moveRandomly(element), 1000), 20);
       });
     });
   }
 });
 
+// log a page loading status when it is changed
 whenDomLoaded(() => console.log('DOM loaded'));
 whenLoaded(() => console.log('all loaded'));

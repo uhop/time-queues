@@ -38,6 +38,7 @@ There are many articles on the subject that detail how to leverage the APIs writ
 Some of them are:
 
 * [Background Tasks API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API)
+* [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
 * [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api)
 
 This package eliminates the need to write code that you'll write anyway following best practices.
@@ -268,7 +269,7 @@ pageWatcher.enqueue(watchStates(scheduler, ['active', 'passive']), true);
 `whenDomLoaded()` is a helper that executes a function when the DOM is loaded.
 If the DOM is already loaded, the function will be executed with `queueMicrotask()`.
 Otherwise it'll be queued and executed when the DOM is loaded.
-See [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/DOMContentLoaded_event) for more information.
+See [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event) for more information.
 
 The function signature is:
 

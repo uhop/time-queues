@@ -49,7 +49,7 @@ export class Scheduler extends MicroTaskQueue {
     return this;
   }
 
-  enqueue(delay, fn) {
+  enqueue(fn, delay) {
     const task = new Task(delay, fn);
 
     if (this.paused) {
@@ -111,6 +111,14 @@ export class Scheduler extends MicroTaskQueue {
     if (!this.paused && !this.queue.isEmpty) this.stopQueue = this.startQueue();
   }
 }
+
+export const repeat = (fn, delay) => {
+  const repeatableTask = (task, scheduler) => {
+    fn(task, scheduler);
+    scheduler.enqueue(repeatableTask, isNaN(delay) ? task.delay : delay);
+  };
+  return repeatableTask;
+};
 
 export const scheduler = new Scheduler();
 

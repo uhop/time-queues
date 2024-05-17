@@ -1,11 +1,11 @@
-import pageWatcher from 'time-queues/PageWatcher.js';
-import watchStates from 'time-queues/watch-states.js';
+import pageWatcher, {watchStates} from 'time-queues/PageWatcher.js';
 
-import {whenDomLoaded, whenLoaded} from 'time-queues/when-loaded.js';
+import whenDomLoaded from 'time-queues/when-dom-loaded.js';
+import whenLoaded from 'time-queues/when-loaded.js';
 
 import frameQueue from 'time-queues/FrameQueue.js';
 import {defer} from 'time-queues/IdleQueue.js';
-import scheduler from 'time-queues/Scheduler.js';
+import scheduler, {repeat} from 'time-queues/Scheduler.js';
 
 // reflect state in DOM
 
@@ -35,10 +35,7 @@ const moveObjectRandomly = obj => {
   obj.style.top = `${shiftY + Math.random() * sizeY}px`;
 };
 
-const moveAndRepeat = obj => (_, scheduler) => {
-  moveObjectRandomly(obj);
-  scheduler.enqueue(1000, moveAndRepeat(obj));
-};
+const moveAndRepeat = obj => repeat(() => moveObjectRandomly(obj), 1000);
 
 // create objects
 whenDomLoaded(() => {
@@ -51,7 +48,7 @@ whenDomLoaded(() => {
       moveObjectRandomly(obj);
       frameQueue.enqueue(() => {
         document.documentElement.appendChild(obj);
-        scheduler.enqueue(20, moveAndRepeat(obj));
+        scheduler.enqueue(moveAndRepeat(obj), 20);
       });
     });
   }

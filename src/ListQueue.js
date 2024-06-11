@@ -1,6 +1,6 @@
 'use strict';
 
-import List from 'list-toolkit/List.js';
+import List from 'list-toolkit/list.js';
 import MicroTaskQueue from './MicroTaskQueue.js';
 
 export class ListQueue extends MicroTaskQueue {

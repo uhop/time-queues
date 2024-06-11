@@ -1,6 +1,6 @@
 'use strict';
 
-import List from 'list-toolkit/List.js';
+import List from 'list-toolkit/list.js';
 import ListQueue from './ListQueue.js';
 
 export class FrameQueue extends ListQueue {

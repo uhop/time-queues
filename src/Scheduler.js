@@ -1,6 +1,6 @@
 'use strict';
 
-import MinHeap from 'list-toolkit/MinHeap.js';
+import MinHeap from 'list-toolkit/heap.js';
 import MicroTask from './MicroTask.js';
 import MicroTaskQueue from './MicroTaskQueue.js';
 

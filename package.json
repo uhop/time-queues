@@ -1,6 +1,6 @@
 {
   "name": "time-queues",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Time queues to organize multitasking and scheduled tasks.",
   "type": "module",
   "exports": {
@@ -23,6 +23,7 @@
     "queue"
   ],
   "author": "Eugene Lazutkin <eugene.lazutkin@gmail.com> (https://www.lazutkin.com/)",
+  "funding": "https://github.com/sponsors/uhop",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/uhop/time-queues/issues"

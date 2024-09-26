@@ -63,8 +63,9 @@ Don't forget to look at a test web application that uses the library. For that y
 npm start
 ```
 
-And navigate to http://localhost:3000/tests/web/test.html &mdash; don't forget to open the console and
-play around: switch tabs, make other window active, navigate away and come back, and so on.
+And navigate to [http://localhost:3000/tests/web/](http://localhost:3000/tests/web/) &mdash;
+don't forget to open the console and play around: switch tabs, make other window active,
+navigate away and come back, and so on.
 See how queues work in [tests/web/test.js](https://github.com/uhop/time-queues/blob/main/tests/web/test.js).
 
 ## Usage
@@ -329,6 +330,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+* 1.0.3 *Updated deps (`list-toolkit`) to fix a minor bug.*
 * 1.0.2 *Updated deps (`list-toolkit`).*
 * 1.0.1 *Minor update in README. No need to upgrade.*
 * 1.0.0 *Initial release.*

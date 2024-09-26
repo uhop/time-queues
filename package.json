@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "tape6 --flags FO",
+    "test:bun": "tape6-bun --flags FO",
+    "test:deno-original": "tape6-deno --flags FO",
+    "test:deno": "deno run -A `tape6-runner main` --flags FO",
     "start": "tape6-server --trace"
   },
   "repository": {
@@ -31,12 +34,18 @@
   "tape6": {
     "tests": [
       "/tests/test-*.*js"
-    ]
+    ],
+    "importmap": {
+      "imports": {
+        "tape-six": "/node_modules/tape-six/index.js",
+        "time-queues/": "/src/"
+      }
+    }
   },
   "devDependencies": {
-    "tape-six": "^0.9.5"
+    "tape-six": "^0.12.2"
   },
   "dependencies": {
-    "list-toolkit": "^2.0.0"
+    "list-toolkit": "^2.1.1"
   }
 }

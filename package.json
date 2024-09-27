@@ -39,6 +39,7 @@
     "importmap": {
       "imports": {
         "tape-six": "/node_modules/tape-six/index.js",
+        "list-toolkit/": "/node_modules/list-toolkit/src/",
         "time-queues/": "/src/"
       }
     }

@@ -7,7 +7,7 @@ const waitingForDom = new ValueList();
 export const remove = fn => {
   for (const node of waitingForDom.getNodeIterable()) {
     if (node.value === fn) {
-      ValueList.pop(node);
+      waitingForDom.removeNode(node);
       return true;
     }
   }

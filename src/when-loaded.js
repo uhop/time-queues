@@ -7,7 +7,7 @@ const waitingForLoad = new ValueList();
 export const remove = fn => {
   for (const node of waitingForLoad.getNodeIterable()) {
     if (node.value === fn) {
-      ValueList.pop(node);
+      waitingForLoad.removeNode(node);
       return true;
     }
   }

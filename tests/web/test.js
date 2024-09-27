@@ -45,7 +45,7 @@ const createTestObject = color => {
 
 // create objects
 whenDomLoaded(() => {
-  for (let i = 0; i < N; i++) {
+  for (let i = 0; i < N; ++i) {
     const color = colors[i];
 
     defer(() => {

@@ -40,12 +40,7 @@ export class ListQueue extends MicroTaskQueue {
   }
 
   dequeue(task) {
-    for (const node of this.list.getNodeIterator()) {
-      if (node.value === task) {
-        List.pop(node);
-        break;
-      }
-    }
+    List.pop(task);
     if (!this.paused && this.list.isEmpty && this.stopQueue)
       this.stopQueue = (this.stopQueue(), null);
     return this;

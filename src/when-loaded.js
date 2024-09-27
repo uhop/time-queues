@@ -1,13 +1,13 @@
 'use strict';
 
-import List from 'list-toolkit/list.js';
+import ValueList from 'list-toolkit/value-list.js';
 
-const waitingForLoad = new List();
+const waitingForLoad = new ValueList();
 
 export const remove = fn => {
   for (const node of waitingForLoad.getNodeIterable()) {
     if (node.value === fn) {
-      List.pop(node);
+      ValueList.pop(node);
       return true;
     }
   }

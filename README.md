@@ -330,7 +330,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
-* 1.1.0 *Added `Throttle`, `Retainer`, `sleep()`, `debounce()`, promise-based convenience methods.*
+* 1.1.0 *Added `Throttler`, `Retainer`, promise-based convenience time methods.*
 * 1.0.5 *Technical release: updated deps, more tests.*
 * 1.0.4 *Bug fixes and code simplifications.*
 * 1.0.3 *Updated deps (`list-toolkit`) to fix a minor bug.*

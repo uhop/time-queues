@@ -2,15 +2,15 @@
 
 import sleep from './sleep.js';
 
-export class Throttle {
+export class Throttler {
   constructor({
-    throttlingPeriod = 1_000,
-    neverSeenPeriod = 0,
-    vacuumPeriod = throttlingPeriod * 3,
+    throttlingTimeout = 1_000,
+    neverSeenTimeout = 0,
+    vacuumPeriod = throttlingTimeout * 3,
     startVacuuming = true
   }) {
-    this.throttlingPeriod = throttlingPeriod;
-    this.neverSeenPeriod = neverSeenPeriod;
+    this.throttlingTimeout = throttlingTimeout;
+    this.neverSeenTimeout = neverSeenTimeout;
     this.vacuumPeriod = vacuumPeriod;
     this.lastSeen = new Map();
     this.handle = null;
@@ -18,10 +18,11 @@ export class Throttle {
   }
 
   getDelay(key) {
-    if (!this.lastSeen.has(key)) return this.neverSeenPeriod;
-    const lastSeen = this.lastSeen.get(key), now = Date.now();
+    if (!this.lastSeen.has(key)) return this.neverSeenTimeout;
+    const lastSeen = this.lastSeen.get(key),
+      now = Date.now();
     this.lastSeen.set(key, now);
-    return Math.max(0, this.throttlingPeriod - (now - lastSeen));
+    return Math.max(0, this.throttlingTimeout - (now - lastSeen));
   }
 
   async wait(key) {
@@ -32,7 +33,7 @@ export class Throttle {
   vacuum() {
     const now = Date.now();
     for (const [key, lastSeen] of this.lastSeen) {
-      if (now - lastSeen > this.throttlingPeriod) {
+      if (now - lastSeen > this.throttlingTimeout) {
         this.lastSeen.delete(key);
       }
     }
@@ -54,4 +55,4 @@ export class Throttle {
   }
 }
 
-export default Throttle;
+export default Throttler;

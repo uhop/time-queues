@@ -81,6 +81,12 @@ export class Scheduler extends MicroTaskQueue {
     return this;
   }
 
+  schedule(delay) {
+    return new Promise(resolve =>
+      this.enqueue((task, scheduler) => resolve({task, scheduler}), delay)
+    );
+  }
+
   clear() {
     const paused = this.paused;
     if (!paused) this.pause();

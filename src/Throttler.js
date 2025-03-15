@@ -6,23 +6,30 @@ export class Throttler {
   constructor({
     throttlingTimeout = 1_000,
     neverSeenTimeout = 0,
-    vacuumPeriod = throttlingTimeout * 3,
-    startVacuuming = true
+    vacuumPeriod = throttlingTimeout * 3
   }) {
     this.throttlingTimeout = throttlingTimeout;
     this.neverSeenTimeout = neverSeenTimeout;
     this.vacuumPeriod = vacuumPeriod;
     this.lastSeen = new Map();
     this.handle = null;
-    if (startVacuuming) this.startVacuum();
+    if (this.vacuumPeriod) this.startVacuum();
+  }
+
+  getLastSeen(key) {
+    return this.lastSeen.get(key) ?? 0;
   }
 
   getDelay(key) {
-    if (!this.lastSeen.has(key)) return this.neverSeenTimeout;
-    const lastSeen = this.lastSeen.get(key),
-      now = Date.now();
-    this.lastSeen.set(key, now);
-    return Math.max(0, this.throttlingTimeout - (now - lastSeen));
+    const now = Date.now();
+    let lastSeen = now,
+      delay = this.neverSeenTimeout;
+    if (this.lastSeen.has(key)) {
+      lastSeen = this.lastSeen.get(key);
+      delay = Math.max(0, this.throttlingTimeout - (now - lastSeen));
+    }
+    this.lastSeen.set(key, lastSeen + delay);
+    return delay;
   }
 
   async wait(key) {

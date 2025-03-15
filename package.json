@@ -48,8 +48,8 @@
     }
   },
   "devDependencies": {
-    "tape-six": "^1.0.2",
-    "tape-six-proc": "^1.0.0"
+    "tape-six": "^1.0.3",
+    "tape-six-proc": "^1.0.1"
   },
   "dependencies": {
     "list-toolkit": "^2.2.1"

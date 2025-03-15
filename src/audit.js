@@ -8,11 +8,9 @@ export const audit = (fn, ms) => {
     if (handle) return;
     handle = setTimeout(() => {
       handle = null;
-      if (lastSeenArgs) {
-        const args = lastSeenArgs;
-        lastSeenArgs = null;
-        fn(...args);
-      }
+      const args = lastSeenArgs;
+      lastSeenArgs = null;
+      fn(...args);
     }, ms);
   };
 };

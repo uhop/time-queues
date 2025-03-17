@@ -6,14 +6,14 @@ import scheduler from '../src/Scheduler.js';
 
 test('Scheduler', t => {
   t.equal(typeof scheduler, 'object');
-  t.equal(scheduler.isEmpty, true);
+  t.ok(scheduler.isEmpty);
   t.equal(scheduler.nextTime, Infinity);
-  t.equal(scheduler.paused, false);
+  t.notOk(scheduler.paused);
 
   scheduler.pause();
-  t.equal(scheduler.paused, true);
+  t.ok(scheduler.paused);
   scheduler.resume();
-  t.equal(scheduler.paused, false);
+  t.notOk(scheduler.paused);
 
   const fn1 = () => 1,
     fn2 = () => 2;
@@ -30,14 +30,14 @@ test('Scheduler', t => {
   t.equal(scheduler.nextTime, task1.time);
   scheduler.dequeue(task1);
   t.equal(scheduler.nextTime, Infinity);
-  t.equal(scheduler.isEmpty, true);
+  t.ok(scheduler.isEmpty);
 
   scheduler.enqueue(fn1, 200);
-  t.equal(scheduler.isEmpty, false);
+  t.notOk(scheduler.isEmpty);
   scheduler.enqueue(fn2, 100);
-  t.equal(scheduler.isEmpty, false);
+  t.notOk(scheduler.isEmpty);
 
   scheduler.clear();
-  t.equal(scheduler.isEmpty, true);
+  t.ok(scheduler.isEmpty);
   t.equal(scheduler.nextTime, Infinity);
 });

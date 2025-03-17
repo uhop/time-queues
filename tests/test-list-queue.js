@@ -9,24 +9,24 @@ test('ListQueue', t => {
 
   const queue = new ListQueue();
 
-  t.equal(queue.isEmpty, true);
-  t.equal(queue.paused, false);
+  t.ok(queue.isEmpty);
+  t.notOk(queue.paused);
 
   queue.pause();
-  t.equal(queue.paused, true);
+  t.ok(queue.paused);
   queue.resume();
-  t.equal(queue.paused, false);
+  t.notOk(queue.paused);
 
   const fn = () => {},
     fn1 = () => 1,
     fn2 = () => 2;
 
   const task = queue.enqueue(fn);
-  t.equal(queue.isEmpty, false);
+  t.notOk(queue.isEmpty);
   t.equal(task.fn, fn);
 
   queue.clear();
-  t.equal(queue.isEmpty, true);
+  t.ok(queue.isEmpty);
 
   const task1 = queue.enqueue(fn1);
   const task2 = queue.enqueue(fn2);
@@ -34,7 +34,7 @@ test('ListQueue', t => {
   t.equal(task2.fn, fn2);
 
   queue.dequeue(task2);
-  t.equal(queue.isEmpty, false);
+  t.notOk(queue.isEmpty);
   queue.dequeue(task1);
-  t.equal(queue.isEmpty, true);
+  t.ok(queue.isEmpty);
 });

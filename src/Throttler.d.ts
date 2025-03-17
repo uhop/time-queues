@@ -3,9 +3,9 @@
  */
 export declare type ThrottlerOptions = {
   /**
-   * The throttling timeout.
+   * The throttle timeout.
    */
-  throttlingTimeout: number;
+  throttleTimeout: number;
   /**
    * The timeout for keys that have never been seen.
    */
@@ -25,9 +25,9 @@ export declare class Throttler implements ThrottlerOptions {
    * @param options The options for the throttler.
    */
   constructor({
-    throttlingTimeout = 1_000,
+    throttleTimeout = 1_000,
     neverSeenTimeout = 0,
-    vacuumPeriod = throttlingTimeout * 3
+    vacuumPeriod = throttleTimeout * 3
   }: ThrottlerOptions = {});
 
   /**

@@ -6,11 +6,11 @@ import sleep from './sleep.js';
 
 export class Throttler {
   constructor({
-    throttlingTimeout = 1_000,
+    throttleTimeout = 1_000,
     neverSeenTimeout = 0,
-    vacuumPeriod = throttlingTimeout * 3
+    vacuumPeriod = throttleTimeout * 3
   } = {}) {
-    this.throttlingTimeout = throttlingTimeout;
+    this.throttleTimeout = throttleTimeout;
     this.neverSeenTimeout = neverSeenTimeout;
     this.vacuumPeriod = vacuumPeriod;
     this.lastSeen = new Map();
@@ -28,7 +28,7 @@ export class Throttler {
       delay = this.neverSeenTimeout;
     if (this.lastSeen.has(key)) {
       lastSeen = this.lastSeen.get(key);
-      delay = Math.max(0, this.throttlingTimeout - (now - lastSeen));
+      delay = Math.max(0, this.throttleTimeout - (now - lastSeen));
     }
     this.lastSeen.set(key, lastSeen + delay);
     return delay;
@@ -42,7 +42,7 @@ export class Throttler {
   vacuum() {
     const now = Date.now();
     for (const [key, lastSeen] of this.lastSeen) {
-      if (now - lastSeen > this.throttlingTimeout) {
+      if (now - lastSeen > this.throttleTimeout) {
         this.lastSeen.delete(key);
       }
     }

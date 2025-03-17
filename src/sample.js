@@ -1,3 +1,5 @@
+// @ts-self-types="./sample.d.ts"
+
 'use strict';
 
 export const sample = (fn, ms) => {

@@ -1,3 +1,5 @@
+// @ts-self-types="./when-dom-loaded.d.ts"
+
 'use strict';
 
 import ValueList from 'list-toolkit/value-list.js';
@@ -12,7 +14,7 @@ export const remove = fn => {
     }
   }
   return false;
-}
+};
 
 const handleDomLoaded = () => {
   while (!waitingForDom.isEmpty) waitingForDom.pop()();

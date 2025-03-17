@@ -1,3 +1,5 @@
+// @ts-self-types="./throttle.d.ts"
+
 'use strict';
 
 export const throttle = (fn, ms) => {

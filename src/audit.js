@@ -1,3 +1,5 @@
+// @ts-self-types="./audit.d.ts"
+
 'use strict';
 
 export const audit = (fn, ms) => {

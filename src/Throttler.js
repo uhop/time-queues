@@ -1,3 +1,5 @@
+// @ts-self-types="./Throttler.d.ts"
+
 'use strict';
 
 import sleep from './sleep.js';
@@ -7,7 +9,7 @@ export class Throttler {
     throttlingTimeout = 1_000,
     neverSeenTimeout = 0,
     vacuumPeriod = throttlingTimeout * 3
-  }) {
+  } = {}) {
     this.throttlingTimeout = throttlingTimeout;
     this.neverSeenTimeout = neverSeenTimeout;
     this.vacuumPeriod = vacuumPeriod;

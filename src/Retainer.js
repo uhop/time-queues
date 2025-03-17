@@ -1,3 +1,5 @@
+// @ts-self-types="./Retainer.d.ts"
+
 'use strict';
 
 export class Retainer {
@@ -38,7 +40,7 @@ export class Retainer {
       this.value = null;
       this.handle = null;
       await this.destroy(value);
-    }, this.retantionPeriod);
+    }, this.retentionPeriod);
     return this;
   }
 }

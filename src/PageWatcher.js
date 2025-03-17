@@ -1,3 +1,5 @@
+// @ts-self-types="./PageWatcher.d.ts"
+
 'use strict';
 
 import ListQueue from './ListQueue.js';

@@ -1,3 +1,5 @@
+// @ts-self-types="./ListQueue.d.ts"
+
 'use strict';
 
 import List from 'list-toolkit/list.js';

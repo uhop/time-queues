@@ -1,3 +1,5 @@
+// @ts-self-types="./MicroTask.d.ts"
+
 'use strict';
 
 export class MicroTask {

@@ -1,3 +1,5 @@
+// @ts-self-types="./Scheduler.d.ts"
+
 'use strict';
 
 import MinHeap from 'list-toolkit/heap.js';
@@ -119,11 +121,11 @@ export class Scheduler extends MicroTaskQueue {
 }
 
 export const repeat = (fn, delay) => {
-  const repeatableTask = (task, scheduler) => {
+  const repeatableFunction = (task, scheduler) => {
     fn(task, scheduler);
-    scheduler.enqueue(repeatableTask, isNaN(delay) ? task.delay : delay);
+    scheduler.enqueue(repeatableFunction, isNaN(delay) ? task.delay : delay);
   };
-  return repeatableTask;
+  return repeatableFunction;
 };
 
 export const scheduler = new Scheduler();

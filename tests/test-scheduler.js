@@ -15,7 +15,8 @@ test('Scheduler', t => {
   scheduler.resume();
   t.equal(scheduler.paused, false);
 
-  const fn1 = () => 1, fn2 = () => 2;
+  const fn1 = () => 1,
+    fn2 = () => 2;
 
   const task1 = scheduler.enqueue(fn1, 200);
   t.equal(task1.fn, fn1);

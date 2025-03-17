@@ -53,7 +53,10 @@ whenDomLoaded(() => {
 
       frameQueue.enqueue(() => {
         document.documentElement.appendChild(element);
-        scheduler.enqueue(repeat(() => moveRandomly(element), 1000), 20);
+        scheduler.enqueue(
+          repeat(() => moveRandomly(element), 1000),
+          20
+        );
       });
     });
   }

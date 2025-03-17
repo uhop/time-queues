@@ -17,7 +17,9 @@ test('ListQueue', t => {
   queue.resume();
   t.equal(queue.paused, false);
 
-  const fn = () => {}, fn1 = () => 1, fn2 = () => 2;
+  const fn = () => {},
+    fn1 = () => 1,
+    fn2 = () => 2;
 
   const task = queue.enqueue(fn);
   t.equal(queue.isEmpty, false);

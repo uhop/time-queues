@@ -14,7 +14,7 @@ test('throttle', async t => {
 
   throttledFn(1);
   t.deepEqual(results, [1]);
-  
+
   await sleep(10);
   throttledFn(2);
   t.deepEqual(results, [1]);

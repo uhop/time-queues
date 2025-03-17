@@ -19,7 +19,7 @@ export declare class IdleQueue extends ListQueue {
 
   /**
    * Creates a new idle queue.
-   * @param paused Whether the queue is starting paused.
+   * @param paused Whether the queue should start paused.
    * @param timeoutBatchInMs The timeout batch size in milliseconds.
    * @param options The options passed to `requestIdleCallback()`.
    */

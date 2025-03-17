@@ -12,7 +12,7 @@ export declare class MicroTaskQueue {
 
   /**
    * Creates a new microtask queue.
-   * @param paused Whether the queue is paused.
+   * @param paused Whether the queue should start paused.
    */
   constructor(paused: boolean);
 

@@ -13,7 +13,7 @@ export declare class FrameQueue extends ListQueue {
 
   /**
    * Creates a new frame queue.
-   * @param paused Whether the queue is starting paused.
+   * @param paused Whether the queue should start paused.
    * @param batchInMs The batch size in milliseconds.
    */
   constructor(paused: boolean = false, batchInMs?: number);

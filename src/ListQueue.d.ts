@@ -19,7 +19,7 @@ export declare class ListQueue extends MicroTaskQueue {
 
   /**
    * Creates a new list queue.
-   * @param paused Whether the queue is starting paused.
+   * @param paused Whether the queue should start paused.
    */
   constructor(paused: boolean);
 

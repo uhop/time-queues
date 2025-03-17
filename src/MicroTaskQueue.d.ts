@@ -36,28 +36,28 @@ export declare class MicroTaskQueue {
    * @param task The microtask to dequeue.
    * @returns The queue.
    */
-  dequeue(task: MicroTask): MicroTaskQueue;
+  dequeue(task: MicroTask): this;
 
   /**
    * Clears the queue.
    * It is meant to be overridden in subclasses.
    * @returns The queue.
    */
-  clear(): MicroTaskQueue;
+  clear(): this;
 
   /**
    * Pauses the queue.
    * It is meant to be overridden in subclasses.
    * @returns The queue.
    */
-  pause(): MicroTaskQueue;
+  pause(): this;
 
   /**
    * Resumes the queue.
    * It is meant to be overridden in subclasses.
    * @returns The queue.
    */
-  resume(): MicroTaskQueue;
+  resume(): this;
 }
 
 export default MicroTaskQueue;

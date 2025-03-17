@@ -40,25 +40,25 @@ export declare class ListQueue extends MicroTaskQueue {
    * @param task The microtask to dequeue.
    * @returns The queue.
    */
-  dequeue(task: MicroTask): ListQueue;
+  dequeue(task: MicroTask): this;
 
   /**
    * Clears the queue.
    * @returns The queue.
    */
-  clear(): ListQueue;
+  clear(): this;
 
   /**
    * Pauses the queue.
    * @returns The queue.
    */
-  pause(): ListQueue;
+  pause(): this;
 
   /**
    * Resumes the queue.
    * @returns The queue.
    */
-  resume(): ListQueue;
+  resume(): this;
 
   /**
    * Starts the queue.

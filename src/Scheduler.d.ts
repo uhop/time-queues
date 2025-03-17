@@ -47,7 +47,7 @@ export declare class Scheduler extends MicroTaskQueue {
    * @param task The task to remove.
    * @returns The scheduler object.
    */
-  dequeue(task: Task): Scheduler;
+  dequeue(task: Task): this;
 
   /**
    * Creates a promise that resolves after a delay.

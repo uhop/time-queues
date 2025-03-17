@@ -37,7 +37,7 @@ export declare class Retainer implements RetainerOptions {
    * @param immediately Whether to release the value immediately. Otherwise it'll be retained for the retention period.
    * @returns The retainer object.
    */
-  async release(immediately?: boolean): Promise<Retainer>;
+  async release(immediately?: boolean): Promise<this>;
 }
 
 export default Retainer;

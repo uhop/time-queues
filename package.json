@@ -36,7 +36,9 @@
   },
   "homepage": "https://github.com/uhop/time-queues#readme",
   "files": [
-    "/src"
+    "/src",
+    "LICENSE",
+    "README.md"
   ],
   "tape6": {
     "tests": [

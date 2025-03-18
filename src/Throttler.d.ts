@@ -20,6 +20,10 @@ export declare type ThrottlerOptions = {
  * A throttler that throttles the execution of tasks based on a key.
  */
 export declare class Throttler implements ThrottlerOptions {
+  throttleTimeout: number;
+  neverSeenTimeout: number;
+  vacuumPeriod?: number;
+
   /**
    * Creates a new throttler.
    * @param options The options for the throttler.
@@ -52,6 +56,12 @@ export declare class Throttler implements ThrottlerOptions {
   wait(key: unknown): Promise<void>;
 
   /**
+   * Retrieves the vacuuming state.
+   * @returns `true` if the vacuuming is active, `false` otherwise.
+   */
+  get isVacuuming(): boolean;
+
+  /**
    * Starts the vacuum process.
    * The vacuum process removes keys that expired.
    * @returns The throttler object.
@@ -65,3 +75,5 @@ export declare class Throttler implements ThrottlerOptions {
    */
   stopVacuum(): this;
 }
+
+export default Throttler;

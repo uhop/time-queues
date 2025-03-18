@@ -20,6 +20,10 @@ export declare interface RetainerOptions {
  * Retains a value for a specified time.
  */
 export declare class Retainer implements RetainerOptions {
+  create: () => Promise<unknown>;
+  destroy: (value: unknown) => Promise<void>;
+  retentionPeriod: number;
+
   /**
    * Creates a new retainer.
    * @param options The options for the retainer.

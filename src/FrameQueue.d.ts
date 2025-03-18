@@ -19,11 +19,41 @@ export declare class FrameQueue extends ListQueue {
   constructor(paused: boolean = false, batchInMs?: number);
 
   /**
+   * Whether the queue is empty.
+   */
+  get isEmpty(): boolean;
+
+  /**
    * Enqueues a task.
    * @param fn The function to execute.
    * @returns The task object.
    */
   enqueue(fn: (timeStamp: number, task: Task, queue: FrameQueue) => void): Task;
+
+  /**
+   * Dequeues a task.
+   * @param task The task to dequeue.
+   * @returns The queue.
+   */
+  dequeue(task: Task): this;
+
+  /**
+   * Clears the queue.
+   * @returns The queue.
+   */
+  clear(): this;
+
+  /**
+   * Pauses the queue.
+   * @returns The queue.
+   */
+  pause(): this;
+
+  /**
+   * Resumes the queue.
+   * @returns The queue.
+   */
+  resume(): this;
 
   /**
    * Starts the queue.

@@ -39,6 +39,10 @@ export class Throttler {
     if (delay > 0) await sleep(delay);
   }
 
+  get isVacuuming() {
+    return !!this.handle;
+  }
+
   vacuum() {
     const now = Date.now();
     for (const [key, lastSeen] of this.lastSeen) {

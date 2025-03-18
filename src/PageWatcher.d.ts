@@ -21,6 +21,11 @@ export declare class PageWatcher extends ListQueue {
   constructor(started: boolean = false);
 
   /**
+   * Whether the queue is empty.
+   */
+  get isEmpty(): boolean;
+
+  /**
    * Enqueues a task.
    * @param fn The function to execute.
    * @param initialize Whether the function should be executed before the state changes.
@@ -30,6 +35,31 @@ export declare class PageWatcher extends ListQueue {
     fn: (state: PageState, previousState: PageState, task: Task, queue: ListQueue) => void,
     initialize?: boolean
   ): Task;
+
+  /**
+   * Dequeues a task.
+   * @param task The task to dequeue.
+   * @returns The queue.
+   */
+  dequeue(task: Task): this;
+
+  /**
+   * Clears the queue.
+   * @returns The queue.
+   */
+  clear(): this;
+
+  /**
+   * Pauses the queue.
+   * @returns The queue.
+   */
+  pause(): this;
+
+  /**
+   * Resumes the queue.
+   * @returns The queue.
+   */
+  resume(): this;
 }
 
 /**

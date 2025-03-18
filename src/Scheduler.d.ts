@@ -55,6 +55,24 @@ export declare class Scheduler extends MicroTaskQueue {
    * @returns A promise that resolves after the delay.
    */
   schedule(delay: number | Date): Promise<{task: Task; scheduler: Scheduler}>;
+
+  /**
+   * Clears the queue.
+   * @returns The queue.
+   */
+  clear(): this;
+
+  /**
+   * Pauses the queue.
+   * @returns The queue.
+   */
+  pause(): this;
+
+  /**
+   * Resumes the queue.
+   * @returns The queue.
+   */
+  resume(): this;
 }
 
 /**

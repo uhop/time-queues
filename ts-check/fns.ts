@@ -9,7 +9,7 @@ import whenLoaded from "../src/when-loaded.js";
 const main = async () => {
   // audit
   {
-    const fn = () => {};
+    const fn = (x: number) => {};
     const auditedFn = audit(fn, 20);
 
     auditedFn(1);
@@ -18,7 +18,7 @@ const main = async () => {
 
   // throttle
   {
-    const fn = () => {};
+    const fn = (x: number) => {};
     const throttledFn = throttle(fn, 20);
 
     throttledFn(1);
@@ -27,7 +27,7 @@ const main = async () => {
 
   // sample
   {
-    const fn = () => {};
+    const fn = (x: number) => {};
     const sampledFn = sample(fn, 20);
 
     sampledFn(1);
@@ -36,7 +36,7 @@ const main = async () => {
 
   // debounce
   {
-    const fn = () => {};
+    const fn = (x: number) => {};
     const debouncedFn = debounce(fn, 20);
 
     debouncedFn(1);

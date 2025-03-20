@@ -1,8 +1,9 @@
 {
   "name": "time-queues",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Time queues to organize multitasking and scheduled tasks.",
   "type": "module",
+  "types": "./src/index.d.ts",
   "exports": {
     "./*": "./src/*"
   },
@@ -42,7 +43,8 @@
   ],
   "tape6": {
     "tests": [
-      "/tests/test-*.*js"
+      "/tests/test-*.*js",
+      "/ts-tests/test-*.*ts"
     ],
     "importmap": {
       "imports": {

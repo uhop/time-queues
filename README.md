@@ -32,7 +32,7 @@ npm install
 
 ## Usage
 
-The full documentation is available in the project's [wiki](https://github.com/uhop/time-queues/wiki). Below is the most important parts of the documentation:
+The full documentation is available in the project's [wiki](https://github.com/uhop/time-queues/wiki). Below is a summary of the most important parts of the documentation:
 
 ### Resource Management
 
@@ -61,6 +61,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+* 1.1.1 *Updates to TS typings.*
 * 1.1.0 *Added `Throttler`, `Retainer`, promise-based convenience time methods.*
 * 1.0.5 *Technical release: updated deps, more tests.*
 * 1.0.4 *Bug fixes and code simplifications.*

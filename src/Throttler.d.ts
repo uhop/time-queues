@@ -5,11 +5,11 @@ export declare type ThrottlerOptions = {
   /**
    * The throttle timeout.
    */
-  throttleTimeout: number;
+  throttleTimeout?: number;
   /**
    * The timeout for keys that have never been seen.
    */
-  neverSeenTimeout: number;
+  neverSeenTimeout?: number;
   /**
    * The vacuum period.
    */
@@ -20,9 +20,25 @@ export declare type ThrottlerOptions = {
  * A throttler that throttles the execution of tasks based on a key.
  */
 export declare class Throttler implements ThrottlerOptions {
+  /**
+   * The throttle timeout.
+   */
   throttleTimeout: number;
+
+  /**
+   * The timeout for keys that have never been seen.
+   */
   neverSeenTimeout: number;
-  vacuumPeriod?: number;
+
+  /**
+   * The vacuum period.
+   */
+  vacuumPeriod: number;
+
+  /**
+   * The last seen times for keys.
+   */
+  lastSeen: Map<unknown, number>;
 
   /**
    * Creates a new throttler.

@@ -6,6 +6,11 @@ import {ListQueue, Task} from './ListQueue';
  */
 export declare class FrameQueue extends ListQueue {
   /**
+   * Whether the queue is paused.
+   */
+  paused: boolean;
+
+  /**
    * The batch size in milliseconds for running tasks.
    * If `undefined`, all tasks are run in a single frame.
    */
@@ -16,7 +21,7 @@ export declare class FrameQueue extends ListQueue {
    * @param paused Whether the queue should start paused.
    * @param batchInMs The batch size in milliseconds.
    */
-  constructor(paused: boolean = false, batchInMs?: number);
+  constructor(paused?: boolean, batchInMs?: number);
 
   /**
    * Whether the queue is empty.

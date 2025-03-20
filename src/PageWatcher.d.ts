@@ -10,6 +10,11 @@ export declare type PageState = 'active' | 'passive' | 'hidden' | 'frozen' | 'te
  */
 export declare class PageWatcher extends ListQueue {
   /**
+   * Whether the queue is paused.
+   */
+  paused: boolean;
+
+  /**
    * The current state of the page.
    */
   currentState: PageState;
@@ -18,7 +23,7 @@ export declare class PageWatcher extends ListQueue {
    * Creates a new page watcher.
    * @param started Whether the queue is unpaused initially.
    */
-  constructor(started: boolean = false);
+  constructor(started?: boolean);
 
   /**
    * Whether the queue is empty.

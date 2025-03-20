@@ -6,11 +6,26 @@ import MicroTaskQueue from './MicroTaskQueue';
  */
 export declare class Task extends MicroTask {
   /**
+   * The function to execute.
+   */
+  fn: (task: Task, scheduler: Scheduler) => void;
+
+  /**
+   * The time in milliseconds (Unix timestamp) when the task is scheduled to run.
+   */
+  time: number;
+
+  /**
+   * The delay in milliseconds before the task is executed.
+   */
+  delay: number;
+
+  /**
    * Creates a new task.
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
    * @param fn The function to execute.
    */
-  constructor(delay: number | Date, fn: () => void);
+  constructor(delay: number | Date, fn: (task: Task, scheduler: Scheduler) => void);
 }
 
 /**
@@ -18,11 +33,21 @@ export declare class Task extends MicroTask {
  */
 export declare class Scheduler extends MicroTaskQueue {
   /**
+   * Whether the scheduler is paused.
+   */
+  paused: boolean;
+
+  /**
+   * The tolerance for comparing starting time of tasks.
+   */
+  tolerance: number;
+
+  /**
    * Creates a new scheduler.
    * @param paused Whether the scheduler should start paused.
    * @param tolerance The tolerance for comparing starting time of tasks.
    */
-  constructor(paused: boolean, tolerance: number = 4);
+  constructor(paused?: boolean, tolerance: number = 4);
 
   /**
    * Whether the scheduler is empty.

@@ -7,9 +7,9 @@
  * @param ms The minimum time interval between function calls, in milliseconds.
  * @returns A throttled version of the function.
  */
-export declare function throttle(
-  fn: (...args: unknown[]) => void,
+export declare function throttle<T extends (...args: any[]) => void>(
+  fn: T,
   ms: number
-): (...args: unknown[]) => void;
+): (...args: Parameters<T>) => void;
 
 export default throttle;

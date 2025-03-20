@@ -7,9 +7,9 @@ import {List} from 'list-toolkit';
  */
 export declare class ListQueue extends MicroTaskQueue {
   /**
-   * The list of tasks.
+   * Whether the queue is paused.
    */
-  list: List<MicroTask>;
+  paused: boolean;
 
   /**
    * The function that stops the queue.
@@ -21,7 +21,7 @@ export declare class ListQueue extends MicroTaskQueue {
    * Creates a new list queue.
    * @param paused Whether the queue should start paused.
    */
-  constructor(paused: boolean);
+  constructor(paused?: boolean);
 
   /**
    * Whether the queue is empty.

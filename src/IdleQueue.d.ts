@@ -6,6 +6,11 @@ import {ListQueue, Task} from './ListQueue';
  */
 export declare class IdleQueue extends ListQueue {
   /**
+   * Whether the queue is paused.
+   */
+  paused: boolean;
+
+  /**
    * The timeout batch size in milliseconds for running tasks.
    * If `undefined`, all tasks are run in a single idle period.
    * This timeout is used only when `deadline.didTimeout` passed by `requestIdleCallback()` is `true`.
@@ -23,7 +28,7 @@ export declare class IdleQueue extends ListQueue {
    * @param timeoutBatchInMs The timeout batch size in milliseconds.
    * @param options The options passed to `requestIdleCallback()`.
    */
-  constructor(paused: boolean = false, timeoutBatchInMs?: number, options?: IdleCallbackOptions);
+  constructor(paused?: boolean, timeoutBatchInMs?: number, options?: IdleCallbackOptions);
 
   /**
    * Whether the queue is empty.

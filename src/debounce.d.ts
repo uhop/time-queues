@@ -6,9 +6,9 @@
  * @param ms The minimum time interval between function calls, in milliseconds.
  * @returns A debounced version of the function.
  */
-export declare function debounce(
-  fn: (...args: unknown[]) => void,
+export declare function debounce<T extends (...args: any[]) => void>  (
+  fn: T,
   ms: number
-): (...args: unknown[]) => void;
+): (...args: Parameters<T>) => void;
 
 export default debounce;

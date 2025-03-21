@@ -61,6 +61,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+* 1.1.2 *Updated dev dependencies. No need to upgrade.*
 * 1.1.1 *Updates to TS typings.*
 * 1.1.0 *Added `Throttler`, `Retainer`, promise-based convenience time methods.*
 * 1.0.5 *Technical release: updated deps, more tests.*

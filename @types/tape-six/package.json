@@ -1,8 +1,0 @@
-{
-  "name": "@types/tape-six",
-  "version": "1.0.0",
-  "description": "TypeScript definitions for tape-six",
-  "main": "",
-  "types": "index.d.ts",
-  "private": true
-}

@@ -44,6 +44,9 @@
     "README.md"
   ],
   "tape6": {
+    "node": ["/ts-tests/test-*.*ts"],
+    "bun": ["/ts-tests/test-*.*ts"],
+    "deno": ["/ts-tests/test-*.*ts"],
     "tests": [
       "/tests/test-*.*js"
     ],

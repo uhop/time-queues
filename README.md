@@ -62,6 +62,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+* 1.2.1 *Minor release: updated formal TS dependencies in `index.d.ts`.*
 * 1.2.0 *Added `Counter`. Updated dev dependencies.*
 * 1.1.2 *Updated dev dependencies. No need to upgrade.*
 * 1.1.1 *Updates to TS typings.*

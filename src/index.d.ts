@@ -16,6 +16,7 @@ declare module 'time-queues' {
   export * from './Scheduler';
   export * from './Retainer';
   export * from './Throttler';
+  export * from './Counter';
 
   export * from './when-dom-loaded';
   export * from './when-loaded';

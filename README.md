@@ -3,7 +3,6 @@
 [npm-img]: https://img.shields.io/npm/v/time-queues.svg
 [npm-url]: https://npmjs.org/package/time-queues
 
-
 `time-queues` is an efficient, lightweight library for organizing asynchronous multitasking and scheduled tasks in JavaScript applications. It works seamlessly in browsers and server-side environments like Node.js, Deno, and Bun.
 
 The library provides elegant solutions for common timing and scheduling challenges, helping developers create responsive, efficient applications that follow best practices for resource management and user experience.
@@ -62,14 +61,15 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
-* 1.2.1 *Minor release: updated formal TS dependencies in `index.d.ts`.*
-* 1.2.0 *Added `Counter`. Updated dev dependencies.*
-* 1.1.2 *Updated dev dependencies. No need to upgrade.*
-* 1.1.1 *Updates to TS typings.*
-* 1.1.0 *Added `Throttler`, `Retainer`, promise-based convenience time methods.*
-* 1.0.5 *Technical release: updated deps, more tests.*
-* 1.0.4 *Bug fixes and code simplifications.*
-* 1.0.3 *Updated deps (`list-toolkit`) to fix a minor bug.*
-* 1.0.2 *Updated deps (`list-toolkit`).*
-* 1.0.1 *Minor update in README. No need to upgrade.*
-* 1.0.0 *Initial release.*
+- 1.2.2 _`Counter`: separated old waiter from new waiters before notifying them._
+- 1.2.1 _Minor release: updated formal TS dependencies in `index.d.ts`._
+- 1.2.0 _Added `Counter`. Updated dev dependencies._
+- 1.1.2 _Updated dev dependencies. No need to upgrade._
+- 1.1.1 _Updates to TS typings._
+- 1.1.0 _Added `Throttler`, `Retainer`, promise-based convenience time methods._
+- 1.0.5 _Technical release: updated deps, more tests._
+- 1.0.4 _Bug fixes and code simplifications._
+- 1.0.3 _Updated deps (`list-toolkit`) to fix a minor bug._
+- 1.0.2 _Updated deps (`list-toolkit`)._
+- 1.0.1 _Minor update in README. No need to upgrade._
+- 1.0.0 _Initial release._

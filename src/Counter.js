@@ -45,25 +45,28 @@ export class Counter {
 
   clearWaiters() {
     if (this.zeroWaiters.length > 0) {
-      for (const resolve of this.zeroWaiters) {
+      const zeroWaiters = this.zeroWaiters;
+      this.zeroWaiters = [];
+      for (const resolve of zeroWaiters) {
         resolve(NaN);
       }
-      this.zeroWaiters = [];
     }
     if (this.functionWaiters.size > 0) {
-      for (const {resolve} of this.functionWaiters) {
+      const functionWaiters = this.functionWaiters;
+      this.functionWaiters = new Set();
+      for (const {resolve} of functionWaiters) {
         resolve(NaN);
       }
-      this.functionWaiters.clear();
     }
   }
 
   notify() {
     if (this.count === 0 && this.zeroWaiters.length > 0) {
-      for (const resolve of this.zeroWaiters) {
+      const zeroWaiters = this.zeroWaiters;
+      this.zeroWaiters = [];
+      for (const resolve of zeroWaiters) {
         resolve(0);
       }
-      this.zeroWaiters = [];
     }
     if (this.functionWaiters.size > 0) {
       const ready = [];

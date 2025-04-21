@@ -1,6 +1,6 @@
 {
   "name": "time-queues",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Time queues to organize multitasking and scheduled tasks.",
   "type": "module",
   "types": "./src/index.d.ts",
@@ -56,10 +56,10 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.14.1",
     "tape-six": "^1.1.1",
     "tape-six-proc": "^1.0.1",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "list-toolkit": "^2.2.1"

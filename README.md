@@ -39,6 +39,7 @@ The full documentation is available in the project's [wiki](https://github.com/u
 - [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler): Time-based task scheduling
 - [Retainer](https://github.com/uhop/time-queues/wiki/Retainer): Manage resource lifecycle
 - [Throttler](https://github.com/uhop/time-queues/wiki/Throttler): Control execution rate based on keys
+- [Counter](https://github.com/uhop/time-queues/wiki/Counter): Track the number of pending tasks asynchronously
 
 ### Browser-Specific Components
 
@@ -61,6 +62,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+* 1.2.0 *Added `Counter`. Updated dev dependencies.*
 * 1.1.2 *Updated dev dependencies. No need to upgrade.*
 * 1.1.1 *Updates to TS typings.*
 * 1.1.0 *Added `Throttler`, `Retainer`, promise-based convenience time methods.*

@@ -42,6 +42,7 @@ export class ListQueue extends MicroTaskQueue {
   }
 
   dequeue(task) {
+    task.cancel();
     this.list.removeNode(task);
     if (!this.paused && this.list.isEmpty && this.stopQueue)
       this.stopQueue = (this.stopQueue(), null);
@@ -51,7 +52,10 @@ export class ListQueue extends MicroTaskQueue {
   clear() {
     const paused = this.paused;
     if (!paused) this.pause();
-    this.list.clear();
+    while (!this.list.isEmpty) {
+      const task = this.list.popFront();
+      task.cancel();
+    }
     if (!paused) this.resume();
     return this;
   }

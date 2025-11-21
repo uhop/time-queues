@@ -33,7 +33,7 @@ export declare class FrameQueue extends ListQueue {
    * @param fn The function to execute.
    * @returns The task object.
    */
-  enqueue(fn: (timeStamp: number, task: Task, queue: FrameQueue) => void): Task;
+  enqueue(fn: ({timeStamp: number, task: Task, queue: FrameQueue}) => unknown): Task;
 
   /**
    * Dequeues a task.
@@ -41,6 +41,15 @@ export declare class FrameQueue extends ListQueue {
    * @returns The queue.
    */
   dequeue(task: Task): this;
+
+  /**
+   * Schedules a task to run in the next frame.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @returns The task object.
+   */
+  schedule(
+    fn: (({timeStamp: number, task: Task, queue: FrameQueue}) => unknown) | null | undefined
+  ): Task;
 
   /**
    * Clears the queue.

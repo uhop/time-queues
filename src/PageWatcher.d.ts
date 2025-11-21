@@ -49,6 +49,12 @@ export declare class PageWatcher extends ListQueue {
   dequeue(task: Task): this;
 
   /**
+   * Schedules a task to be executed when the page state changes.
+   * @throws Always throws an error.
+   */
+  schedule(): never;
+
+  /**
    * Clears the queue.
    * @returns The queue.
    */

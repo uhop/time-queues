@@ -7,9 +7,15 @@ const main = async () => {
   scheduler.dequeue(task);
   if (!scheduler.isEmpty) scheduler.clear();
 
-  scheduler.enqueue(repeat(() => {}, 10), 50);
-  
-  await scheduler.schedule(100);
+  scheduler.enqueue(
+    repeat(() => {}, 10),
+    50
+  );
+
+  await scheduler.schedule(null, 100).promise;
+
+  const result = await (scheduler.schedule(() => 42, 100).promise as Promise<number>);
+  console.log(result);
 };
 
 main();

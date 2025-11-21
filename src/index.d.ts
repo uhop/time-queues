@@ -6,6 +6,7 @@ declare module 'time-queues' {
   export * from './sleep';
   export * from './throttle';
 
+  export * from './CancelTaskError';
   export * from './MicroTask';
   export * from './MicroTaskQueue';
   export * from './ListQueue';

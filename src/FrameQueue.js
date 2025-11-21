@@ -26,14 +26,14 @@ export class FrameQueue extends ListQueue {
       const start = Date.now();
       while (Date.now() - start < this.batch && !this.list.isEmpty) {
         const task = this.list.popFront();
-        task.fn(timeStamp, task, this);
+        task.fn({timeStamp, task, queue: this});
       }
     } else {
       const list = this.list;
       this.list = new List();
       while (!list.isEmpty) {
         const task = list.popFront();
-        task.fn(timeStamp, task, this);
+        task.fn({timeStamp, task, queue: this});
       }
     }
 

@@ -25,10 +25,31 @@ export class MicroTaskQueue {
     return task;
   }
   dequeue(task) {
+    task.cancel();
     return this;
   }
   clear() {
     return this;
+  }
+  // Generic API
+  schedule(fn, ...args) {
+    fn ||= MicroTaskQueue.returnArgs;
+    const task = this.enqueue(
+      (...args) => {
+        try {
+          task.resolve(fn(...args));
+        } catch (error) {
+          task.cancel();
+        }
+      },
+      ...args
+    );
+    task.makePromise();
+    task.fn = fn;
+    return task;
+  }
+  static returnArgs(...args) {
+    return args;
   }
 }
 

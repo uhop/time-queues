@@ -47,6 +47,10 @@ export class PageWatcher extends ListQueue {
 
   // Implemented in ListQueue: dequeue()
 
+  schedule() {
+    throw new Error('Not implemented');
+  }
+
   clear() {
     this.list.clear();
     return this;

@@ -30,20 +30,20 @@ export class IdleQueue extends ListQueue {
         const start = Date.now();
         while (Date.now() - start < this.timeoutBatch && !this.list.isEmpty) {
           const task = this.list.popFront();
-          task.fn(deadline, task, this);
+          task.fn({deadline, task, queue: this});
         }
       } else {
         const list = this.list;
         this.list = new List();
         while (!list.isEmpty) {
           const task = list.popFront();
-          task.fn(deadline, task, this);
+          task.fn({deadline, task, queue: this});
         }
       }
     } else {
       while (deadline.timeRemaining() > 0 && !this.list.isEmpty) {
         const task = this.list.popFront();
-        task.fn(deadline, task, this);
+        task.fn({deadline, task, queue: this});
       }
     }
 

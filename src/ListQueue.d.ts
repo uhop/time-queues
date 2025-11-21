@@ -1,4 +1,5 @@
 import {MicroTask} from './MicroTask';
+import {MicroTaskQueue} from './MicroTaskQueue';
 import {List} from 'list-toolkit';
 
 /**
@@ -33,7 +34,7 @@ export declare class ListQueue extends MicroTaskQueue {
    * @param fn The function to execute when the microtask is scheduled.
    * @returns The enqueued microtask.
    */
-  enqueue(fn: () => void): MicroTask;
+  enqueue(fn: () => unknown): MicroTask;
 
   /**
    * Dequeues a microtask.
@@ -41,6 +42,13 @@ export declare class ListQueue extends MicroTaskQueue {
    * @returns The queue.
    */
   dequeue(task: MicroTask): this;
+
+  /**
+   * Schedules a microtask.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @returns The task object.
+   */
+  schedule(fn: (() => unknown) | null | undefined): MicroTask;
 
   /**
    * Clears the queue.
@@ -73,5 +81,10 @@ export declare class ListQueue extends MicroTaskQueue {
  * A task for list queues.
  */
 export declare type Task = MicroTask;
+
+/**
+ * A task for list queues with a promise.
+ */
+export declare type TaskWithPromise = MicroTaskWithPromise;
 
 export default ListQueue;

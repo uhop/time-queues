@@ -8,7 +8,12 @@ export declare class Task extends MicroTask {
   /**
    * The function to execute.
    */
-  fn: (task: Task, scheduler: Scheduler) => void;
+  fn: ({task: Task, scheduler: Scheduler}) => unknown;
+
+  /**
+   * Whether the task has been canceled.
+   */
+  isCanceled: boolean;
 
   /**
    * The time in milliseconds (Unix timestamp) when the task is scheduled to run.
@@ -25,7 +30,35 @@ export declare class Task extends MicroTask {
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
    * @param fn The function to execute.
    */
-  constructor(delay: number | Date, fn: (task: Task, scheduler: Scheduler) => void);
+  constructor(delay: number | Date, fn: ({task: Task, scheduler: Scheduler}) => unknown);
+
+  /**
+   * Makes a promise that will be resolved when the microtask is executed.
+   * @returns The microtask.
+   */
+  makePromise(): this;
+
+  /**
+   * The promise that could be resolved when the microtask is executed.
+   * This is a queue-specific promise. It may be created when there is an associated asynchronous task.
+   * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
+   */
+  get promise(): Promise<unknown> | null;
+
+  /**
+   * Resolves the microtask, if a promise is created.
+   * @param value The value to resolve the microtask with.
+   * @returns The microtask.
+   */
+  resolve(value: unknown): this;
+
+  /**
+   * Cancels the microtask, if a promise is created.
+   * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
+   * It can be overridden in subclasses.
+   * @returns The microtask.
+   */
+  cancel(): this;
 }
 
 /**
@@ -65,7 +98,7 @@ export declare class Scheduler extends MicroTaskQueue {
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
    * @returns The task object.
    */
-  enqueue(fn: (task: Task, scheduler: Scheduler) => void, delay: number | Date): Task;
+  enqueue(fn: ({task: Task, scheduler: Scheduler}) => unknown, delay: number | Date): Task;
 
   /**
    * Removes a task from the scheduler.
@@ -75,11 +108,15 @@ export declare class Scheduler extends MicroTaskQueue {
   dequeue(task: Task): this;
 
   /**
-   * Creates a promise that resolves after a delay.
+   * Schedules a task to run in the future.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
-   * @returns A promise that resolves after the delay.
+   * @returns The task object.
    */
-  schedule(delay: number | Date): Promise<{task: Task; scheduler: Scheduler}>;
+  schedule(
+    fn: (({task: Task, scheduler: Scheduler}) => unknown) | null | undefined,
+    delay: number | Date
+  ): Task;
 
   /**
    * Clears the queue.
@@ -107,9 +144,9 @@ export declare class Scheduler extends MicroTaskQueue {
  * @returns A function that can be used to enqueue the task to the scheduler.
  */
 export declare const repeat: (
-  fn: (task: Task, scheduler: Scheduler) => void,
+  fn: ({task: Task, scheduler: Scheduler}) => void,
   delay: number | Date
-) => (task: Task, scheduler: Scheduler) => void;
+) => ({task: Task, scheduler: Scheduler}) => void;
 
 /**
  * A scheduler instance usually used as a global scheduler.

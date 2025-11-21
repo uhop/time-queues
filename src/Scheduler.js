@@ -70,6 +70,7 @@ export class Scheduler extends MicroTaskQueue {
   }
 
   dequeue(task) {
+    task.cancel();
     if (this.queue.isEmpty) return this;
     if (this.paused || this.queue.top !== task) {
       this.queue.remove(task);
@@ -83,15 +84,10 @@ export class Scheduler extends MicroTaskQueue {
     return this;
   }
 
-  schedule(delay) {
-    return new Promise(resolve =>
-      this.enqueue((task, scheduler) => resolve({task, scheduler}), delay)
-    );
-  }
-
   clear() {
     const paused = this.paused;
     if (!paused) this.pause();
+    this.queue.array.forEach(task => task.cancel());
     this.queue.clear();
     if (!paused) this.resume();
   }
@@ -113,7 +109,7 @@ export class Scheduler extends MicroTaskQueue {
       this.queue.top.time <= Date.now() + this.tolerance
     ) {
       const task = this.queue.pop();
-      task.fn(task, this);
+      task.fn({task, scheduler: this});
     }
 
     if (!this.paused && !this.queue.isEmpty) this.stopQueue = this.startQueue();
@@ -121,8 +117,8 @@ export class Scheduler extends MicroTaskQueue {
 }
 
 export const repeat = (fn, delay) => {
-  const repeatableFunction = (task, scheduler) => {
-    fn(task, scheduler);
+  const repeatableFunction = ({task, scheduler}) => {
+    fn({task, scheduler});
     scheduler.enqueue(repeatableFunction, isNaN(delay) ? task.delay : delay);
   };
   return repeatableFunction;

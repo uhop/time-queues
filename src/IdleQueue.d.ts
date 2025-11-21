@@ -40,7 +40,7 @@ export declare class IdleQueue extends ListQueue {
    * @param fn The function to execute.
    * @returns The task object.
    */
-  enqueue(fn: (deadline: IdleDeadline, task: Task, queue: IdleQueue) => void): Task;
+  enqueue(fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown): Task;
 
   /**
    * Dequeues a task.
@@ -48,6 +48,15 @@ export declare class IdleQueue extends ListQueue {
    * @returns The queue.
    */
   dequeue(task: Task): this;
+
+  /**
+   * Schedules a task to run in the next idle period.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @returns The task object.
+   */
+  schedule(
+    fn: (({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown) | null | undefined
+  ): Task;
 
   /**
    * Clears the queue.
@@ -83,6 +92,8 @@ export const idleQueue: IdleQueue;
 /**
  * A function that schedules a task to run in the next idle period.
  */
-export const defer: (fn: (deadline: IdleDeadline, task: Task, queue: IdleQueue) => void) => Task;
+export const defer: (
+  fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown
+) => Task;
 
 export default IdleQueue;

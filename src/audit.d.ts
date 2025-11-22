@@ -7,9 +7,9 @@
  * @param ms The minimum time interval between function calls, in milliseconds.
  * @returns An audited version of the function.
  */
-export declare function audit<T extends (...args: any[]) => void>(
-  fn: T,
+export declare function audit<A extends unknown[]>(
+  fn: (...args: A) => void,
   ms: number
-): (...args: Parameters<T>) => void;
+): (...args: A) => void;
 
 export default audit;

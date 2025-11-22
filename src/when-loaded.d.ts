@@ -14,4 +14,24 @@ export declare function whenLoaded(fn: () => void): void;
  */
 export declare function remove(fn: () => void): boolean;
 
+/**
+ * Schedules a function to be called when the document is loaded.
+ *
+ * @param fn The function to schedule.
+ * @returns A promise that resolves when the document is loaded.
+ */
+export declare function scheduleWhenLoaded<R extends unknown>(
+  fn: () => R
+): Promise<Awaited<R>>;
+
+/**
+ * Schedules a function to be called when the document is loaded.
+ *
+ * @param fn The function to schedule.
+ * @returns A promise that resolves when the document is loaded.
+ */
+export declare function scheduleWhenLoaded(
+  fn: null | undefined
+): Promise<void>;
+
 export default whenLoaded;

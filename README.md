@@ -61,6 +61,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+- 1.2.3 _Updated dependencies._
 - 1.2.2 _`Counter`: separated old waiter from new waiters before notifying them._
 - 1.2.1 _Minor release: updated formal TS dependencies in `index.d.ts`._
 - 1.2.0 _Added `Counter`. Updated dev dependencies._

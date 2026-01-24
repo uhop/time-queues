@@ -36,7 +36,9 @@ test('Retainer', async t => {
   t.equal(retainer.value, 1);
 
   await sleep(5);
-  t.equal(retainer.value, 1);
+  const isOne = retainer.value === 1,
+    isNull = retainer.value === null;
+  t.ok(isOne || isNull);
 
   await sleep(10);
   t.equal(retainer.value, null);

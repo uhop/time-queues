@@ -32,19 +32,15 @@ export const whenLoaded = fn => {
   if (wasEmpty) window.addEventListener('load', handleLoaded);
 };
 
-const returnArgs = (...args) => args;
-
-export const scheduleWhenLoaded = fn => {
-  fn ||= returnArgs;
-  return new Promise((resolve, reject) => {
+export const scheduleWhenLoaded = fn =>
+  new Promise((resolve, reject) => {
     whenLoaded(() => {
       try {
-        resolve(fn());
+        resolve(fn?.());
       } catch (error) {
         reject(error);
       }
     });
   });
-};
 
 export default whenLoaded;

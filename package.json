@@ -56,12 +56,12 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^25.0.10",
-    "tape-six": "^1.4.5",
-    "tape-six-proc": "^1.1.6",
+    "@types/node": "^25.2.2",
+    "tape-six": "^1.7.0",
+    "tape-six-proc": "^1.2.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "list-toolkit": "^2.2.5"
+    "list-toolkit": "^2.2.6"
   }
 }

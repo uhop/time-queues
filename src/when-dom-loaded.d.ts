@@ -25,13 +25,13 @@ export declare function scheduleWhenDomLoaded<R extends unknown>(
 ): Promise<Awaited<R>>;
 
 /**
- * Schedules a function to be called when the DOM is loaded.
+ * Resolves a promise when the DOM is loaded.
  *
- * @param fn The function to schedule.
+ * @param fn `null` or `undefined`.
  * @returns A promise that resolves when the DOM is loaded.
  */
 export declare function scheduleWhenDomLoaded(
-  fn: null | undefined
+  fn?: null
 ): Promise<void>;
 
 export default whenDomLoaded;

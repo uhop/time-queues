@@ -34,19 +34,15 @@ export const whenDomLoaded = fn => {
   if (wasEmpty) document.addEventListener('DOMContentLoaded', handleDomLoaded);
 };
 
-const returnArgs = (...args) => args;
-
-export const scheduleWhenDomLoaded = fn => {
-  fn ||= returnArgs;
-  return new Promise((resolve, reject) => {
+export const scheduleWhenDomLoaded = fn =>
+  new Promise((resolve, reject) => {
     whenDomLoaded(() => {
       try {
-        resolve(fn());
+        resolve(fn?.());
       } catch (error) {
         reject(error);
       }
     });
   });
-};
 
 export default whenDomLoaded;

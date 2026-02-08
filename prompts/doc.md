@@ -1,4 +1,4 @@
-Generate a comprehensive documentation file for the specified file, including a detailed description of its purpose, key features, technical specifications, usage instructions, and any relevant troubleshooting steps. Ensure the document is formatted for easy readability and includes clear headings and sections.
+Generate a comprehensive documentation file for the specified file, including a detailed description of its purpose, key features, technical specifications, usage instructions, and any relevant troubleshooting steps. Ensure the document is formatted for easy readability and includes clear headings and sections. Target the developers who will use the file. Be concise and do not include any unnecessary details.
 
 Generate a Markdown text with the following sections:
 

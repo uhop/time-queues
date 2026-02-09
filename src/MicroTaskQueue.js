@@ -36,6 +36,7 @@ export class MicroTaskQueue {
     fn ||= MicroTaskQueue.returnArgs;
     const task = this.enqueue(
       (...args) => {
+        task.makePromise();
         try {
           task.resolve(fn(...args));
         } catch (error) {

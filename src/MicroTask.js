@@ -19,25 +19,36 @@ export class MicroTask {
     return this.#promise;
   }
   makePromise() {
-    this.#promise = new Promise((resolve, reject) => {
-      this.#resolve = resolve;
-      this.#reject = reject;
-    });
+    if (this.#promise) return this;
+    if (typeof Promise.withResolvers == 'function') {
+      ({
+        promise: this.#promise,
+        resolve: this.#resolve,
+        reject: this.#reject
+      } = Promise.withResolvers());
+    } else {
+      this.#promise = new Promise((resolve, reject) => {
+        this.#resolve = resolve;
+        this.#reject = reject;
+      });
+    }
     return this;
   }
   resolve(value) {
-    if (!this.#resolve) return;
-    this.#resolve(value);
-    this.#resolve = null;
-    this.#reject = null;
+    if (this.#resolve) {
+      this.#resolve(value);
+      this.#resolve = null;
+      this.#reject = null;
+    }
     return this;
   }
   cancel() {
-    if (!this.#reject) return;
     this.isCanceled = true;
-    this.#reject(new CancelTaskError());
-    this.#resolve = null;
-    this.#reject = null;
+    if (this.#reject) {
+      this.#reject(new CancelTaskError());
+      this.#resolve = null;
+      this.#reject = null;
+    }
     return this;
   }
 }

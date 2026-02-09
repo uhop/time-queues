@@ -3,8 +3,8 @@
 'use strict';
 
 export class CancelTaskError extends Error {
-  constructor() {
-    super('Task was canceled');
+  constructor(message = 'Task was canceled', options) {
+    super(message, options);
     this.name = 'CancelTaskError';
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, CancelTaskError);

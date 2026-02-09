@@ -1,7 +1,5 @@
 // @ts-self-types="./MicroTask.d.ts"
 
-'use strict';
-
 import CancelTaskError from './CancelTaskError.js';
 
 export class MicroTask {
@@ -42,10 +40,10 @@ export class MicroTask {
     }
     return this;
   }
-  cancel() {
+  cancel(error) {
     this.isCanceled = true;
     if (this.#reject) {
-      this.#reject(new CancelTaskError());
+      this.#reject(new CancelTaskError(undefined, error ? {cause: error} : undefined));
       this.#resolve = null;
       this.#reject = null;
     }

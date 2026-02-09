@@ -42,9 +42,10 @@ export declare class MicroTask {
    * Cancels the microtask, if a promise is created.
    * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
    * It can be overridden in subclasses.
+   * @param error The optional error to use as the cause of the cancellation.
    * @returns The microtask.
    */
-  cancel(): this;
+  cancel(error?: Error): this;
 }
 
 export default MicroTask;

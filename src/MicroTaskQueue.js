@@ -35,18 +35,18 @@ export class MicroTaskQueue {
   schedule(fn, ...args) {
     fn ||= MicroTaskQueue.returnArgs;
     const task = this.enqueue(
-      (...args) => {
-        task.makePromise();
+      function (...args) {
+        this.makePromise();
         try {
-          task.resolve(fn(...args));
+          this.resolve(fn(...args));
         } catch (error) {
-          task.cancel();
+          this.cancel(error);
         }
+        return this.promise;
       },
       ...args
     );
     task.makePromise();
-    task.fn = fn;
     return task;
   }
   static returnArgs(...args) {

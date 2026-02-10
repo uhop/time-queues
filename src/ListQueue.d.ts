@@ -82,9 +82,4 @@ export declare class ListQueue extends MicroTaskQueue {
  */
 export declare type Task = MicroTask;
 
-/**
- * A task for list queues with a promise.
- */
-export declare type TaskWithPromise = MicroTaskWithPromise;
-
 export default ListQueue;

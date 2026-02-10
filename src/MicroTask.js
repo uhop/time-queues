@@ -6,6 +6,7 @@ export class MicroTask {
   #promise;
   #resolve;
   #reject;
+  #settled;
   constructor(fn) {
     this.fn = fn;
     this.#promise = null;
@@ -15,6 +16,9 @@ export class MicroTask {
   }
   get promise() {
     return this.#promise;
+  }
+  get settled() {
+    return this.#settled;
   }
   makePromise() {
     if (this.#promise) return this;
@@ -37,6 +41,7 @@ export class MicroTask {
       this.#resolve(value);
       this.#resolve = null;
       this.#reject = null;
+      this.#settled = true;
     }
     return this;
   }
@@ -46,6 +51,7 @@ export class MicroTask {
       this.#reject(new CancelTaskError(undefined, error ? {cause: error} : undefined));
       this.#resolve = null;
       this.#reject = null;
+      this.#settled = true;
     }
     return this;
   }

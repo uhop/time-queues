@@ -9,7 +9,7 @@ test('batch', async t => {
   let counter = 0,
     maxCount = 0;
 
-  const f = async () => {
+  const fn = async () => {
     ++counter;
     maxCount = Math.max(maxCount, counter);
     await randomSleep(10, 5);
@@ -21,10 +21,11 @@ test('batch', async t => {
     M = 3;
 
   for (let i = 0; i < N; ++i) {
-    fs.push(f);
+    fs.push(fn);
   }
 
   await batch(fs, M);
 
+  t.equal(counter, 0);
   t.equal(maxCount, M);
 });

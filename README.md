@@ -29,22 +29,32 @@ cd time-queues
 npm install
 ```
 
-## Usage
+## Documentation
 
-The full documentation is available in the project's [wiki](https://github.com/uhop/time-queues/wiki). Below is a summary of the most important parts of the documentation:
+The [project wiki](https://github.com/uhop/time-queues/wiki) provides comprehensive information about the `time-queues` library.
 
-### Resource Management
+### Core Task Queue Classes
 
-- [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler): Time-based task scheduling
-- [Retainer](https://github.com/uhop/time-queues/wiki/Retainer): Manage resource lifecycle
+- [MicroTask](https://github.com/uhop/time-queues/wiki/MicroTask): Base class for deferred execution
+- [MicroTaskQueue](https://github.com/uhop/time-queues/wiki/MicroTaskQueue): Base class for task queues
+- [ListQueue](https://github.com/uhop/time-queues/wiki/ListQueue): List-based queue implementation
+
+### Concurrency Control
+
+- [LimitedQueue](https://github.com/uhop/time-queues/wiki/LimitedQueue): Queue with controlled concurrency
 - [Throttler](https://github.com/uhop/time-queues/wiki/Throttler): Control execution rate based on keys
-- [Counter](https://github.com/uhop/time-queues/wiki/Counter): Track the number of pending tasks asynchronously
+- [Counter](https://github.com/uhop/time-queues/wiki/Counter): Track pending task counts
 
 ### Browser-Specific Components
 
 - [IdleQueue](https://github.com/uhop/time-queues/wiki/IdleQueue): Execute tasks during browser idle periods
 - [FrameQueue](https://github.com/uhop/time-queues/wiki/FrameQueue): Execute tasks during animation frames
 - [PageWatcher](https://github.com/uhop/time-queues/wiki/PageWatcher): Monitor and respond to page lifecycle changes
+
+### Scheduling & Timing
+
+- [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler): Time-based task scheduling
+- [Retainer](https://github.com/uhop/time-queues/wiki/Retainer): Resource lifecycle management
 
 ### Utility Functions
 
@@ -54,6 +64,60 @@ The full documentation is available in the project's [wiki](https://github.com/u
 - [debounce()](<https://github.com/uhop/time-queues/wiki/debounce()>): Delay function execution until input stabilizes
 - [sample()](<https://github.com/uhop/time-queues/wiki/sample()>): Execute function at regular intervals
 - [audit()](<https://github.com/uhop/time-queues/wiki/audit()>): Execute function after specified delay
+- [batch()](<https://github.com/uhop/time-queues/wiki/batch()>): Execute async operations with controlled concurrency
+
+## Getting Started
+
+To get started with `time-queues`, install it via npm:
+
+```sh
+npm install time-queues
+```
+
+Then import the components you need in your project:
+
+```js
+// Import specific components
+import {Scheduler, repeat} from 'time-queues/Scheduler.js';
+import idleQueue from 'time-queues/IdleQueue.js';
+import defer from 'time-queues/defer.js';
+
+// Use the components in your application
+```
+
+For more information, see the documentation for each component in the wiki.
+
+## Browser-related notes
+
+Internally it uses `list-toolkit` and leverages the following browser APIs:
+
+- [requestIdleCallback()](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
+- [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+- [queueMicrotask()](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)
+- [setTimeout()](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
+- Various events and properties.
+
+There are many articles on the subject that detail how to leverage the APIs writing efficient applications.
+Some of them are:
+
+- [Background Tasks API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API)
+- [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+- [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api)
+
+This package eliminates the need to write code that you'll write anyway following best practices.
+
+### Running a test web application
+
+Don't forget to look at a test web application that uses the library. For that you should start a server:
+
+```sh
+npm start
+```
+
+And navigate to [http://localhost:3000/tests/web/](http://localhost:3000/tests/web/) &mdash;
+don't forget to open the console and play around: switch tabs, make other window active,
+navigate away and come back, and so on.
+See how queues work in [tests/web/test.js](https://github.com/uhop/time-queues/blob/main/tests/web/test.js).
 
 ## License
 

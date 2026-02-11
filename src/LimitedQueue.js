@@ -5,11 +5,13 @@ import ListQueue from './ListQueue.js';
 export class LimitedQueue extends ListQueue {
   #taskLimit;
   #activeTasks;
+  #idleWaiters;
 
   constructor(limit, paused) {
     super(paused);
     this.#taskLimit = limit;
     this.#activeTasks = 0;
+    this.#idleWaiters = [];
   }
 
   get taskLimit() {
@@ -25,13 +27,33 @@ export class LimitedQueue extends ListQueue {
     return this.#activeTasks;
   }
 
+  get isIdle() {
+    return !this.#activeTasks && this.list.isEmpty;
+  }
+
+  waitForIdle() {
+    return new Promise(resolve => {
+      if (this.isIdle) {
+        resolve();
+      } else {
+        this.#idleWaiters.push(resolve);
+      }
+    });
+  }
+
   startQueue() {
     this.#processTasks();
     return null;
   }
 
   #processTasks() {
-    if (this.#activeTasks >= this.#taskLimit || this.list.isEmpty || this.paused) return;
+    if (this.paused) return;
+    if (this.isIdle) {
+      const waiters = this.#idleWaiters;
+      this.#idleWaiters = [];
+      waiters.forEach(resolve => resolve());
+      return;
+    }
     while (this.#activeTasks < this.#taskLimit && !this.list.isEmpty) {
       const task = this.list.popFront();
       ++this.#activeTasks;

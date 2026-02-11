@@ -33,10 +33,25 @@ export declare class LimitedQueue extends ListQueue {
 
   /**
    * Set the maximum number of tasks that can be run in parallel.
+   * @param limit The new maximum number of tasks that can be run in parallel. It can dynamically add more tasks if the current number of tasks is less than the new limit.
    */
   set taskLimit(limit: number);
 
+  /**
+   * Get the number of currently active tasks.
+   */
   get activeTasks(): number;
+
+  /**
+   * Whether the queue is idle.
+   */
+  get isIdle(): boolean;
+
+  /**
+   * Wait for queue to become idle.
+   * @returns A promise that resolves when the queue becomes idle. If the queue is already idle, the promise is resolved immediately.
+   */
+  waitForIdle(): Promise<void>;
 
   /**
    * Enqueues a microtask.

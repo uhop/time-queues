@@ -22,6 +22,7 @@ test('LimitedQueue with random sleep', async t => {
     M = 3;
 
   const queue = new LimitedQueue(M);
+  t.ok(queue.isIdle);
 
   for (let i = 0; i < N; ++i) {
     const task = queue.schedule(fn(i));
@@ -29,6 +30,9 @@ test('LimitedQueue with random sleep', async t => {
   }
 
   await Promise.all(fs);
+
+  await queue.waitForIdle();
+  t.ok(queue.isIdle);
 
   t.equal(counter, 0);
   t.equal(maxCount, M);

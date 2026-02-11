@@ -15,7 +15,6 @@ export declare class Counter {
 
   /**
    * Gets the current value of the counter.
-   * @returns The current value of the counter.
    */
   get value(): number;
 

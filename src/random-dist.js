@@ -19,9 +19,9 @@ export const normal = (mean, stdDev, skewness = 0) => {
 };
 
 export const expo = lambda => {
-  return -Math.log(Math.random()) / lambda;
+  return -Math.log(1 - Math.random()) / lambda;
 };
 
 export const pareto = (min, alpha) => {
-  return min / Math.pow(Math.random(), 1 / alpha);
+  return min / Math.pow(1 - Math.random(), 1 / alpha);
 };

@@ -4,9 +4,9 @@
  * All other non-function values are passed as-is and promises are resolved.
  * Modelled after Promise.all().
  *
- * @param fns an array of parameterless functions (asynchronous or not), promises, or values
- * @param limit how many asynchronous operations to run in parallel (default is 4)
- * @returns a promise that resolves when all functions have completed to an array of results
+ * @param fns An array of parameterless functions (asynchronous or not), promises, or values
+ * @param limit How many asynchronous operations to run in parallel (default is 4)
+ * @returns A promise that resolves when all functions have completed to an array of results
  */
 export declare function batch(
   fns: ((() => PromiseLike<unknown>) | PromiseLike<unknown> | unknown)[],

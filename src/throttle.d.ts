@@ -1,6 +1,7 @@
 /**
  * Throttles a function by ensuring it is not called more often than the specified interval.
- * The first call calls the function and starts a timeout. Until the timeout expires, any subsequent calls are ignored.
+ * The first call calls the function and starts a timeout. Until the timeout expires,
+ * any subsequent calls are ignored.
  * This function is similar to `audit()`, but the first seen arguments are passed to the function.
  *
  * @param fn The function to throttle.

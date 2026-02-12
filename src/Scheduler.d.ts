@@ -55,7 +55,6 @@ export declare class Task extends MicroTask {
   /**
    * Cancels the microtask, if a promise is created.
    * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
-   * It can be overridden in subclasses.
    * @returns The microtask.
    */
   cancel(): this;
@@ -67,43 +66,47 @@ export declare class Task extends MicroTask {
 export declare class Scheduler extends MicroTaskQueue {
   /**
    * Whether the scheduler is paused.
+   * When paused, new tasks are queued but not executed immediately.
    */
   paused: boolean;
 
   /**
    * The tolerance for comparing starting time of tasks.
+   * This allows for small timing differences in task execution.
    */
   tolerance: number;
 
   /**
    * Creates a new scheduler.
-   * @param paused Whether the scheduler should start paused.
-   * @param tolerance The tolerance for comparing starting time of tasks.
+   * @param paused Whether the scheduler should start in a paused state.
+   * @param tolerance The tolerance for comparing starting time of tasks (default is 4ms).
    */
-  constructor(paused?: boolean, tolerance: number = 4);
+  constructor(paused?: boolean, tolerance?: number);
 
   /**
    * Whether the scheduler is empty.
+   * Returns true if there are no tasks scheduled for execution.
    */
   get isEmpty(): boolean;
 
   /**
    * The next scheduled time or `Infinity` if the scheduler is empty.
+   * Represents the time when the next task is scheduled to execute.
    */
   get nextTime(): number;
 
   /**
-   * Enqueues a task.
+   * Enqueues a task for future execution.
    * @param fn The function to execute.
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
-   * @returns The task object.
+   * @returns The task object that was enqueued.
    */
   enqueue(fn: ({task: Task, scheduler: Scheduler}) => unknown, delay: number | Date): Task;
 
   /**
    * Removes a task from the scheduler.
    * @param task The task to remove.
-   * @returns The scheduler object.
+   * @returns The scheduler object for chaining.
    */
   dequeue(task: Task): this;
 
@@ -111,7 +114,7 @@ export declare class Scheduler extends MicroTaskQueue {
    * Schedules a task to run in the future.
    * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
-   * @returns The task object.
+   * @returns The task object that was scheduled.
    */
   schedule(
     fn: (({task: Task, scheduler: Scheduler}) => unknown) | null | undefined,
@@ -119,20 +122,22 @@ export declare class Scheduler extends MicroTaskQueue {
   ): Task;
 
   /**
-   * Clears the queue.
-   * @returns The queue.
+   * Clears all tasks from the scheduler.
+   * @returns The scheduler instance for chaining.
    */
   clear(): this;
 
   /**
-   * Pauses the queue.
-   * @returns The queue.
+   * Pauses the scheduler.
+   * When paused, new tasks are queued but not executed immediately.
+   * @returns The scheduler instance for chaining.
    */
   pause(): this;
 
   /**
-   * Resumes the queue.
-   * @returns The queue.
+   * Resumes the scheduler.
+   * When resumed, queued tasks will be executed according to their scheduling.
+   * @returns The scheduler instance for chaining.
    */
   resume(): this;
 }

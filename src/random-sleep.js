@@ -10,7 +10,11 @@ export const randomNormalSleep =
   () =>
     sleep(normal(mean, stdDev, skewness));
 
-export const randomExpoSleep = lambda => () => sleep(expo(lambda));
+export const randomExpoSleep = (min, max, lambda) => {
+  const range = Math.abs(max - min),
+    base = Math.min(min, max);
+  return () => sleep(range * expo(lambda) + base);
+};
 
 export const randomParetoSleep = (min, alpha) => () => sleep(pareto(min, alpha));
 

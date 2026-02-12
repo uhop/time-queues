@@ -22,7 +22,7 @@ test('random sleep', async t => {
   await n();
 
   t.equal(typeof randomExpoSleep, 'function');
-  const e = randomExpoSleep(0.1);
+  const e = randomExpoSleep(5, 15, 0.1);
   t.equal(typeof e, 'function');
   await e();
   await e();

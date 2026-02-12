@@ -66,6 +66,11 @@ The [project wiki](https://github.com/uhop/time-queues/wiki) provides comprehens
 - [audit()](<https://github.com/uhop/time-queues/wiki/audit()>): Execute function after specified delay
 - [batch()](<https://github.com/uhop/time-queues/wiki/batch()>): Execute async operations with controlled concurrency
 
+### Random Distribution Utilities
+
+- [random-dist](https://github.com/uhop/time-queues/wiki/random-dist): Generate random numbers from various probability distributions
+- [random-sleep](https://github.com/uhop/time-queues/wiki/random-sleep): Create randomized delays with various probability distributions
+
 ## Getting Started
 
 To get started with `time-queues`, install it via npm:

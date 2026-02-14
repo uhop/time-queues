@@ -43,9 +43,10 @@ export declare class MicroTaskQueue {
    * Schedules a microtask with a promise for execution.
    * This can be overridden in subclasses if more arguments are needed.
    * @param fn The function to execute when the microtask is scheduled, it can be an async function.
+   * @param args Additional arguments to pass to `enqueue()`. It is there to accommodate custom implementations in subclasses.
    * @returns The scheduled microtask.
    */
-  schedule(fn: (() => unknown) | null | undefined): MicroTask;
+  schedule(fn: (() => unknown) | null | undefined, ...args: unknown[]): MicroTask;
 
   /**
    * Clears all tasks from the queue.

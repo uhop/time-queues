@@ -130,6 +130,7 @@ This project is licensed under the BSD-3-Clause License.
 
 ## Release History
 
+- 1.3.0 _Added `batch()` and `LimitedQueue` to run asynchronous operations with controlled concurrency, random distribuitions and random sleep functions, updated dependencies, minor improvements._
 - 1.2.4 _Updated dependencies._
 - 1.2.3 _Updated dependencies._
 - 1.2.2 _`Counter`: separated old waiter from new waiters before notifying them._

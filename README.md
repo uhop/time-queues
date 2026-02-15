@@ -3,17 +3,18 @@
 [npm-img]: https://img.shields.io/npm/v/time-queues.svg
 [npm-url]: https://npmjs.org/package/time-queues
 
-`time-queues` is an efficient, lightweight library for organizing asynchronous multitasking and scheduled tasks in JavaScript applications. It works seamlessly in browsers and server-side environments like Node.js, Deno, and Bun.
+Lightweight library for asynchronous task scheduling and concurrency control in JavaScript. Works in browsers, Node.js, Deno, and Bun.
 
-The library provides elegant solutions for common timing and scheduling challenges, helping developers create responsive, efficient applications that follow best practices for resource management and user experience.
+## Why time-queues?
 
-## Key Features
+Modern web apps need to schedule work without blocking the main thread, respect page lifecycle events, and limit concurrency &mdash; but the platform APIs are low-level and tedious to use correctly. `time-queues` wraps them in a small, composable toolkit:
 
-- **Efficient Task Scheduling**: Schedule tasks to run at specific times or after delays
-- **Browser Performance Optimization**: Execute tasks during idle periods or animation frames
-- **Page Lifecycle Management**: Respond intelligently to page visibility and focus changes
-- **Resource Management**: Control execution rates with throttling and debouncing
-- **Minimal Dependencies**: Relies only on [list-toolkit](https://www.npmjs.com/package/list-toolkit), a zero-dependency library
+- **Schedule tasks** to run after a delay, at a specific time, or on a recurring interval
+- **Optimize browser performance** by running work during idle periods or animation frames
+- **React to page lifecycle** changes (hidden, frozen, terminated) automatically
+- **Control concurrency** with throttling, debouncing, batching, and rate limiting
+- **Manage resources** with reference-counted creation/destruction
+- **Minimal footprint** &mdash; one dependency ([list-toolkit](https://www.npmjs.com/package/list-toolkit), zero-dep)
 
 ## Installation
 
@@ -21,127 +22,129 @@ The library provides elegant solutions for common timing and scheduling challeng
 npm install time-queues
 ```
 
-If you want to check out the source code, you can use the following command:
+## Quick Start
+
+```js
+import sleep from 'time-queues/sleep.js';
+import {Scheduler, repeat} from 'time-queues/Scheduler.js';
+import {batch} from 'time-queues/batch.js';
+
+// Simple delay
+await sleep(1000);
+
+// Run a task every 5 seconds
+const scheduler = new Scheduler();
+scheduler.enqueue(repeat(({task, scheduler}) => {
+  console.log('tick');
+}, 5000), 5000);
+
+// Fetch 10 URLs, max 3 at a time
+const results = await batch(
+  urls.map(url => () => fetch(url).then(r => r.json())),
+  3
+);
+```
+
+See [examples/README.md](examples/README.md) for more use cases.
+
+## Documentation
+
+The [project wiki](https://github.com/uhop/time-queues/wiki) has detailed docs for every component.
+
+### Queues
+
+| Component | Purpose |
+|---|---|
+| [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler) | Time-based task scheduling (delays, dates, repeats) |
+| [IdleQueue](https://github.com/uhop/time-queues/wiki/IdleQueue) | Run tasks during browser idle periods |
+| [FrameQueue](https://github.com/uhop/time-queues/wiki/FrameQueue) | Run tasks in animation frames |
+| [LimitedQueue](https://github.com/uhop/time-queues/wiki/LimitedQueue) | Concurrency-controlled async queue |
+| [PageWatcher](https://github.com/uhop/time-queues/wiki/PageWatcher) | React to page lifecycle changes |
+
+### Utilities
+
+| Function | Purpose |
+|---|---|
+| [sleep()](<https://github.com/uhop/time-queues/wiki/sleep()>) | Promise-based delay |
+| [defer()](<https://github.com/uhop/time-queues/wiki/defer()>) | Execute on next tick |
+| [throttle()](<https://github.com/uhop/time-queues/wiki/throttle()>) | Rate-limit a function (first call wins) |
+| [debounce()](<https://github.com/uhop/time-queues/wiki/debounce()>) | Delay until input stabilizes |
+| [sample()](<https://github.com/uhop/time-queues/wiki/sample()>) | Sample at regular intervals |
+| [audit()](<https://github.com/uhop/time-queues/wiki/audit()>) | Collect then execute after delay |
+| [batch()](<https://github.com/uhop/time-queues/wiki/batch()>) | Run async ops with concurrency limit |
+
+### Supporting Classes
+
+| Component | Purpose |
+|---|---|
+| [Throttler](https://github.com/uhop/time-queues/wiki/Throttler) | Key-based rate limiting |
+| [Retainer](https://github.com/uhop/time-queues/wiki/Retainer) | Resource lifecycle management |
+| [Counter](https://github.com/uhop/time-queues/wiki/Counter) | Track pending task counts |
+| [MicroTask](https://github.com/uhop/time-queues/wiki/MicroTask) | Base task unit |
+| [MicroTaskQueue](https://github.com/uhop/time-queues/wiki/MicroTaskQueue) | Base queue class |
+| [ListQueue](https://github.com/uhop/time-queues/wiki/ListQueue) | List-based queue implementation |
+
+### Random Utilities
+
+| Module | Purpose |
+|---|---|
+| [random-dist](https://github.com/uhop/time-queues/wiki/random-dist) | Random numbers (uniform, normal, exponential, Pareto) |
+| [random-sleep](https://github.com/uhop/time-queues/wiki/random-sleep) | Randomized delays from various distributions |
+
+### Page Load Helpers
+
+| Function | Purpose |
+|---|---|
+| [whenDomLoaded()](<https://github.com/uhop/time-queues/wiki/whenDomLoaded()>) | Run code when DOM is ready |
+| [whenLoaded()](<https://github.com/uhop/time-queues/wiki/whenLoaded()>) | Run code when page is fully loaded |
+
+## Browser Notes
+
+The library leverages these browser APIs where available:
+
+- [requestIdleCallback()](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
+- [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+- [queueMicrotask()](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)
+- [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api)
+
+For background reading:
+
+- [Background Tasks API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API)
+- [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+
+### Test web app
+
+Run `npm start` and open [http://localhost:3000/tests/web/](http://localhost:3000/tests/web/) &mdash;
+open the console, switch tabs, navigate away and back to see queues in action.
+Source: [tests/web/test.js](https://github.com/uhop/time-queues/blob/main/tests/web/test.js).
+
+## Development
 
 ```sh
 git clone --recurse-submodules https://github.com/uhop/time-queues.git
 cd time-queues
 npm install
+npm test
 ```
-
-## Documentation
-
-The [project wiki](https://github.com/uhop/time-queues/wiki) provides comprehensive information about the `time-queues` library.
-
-### Core Task Queue Classes
-
-- [MicroTask](https://github.com/uhop/time-queues/wiki/MicroTask): Base class for deferred execution
-- [MicroTaskQueue](https://github.com/uhop/time-queues/wiki/MicroTaskQueue): Base class for task queues
-- [ListQueue](https://github.com/uhop/time-queues/wiki/ListQueue): List-based queue implementation
-
-### Concurrency Control
-
-- [LimitedQueue](https://github.com/uhop/time-queues/wiki/LimitedQueue): Queue with controlled concurrency
-- [Throttler](https://github.com/uhop/time-queues/wiki/Throttler): Control execution rate based on keys
-- [Counter](https://github.com/uhop/time-queues/wiki/Counter): Track pending task counts
-
-### Browser-Specific Components
-
-- [IdleQueue](https://github.com/uhop/time-queues/wiki/IdleQueue): Execute tasks during browser idle periods
-- [FrameQueue](https://github.com/uhop/time-queues/wiki/FrameQueue): Execute tasks during animation frames
-- [PageWatcher](https://github.com/uhop/time-queues/wiki/PageWatcher): Monitor and respond to page lifecycle changes
-
-### Scheduling & Timing
-
-- [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler): Time-based task scheduling
-- [Retainer](https://github.com/uhop/time-queues/wiki/Retainer): Resource lifecycle management
-
-### Utility Functions
-
-- [defer()](<https://github.com/uhop/time-queues/wiki/defer()>): Execute tasks in the next tick
-- [sleep()](<https://github.com/uhop/time-queues/wiki/sleep()>): Promise-based delay function
-- [throttle()](<https://github.com/uhop/time-queues/wiki/throttle()>): Limit function execution rate
-- [debounce()](<https://github.com/uhop/time-queues/wiki/debounce()>): Delay function execution until input stabilizes
-- [sample()](<https://github.com/uhop/time-queues/wiki/sample()>): Execute function at regular intervals
-- [audit()](<https://github.com/uhop/time-queues/wiki/audit()>): Execute function after specified delay
-- [batch()](<https://github.com/uhop/time-queues/wiki/batch()>): Execute async operations with controlled concurrency
-
-### Random Distribution Utilities
-
-- [random-dist](https://github.com/uhop/time-queues/wiki/random-dist): Generate random numbers from various probability distributions
-- [random-sleep](https://github.com/uhop/time-queues/wiki/random-sleep): Create randomized delays with various probability distributions
-
-## Getting Started
-
-To get started with `time-queues`, install it via npm:
-
-```sh
-npm install time-queues
-```
-
-Then import the components you need in your project:
-
-```js
-// Import specific components
-import {Scheduler, repeat} from 'time-queues/Scheduler.js';
-import idleQueue from 'time-queues/IdleQueue.js';
-import defer from 'time-queues/defer.js';
-
-// Use the components in your application
-```
-
-For more information, see the documentation for each component in the wiki.
-
-## Browser-related notes
-
-Internally it uses `list-toolkit` and leverages the following browser APIs:
-
-- [requestIdleCallback()](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
-- [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
-- [queueMicrotask()](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)
-- [setTimeout()](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
-- Various events and properties.
-
-There are many articles on the subject that detail how to leverage the APIs writing efficient applications.
-Some of them are:
-
-- [Background Tasks API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API)
-- [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
-- [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api)
-
-This package eliminates the need to write code that you'll write anyway following best practices.
-
-### Running a test web application
-
-Don't forget to look at a test web application that uses the library. For that you should start a server:
-
-```sh
-npm start
-```
-
-And navigate to [http://localhost:3000/tests/web/](http://localhost:3000/tests/web/) &mdash;
-don't forget to open the console and play around: switch tabs, make other window active,
-navigate away and come back, and so on.
-See how queues work in [tests/web/test.js](https://github.com/uhop/time-queues/blob/main/tests/web/test.js).
 
 ## License
 
-This project is licensed under the BSD-3-Clause License.
+BSD-3-Clause
 
 ## Release History
 
-- 1.3.0 _Added `batch()` and `LimitedQueue` to run asynchronous operations with controlled concurrency, random distribuitions and random sleep functions, updated dependencies, minor improvements._
+- 1.3.0 _Added `batch()`, `LimitedQueue`, random distributions and random sleep functions._
 - 1.2.4 _Updated dependencies._
 - 1.2.3 _Updated dependencies._
 - 1.2.2 _`Counter`: separated old waiter from new waiters before notifying them._
 - 1.2.1 _Minor release: updated formal TS dependencies in `index.d.ts`._
-- 1.2.0 _Added `Counter`. Updated dev dependencies._
-- 1.1.2 _Updated dev dependencies. No need to upgrade._
+- 1.2.0 _Added `Counter`._
+- 1.1.2 _Updated dev dependencies._
 - 1.1.1 _Updates to TS typings._
 - 1.1.0 _Added `Throttler`, `Retainer`, promise-based convenience time methods._
 - 1.0.5 _Technical release: updated deps, more tests._
 - 1.0.4 _Bug fixes and code simplifications._
 - 1.0.3 _Updated deps (`list-toolkit`) to fix a minor bug._
 - 1.0.2 _Updated deps (`list-toolkit`)._
-- 1.0.1 _Minor update in README. No need to upgrade._
+- 1.0.1 _Minor update in README._
 - 1.0.0 _Initial release._

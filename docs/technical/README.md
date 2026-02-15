@@ -5,24 +5,24 @@ Welcome to the technical documentation for the time-queues library. This documen
 ## Documentation Overview
 
 ### [ARCHITECTURE.md](ARCHITECTURE.md)
-Comprehensive overview of the library's architecture, design patterns, and implementation details. This document explains:
-- Core architecture and component relationships
-- Key design patterns used throughout the codebase
+Comprehensive overview of the library's architecture, design patterns, and implementation details:
+- Inheritance hierarchy and component relationships
+- Key design patterns (lazy promises, start/stop queue, browser API abstraction)
 - Implementation details and technical decisions
 - Performance considerations and memory management strategies
 
 ### [API.md](API.md)
-Detailed API specifications for all classes, methods, and functions. This document provides:
-- Precise method signatures and parameter descriptions
-- Return value specifications
-- Error handling behaviors
-- Usage examples for all public APIs
+Detailed API specifications for all classes, methods, and functions:
+- Import paths and precise method signatures
+- Parameter descriptions and return value specifications
+- Task callback signatures for each queue type
+- All exported functions and singleton instances
 
 ### [CONTRIBUTING.md](CONTRIBUTING.md)
-Guidelines for contributing to the project, including:
-- Development setup instructions
-- Coding standards and best practices
-- Testing procedures and requirements
+Guidelines for contributing to the project:
+- Development setup and project structure
+- Coding standards and key patterns
+- Testing procedures across Node.js, Bun, and Deno
 - Pull request submission process
 
 ## Quick Start for Developers
@@ -39,11 +39,12 @@ This documentation is specifically structured to provide AI agents with comprehe
 - Contribution guidelines help understand project conventions
 - Implementation details facilitate debugging and extension suggestions
 
+See also [CLAUDE.md](../../CLAUDE.md) and [AI.md](../../AI.md) for AI-specific guidance.
+
 ## Additional Resources
 
-- [Main README](../../README.md) - User-facing documentation
-- [Project Overview](../../PROJECT.md) - High-level project description
-- [Source Code](../../src/) - Implementation files with inline comments
-- [Tests](../../tests/) - Comprehensive test suite demonstrating usage patterns
-
-This technical documentation provides everything needed to deeply understand, contribute to, and extend the time-queues library.
+- [README](../../README.md) - User-facing documentation
+- [PROJECT.md](../../PROJECT.md) - High-level project description
+- [Wiki](https://github.com/uhop/time-queues/wiki) - Component documentation
+- [Examples](../../examples/README.md) - Usage examples
+- [Source Index](../../src/INDEX.md) - Quick component discovery

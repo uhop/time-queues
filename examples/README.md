@@ -32,9 +32,9 @@ import { Scheduler, repeat } from 'time-queues/Scheduler.js';
 const scheduler = new Scheduler();
 
 // Run every 5 seconds
-const task = scheduler.schedule(() => {
+const task = scheduler.enqueue(repeat(({task, scheduler}) => {
   console.log('Running every 5 seconds');
-}, { delay: 5000, repeat: repeat.every(5000) });
+}, 5000), 5000);
 
 // Stop after some time
 setTimeout(() => {
@@ -58,13 +58,13 @@ defer(() => {
 
 ### Browser Idle Processing
 ```javascript
-import { IdleQueue } from 'time-queues';
+import { IdleQueue } from 'time-queues/IdleQueue.js';
 
 const idleQueue = new IdleQueue();
 
 // Process low-priority work during browser idle time
 for (const item of largeDataset) {
-  idleQueue.enqueue(() => processItem(item));
+  idleQueue.enqueue(({deadline, task, queue}) => processItem(item));
 }
 
 // Pause when user switches tabs
@@ -83,16 +83,16 @@ window.addEventListener('visibilitychange', () => {
 
 ### Smooth Animation
 ```javascript
-import { FrameQueue } from 'time-queues';
+import { FrameQueue } from 'time-queues/FrameQueue.js';
 
 const frameQueue = new FrameQueue();
 
 // Update animation on every frame
 function updateAnimation() {
-  frameQueue.enqueue(({ timeStamp }) => {
+  frameQueue.enqueue(({ timeStamp, task, queue }) => {
     const progress = timeStamp / 1000; // seconds
     element.style.transform = `translateX(${progress * 100}px)`;
-    
+
     // Continue animating
     updateAnimation();
   });
@@ -140,13 +140,18 @@ searchInput.addEventListener('input', (e) => {
 
 ### Throttle by Key (Different limits per resource)
 ```javascript
-import { Throttler } from 'time-queues';
+import { Throttler } from 'time-queues/Throttler.js';
 
-const throttler = new Throttler({ delay: 1000 });
+const throttler = new Throttler({ throttleTimeout: 1000 });
 
 // Each API endpoint has its own throttle
-throttler.enqueue(() => fetch('/api/users'), 'users');
-throttler.enqueue(() => fetch('/api/posts'), 'posts');
+async function fetchWithThrottle(key, url) {
+  await throttler.wait(key);
+  return fetch(url);
+}
+
+await fetchWithThrottle('users', '/api/users');
+await fetchWithThrottle('posts', '/api/posts');
 ```
 
 ---
@@ -155,24 +160,30 @@ throttler.enqueue(() => fetch('/api/posts'), 'posts');
 
 ### Controlled Concurrency
 ```javascript
-import { batch, LimitedQueue } from 'time-queues';
+import { batch } from 'time-queues/batch.js';
+import { LimitedQueue } from 'time-queues/LimitedQueue.js';
 
-// Process URLs with max 3 concurrent requests
+// Process URLs with max 3 concurrent requests using batch()
 const urls = ['url1', 'url2', 'url3', 'url4', 'url5'];
-const results = await batch(urls, async (url) => {
-  const response = await fetch(url);
-  return response.json();
-}, { concurrency: 3 });
+const results = await batch(
+  urls.map(url => async () => {
+    const response = await fetch(url);
+    return response.json();
+  }),
+  3 // concurrency limit
+);
 
 // Or use LimitedQueue directly
-const queue = new LimitedQueue({ concurrency: 3 });
+const queue = new LimitedQueue(3);
 
 for (const url of urls) {
-  queue.enqueue(async () => {
+  queue.enqueue(async ({task, queue}) => {
     const response = await fetch(url);
     return response.json();
   });
 }
+
+await queue.waitForIdle();
 ```
 
 ---
@@ -181,7 +192,7 @@ for (const url of urls) {
 
 ### Lifecycle Managed Resource
 ```javascript
-import { Retainer } from 'time-queues';
+import { Retainer } from 'time-queues/Retainer.js';
 
 // Database connection pool
 const dbPool = new Retainer({
@@ -192,15 +203,15 @@ const dbPool = new Retainer({
   destroy: async (connection) => {
     await connection.close();
   },
-  maxAge: 30000 // Recreate every 30 seconds
+  retentionPeriod: 30000 // Keep alive for 30s after last release
 });
 
 // Get connection (creates if needed)
-const connection = await dbPool.retain();
+const connection = await dbPool.get();
 try {
   await connection.query('SELECT * FROM users');
 } finally {
-  dbPool.release(connection);
+  await dbPool.release();
 }
 ```
 
@@ -210,7 +221,7 @@ try {
 
 ### Throttled Queue with Logging
 ```javascript
-import { ListQueue } from 'time-queues';
+import { ListQueue } from 'time-queues/ListQueue.js';
 
 class LoggingThrottledQueue extends ListQueue {
   constructor(options = {}) {
@@ -221,31 +232,29 @@ class LoggingThrottledQueue extends ListQueue {
 
   startQueue() {
     console.log('Queue processing started');
-    
+
     const processNext = () => {
       if (this.list.isEmpty) {
         this.stopQueue = null;
         return;
       }
-      
+
       const task = this.list.popFront();
       console.log('Processing task:', task.fn.name || 'anonymous');
-      
-      task.makePromise();
+
       try {
-        const result = task.fn();
-        task.resolve(result);
+        task.fn({task, queue: this});
       } catch (error) {
-        task.cancel(error);
+        // handle error
       }
-      
+
       // Schedule next task
       this.timerId = setTimeout(processNext, this.interval);
     };
-    
+
     // Start first task immediately
     this.timerId = setTimeout(processNext, 0);
-    
+
     // Return stop function
     return () => {
       console.log('Queue processing stopped');

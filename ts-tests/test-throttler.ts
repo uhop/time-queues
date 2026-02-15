@@ -45,4 +45,6 @@ test('Throttler', async t => {
   t.equal(throttler.getLastSeen('b'), 0);
 
   t.equal(throttler.lastSeen.size, 0);
+
+  throttler.stopVacuum();
 });

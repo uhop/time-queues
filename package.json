@@ -21,6 +21,12 @@
     "ts-test": "tape6 --flags FO '/ts-tests/test-*.*ts'",
     "ts-test:bun": "tape6-bun --flags FO '/ts-tests/test-*.*ts'",
     "ts-test:deno": "tape6-deno --flags FO '/ts-tests/test-*.*ts'",
+    "ts-test:proc": "tape6-proc --flags FO '/ts-tests/test-*.*ts'",
+    "ts-test:proc:bun": "bun run `tape6-proc --self` --flags FO '/ts-tests/test-*.*ts'",
+    "ts-test:proc:deno": "deno run -A `tape6-proc --self` --flags FO -r -A '/ts-tests/test-*.*ts'",
+    "ts-test:seq": "tape6-seq --flags FO '/ts-tests/test-*.*ts'",
+    "ts-test:seq:bun": "bun run `tape6-seq --self` --flags FO '/ts-tests/test-*.*ts'",
+    "ts-test:seq:deno": "deno run -A `tape6-seq --self` --flags FO '/ts-tests/test-*.*ts'",
     "lint": "prettier --check src/ tests/ wiki/",
     "lint:fix": "prettier --write src/ tests/ wiki/",
     "start": "tape6-server --trace"

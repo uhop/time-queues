@@ -47,6 +47,19 @@
     "url": "https://github.com/uhop/time-queues/issues"
   },
   "homepage": "https://github.com/uhop/time-queues#readme",
+  "aiHints": {
+    "entryPoints": [
+      "src/MicroTask.js",
+      "src/MicroTaskQueue.js",
+      "src/ListQueue.js"
+    ],
+    "architectureDoc": "docs/technical/ARCHITECTURE.md",
+    "apiDoc": "docs/technical/API.md",
+    "contributingDoc": "docs/technical/CONTRIBUTING.md",
+    "aiGuide": "CLAUDE.md",
+    "testCommand": "npm test",
+    "tsCheckCommand": "npm run ts-check"
+  },
   "files": [
     "/src",
     "LICENSE",

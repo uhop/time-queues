@@ -1,10 +1,19 @@
+<!-- 
+This document provides a technical overview of the time-queues project, 
+intended for contributors and AI agents who need to understand the codebase architecture.
+For user documentation, see README.md. 
+For detailed technical specifications, see docs/technical/.
+-->
+
 # Time Queues Project Overview
+
+*A technical overview for contributors and AI agents*
 
 ## Project Description
 
 `time-queues` is an efficient, lightweight JavaScript library for organizing asynchronous multitasking and scheduled tasks. It works seamlessly in browsers and server-side environments like Node.js, Deno, and Bun.
 
-The library provides elegant solutions for common timing and scheduling challenges, helping developers create responsive, efficient applications that follow best practices for resource management and user experience. It works seamlessly in browsers, Node.js, Bun, and Deno environments.
+The library provides elegant solutions for common timing and scheduling challenges, helping developers create responsive, efficient applications that follow best practices for resource management and user experience.
 
 ## Key Features
 
@@ -84,6 +93,16 @@ time-queues/
 │   └── when-loaded.js              # Page load event handling
 ├── tests/
 │   ├── test-*.js                   # Unit tests for various components
+├── ts-check/
+│   └── *.ts                        # TypeScript static analysis files
+├── ts-tests/
+│   └── test-*.ts                   # Runtime TypeScript tests
+├── docs/
+│   └── technical/                  # Technical documentation for contributors
+│       ├── ARCHITECTURE.md         # Detailed architecture and design patterns
+│       ├── API.md                  # Complete API specifications
+│       ├── CONTRIBUTING.md         # Contribution guidelines
+│       └── README.md               # Technical documentation overview
 └── package.json
 ```
 
@@ -96,6 +115,25 @@ time-queues/
 - **tape-six**: Testing framework
 - **tape-six-proc**: Process-based test runner
 - **typescript**: Type checking
+
+## Testing Approach
+
+The project employs comprehensive testing strategies:
+
+### JavaScript Tests
+- Unit tests for all core components in `tests/` directory
+- Integration tests for queue behaviors and interactions
+- Browser-specific functionality tests
+
+### TypeScript Validation
+- **Static Analysis** (`ts-check/`): Compilation checks using `tsc --noEmit`
+- **Runtime Tests** (`ts-tests/`): Executable TypeScript tests for Node.js, Deno, and Bun
+
+### Cross-Environment Compatibility
+- Tests run in Node.js, Deno, and Bun environments
+- Cannot run TypeScript tests directly in browsers (require JavaScript transpilation)
+
+
 
 ## Installation
 
@@ -140,11 +178,36 @@ pageWatcher.enqueue((state, prevState) => {
 });
 ```
 
-## Environment Compatibility
+## Architecture Summary
+
+### Core Design Patterns
+- **Hierarchical Task Management**: Base `MicroTask` → `MicroTaskQueue` → specialized implementations
+- **Promise-Based Interfaces**: All tasks integrate seamlessly with JavaScript's Promise system
+- **Event-Driven Processing**: Uses browser and Node.js event systems for optimal performance
+- **Memory-Efficient Data Structures**: Linked lists and heaps for O(1) and O(log n) operations
+
+### Key Implementation Details
+- **Cancellation Support**: Clean resource cleanup with custom `CancelTaskError`
+- **Graceful Degradation**: Feature detection for environment-specific APIs
+- **Lazy Evaluation**: Tasks only create promises when accessed
+- **Batched Processing**: Efficient handling of multiple tasks
 
 The library leverages several environment-specific APIs:
 - Browser APIs: `requestIdleCallback()`, `requestAnimationFrame()`, `queueMicrotask()`, `setTimeout()`, and page lifecycle events
 - Node.js, Bun, and Deno environments are all supported with appropriate API fallbacks
+
+## Extensibility
+
+The library is designed for easy extension:
+
+### Creating Custom Queues
+Extend `ListQueue` or `MicroTaskQueue` to create specialized queue implementations
+
+### Adding Utility Functions
+Follow existing patterns in `src/` for consistent API design
+
+### Contributing
+See `docs/technical/CONTRIBUTING.md` for detailed contribution guidelines
 
 ## License
 

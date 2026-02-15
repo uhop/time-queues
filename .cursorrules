@@ -1,0 +1,70 @@
+# time-queues conventions for AI agents
+
+## Code Patterns
+
+### Class Structure
+- Classes use private fields (`#prefix`) with getters for read-only access
+- Promise-based interfaces with `Promise.withResolvers()` preferred, manual Promise fallback
+- All modules export both named and default exports
+- Error handling uses custom `CancelTaskError` class
+
+### Naming Conventions
+- PascalCase for classes: `MicroTask`, `ListQueue`, `Scheduler`
+- camelCase for functions: `defer()`, `sleep()`, `throttle()`
+- Files match class names: `MicroTask.js`, `ListQueue.js`
+
+## File Organization
+
+### Core Hierarchy (read in this order)
+1. `src/MicroTask.js` - Base task unit with promise lifecycle
+2. `src/MicroTaskQueue.js` - Queue base class with scheduler integration
+3. `src/ListQueue.js` - List-based queue implementation
+4. `src/Scheduler.js` - Time-based scheduling with min-heap
+
+### Specialized Queues
+- `src/IdleQueue.js` - Browser idle period execution
+- `src/FrameQueue.js` - Animation frame synchronization
+- `src/LimitedQueue.js` - Concurrency-controlled execution
+
+### Utilities (standalone functions)
+- `src/defer.js` - Next tick execution
+- `src/sleep.js` - Promise-based delay
+- `src/throttle.js` - Rate limiting
+- `src/debounce.js` - Delay until input stabilizes
+- `src/batch.js` - Controlled concurrency for async operations
+
+## Testing
+
+- Tests in `tests/test-*.js` using tape-six
+- TS checks in `ts-check/` (static analysis)
+- Runtime TS tests in `ts-tests/` (Node.js, Deno, Bun)
+- Run tests: `npm test`
+
+## Common Modification Patterns
+
+### Adding a new queue type
+1. Extend `MicroTaskQueue` or `ListQueue`
+2. Implement `processTasks()` method
+3. Create corresponding `.d.ts` file
+4. Add test in `tests/test-<name>.js`
+
+### Adding a utility function
+1. Create `src/<function>.js` with JSDoc
+2. Create `src/<function>.d.ts` with TypeScript definitions
+3. Follow existing promise-based patterns
+4. Add example in `examples/`
+
+## Architecture Notes
+
+- **Lazy Evaluation**: Tasks only create promises when accessed
+- **Memory Efficiency**: Linked lists and heaps for O(1)/O(log n) operations
+- **Graceful Degradation**: Feature detection for environment-specific APIs
+- **Clean Cancellation**: All tasks support cancellation via `CancelTaskError`
+
+## Documentation Navigation
+
+- `AI.md` - AI agent overview and common use cases
+- `PROJECT.md` - Technical project overview
+- `docs/technical/ARCHITECTURE.md` - Deep technical design
+- `docs/technical/API.md` - Complete API specifications
+- `docs/technical/CONTRIBUTING.md` - Extension guidelines

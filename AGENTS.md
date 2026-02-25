@@ -22,6 +22,7 @@ npm install
 - `npm run test:bun` — run with Bun
 - `npm run test:deno` — run with Deno
 - `npm run ts-check` — TypeScript type checking (tsc --noEmit)
+- `npm run ts-test` — run TS typing tests
 - `npm run lint` — Prettier format check
 
 ## Critical rules

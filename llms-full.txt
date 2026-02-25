@@ -358,7 +358,7 @@ export default audit;
 
 ### batch (`time-queues/batch.js`)
 
-Run async operations with concurrency limit. Modelled after `Promise.all()`.
+Run async operations with concurrency limit. Modeled after `Promise.all()`.
 
 ```ts
 function batch(

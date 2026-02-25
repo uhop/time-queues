@@ -17,7 +17,7 @@ The `--recurse-submodules` flag is needed to clone the wiki submodule under `wik
 
 ## Project structure
 
-See [PROJECT.md](./PROJECT.md) for the full directory layout and [ARCHITECTURE.md](./ARCHITECTURE.md) for the design deep-dive.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for the design deep-dive.
 
 - `src/` — source code (ESM) and hand-written `.d.ts` type definitions
 - `tests/` — automated tests (`test-*.js`)

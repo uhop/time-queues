@@ -4,7 +4,7 @@
 
 time-queues is a lightweight ESM JavaScript library for async task scheduling and concurrency control: time-based schedulers, idle/frame/limited queues, throttle, debounce, batch, page lifecycle watchers, and random delays. Works in browsers, Node.js, Bun, and Deno. One runtime dependency: [list-toolkit](https://github.com/uhop/list-toolkit).
 
-For project structure and testing see [PROJECT.md](./PROJECT.md).
+For contributor setup and workflow see [CONTRIBUTING.md](./CONTRIBUTING.md).
 For detailed usage docs and API references see the [wiki](https://github.com/uhop/time-queues/wiki).
 
 ## Setup

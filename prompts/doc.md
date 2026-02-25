@@ -2,7 +2,7 @@ Generate a comprehensive documentation file for the specified file, including a 
 
 Before generating documentation:
 1. Review AGENTS.md for project overview and patterns
-2. Review src/INDEX.md to understand component relationships
+2. Review wiki/Home.md to understand component relationships
 3. For classes, check the inheritance hierarchy (extends MicroTaskQueue/ListQueue)
 4. Check the actual source file (.js) and TypeScript definitions (.d.ts) for accuracy
 

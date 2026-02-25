@@ -73,7 +73,7 @@ Cross-reference related components:
 Include a "See Also" section at the end with:
 - Parent class documentation link (if applicable)
 - Related utility function links
-- Link to examples in examples/README.md
+- Link to relevant wiki pages for examples
 - Links to sibling components in the same category
 
 When you generate links in a file located in the wiki directory, use relative paths for wiki files and full path for files located in the main repository. For example `README.md` file will be linked as `https://github.com/uhop/time-queue/blob/master/README.md`. Always use https://github.com/uhop/time-queue/blob/master/ for the main repository.

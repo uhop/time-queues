@@ -45,7 +45,7 @@ const results = await batch(
 );
 ```
 
-See [examples/README.md](examples/README.md) for more use cases.
+See the [wiki](https://github.com/uhop/time-queues/wiki) for more use cases.
 
 ## Documentation
 

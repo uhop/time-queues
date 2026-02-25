@@ -24,7 +24,6 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the design deep-dive.
 - `ts-check/` — TypeScript static analysis files
 - `ts-tests/` — runtime TypeScript tests
 - `wiki/` — GitHub wiki (git submodule)
-- `examples/` — usage examples
 
 ## Development workflow
 
@@ -103,7 +102,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for core concepts (inheritance hierarch
 1. All tests pass (`npm test`).
 2. TypeScript checks pass (`npm run ts-check`).
 3. Code is formatted (`npm run lint`).
-4. Documentation updated (wiki, examples) as needed.
+4. Documentation updated (wiki) as needed.
 
 ## AI agents
 

@@ -206,4 +206,3 @@ The project uses [tape-six](https://github.com/nicklatkovich/tape-six) for testi
 - [AGENTS.md](./AGENTS.md) — AI agent guide
 - [CONTRIBUTING.md](./CONTRIBUTING.md) — contributor guide
 - [Wiki](https://github.com/uhop/time-queues/wiki) — component documentation
-- [Examples](./examples/README.md) — usage examples

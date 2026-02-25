@@ -17,3 +17,17 @@ test('sleep', async t => {
   ]);
   t.deepEqual(results, [1, 2, 3, 4, 5]);
 });
+
+test('sleep: Date input', async t => {
+  const start = Date.now();
+  await sleep(new Date(Date.now() + 20));
+  const elapsed = Date.now() - start;
+  t.ok(elapsed >= 15);
+});
+
+test('sleep: past Date resolves immediately', async t => {
+  const start = Date.now();
+  await sleep(new Date(Date.now() - 100));
+  const elapsed = Date.now() - start;
+  t.ok(elapsed < 15);
+});

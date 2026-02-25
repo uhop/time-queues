@@ -33,7 +33,7 @@ export declare class PageWatcher extends ListQueue {
   /**
    * Enqueues a task.
    * @param fn The function to execute.
-   * @param initialize Whether the function should be executed before the state changes.
+   * @param initialize Whether the function should be called immediately with the current state.
    * @returns The task object.
    */
   enqueue(

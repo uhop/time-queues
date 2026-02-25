@@ -72,7 +72,7 @@ export declare class Scheduler extends MicroTaskQueue {
   paused: boolean;
 
   /**
-   * The tolerance for comparing starting time of tasks.
+   * The tolerance for comparing starting times of tasks.
    * This allows for small timing differences in task execution.
    */
   tolerance: number;
@@ -80,7 +80,7 @@ export declare class Scheduler extends MicroTaskQueue {
   /**
    * Creates a new scheduler.
    * @param paused Whether the scheduler should start in a paused state.
-   * @param tolerance The tolerance for comparing starting time of tasks (default is 4ms).
+   * @param tolerance The tolerance for comparing starting times of tasks (default is 4ms).
    */
   constructor(paused?: boolean, tolerance?: number);
 
@@ -113,7 +113,7 @@ export declare class Scheduler extends MicroTaskQueue {
 
   /**
    * Schedules a task to run in the future.
-   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with the function's arguments. Otherwise, it is resolved with the function's return value.
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
    * @returns The task object that was scheduled.
    */

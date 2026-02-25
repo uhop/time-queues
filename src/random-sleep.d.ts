@@ -1,5 +1,5 @@
 /**
- * Random sleep function modelled after `sleep()`.
+ * Random sleep function modeled after `sleep()`.
  */
 export type RandomSleepFunction = () => Promise<void>;
 

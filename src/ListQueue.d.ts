@@ -45,7 +45,7 @@ export declare class ListQueue extends MicroTaskQueue {
 
   /**
    * Schedules a microtask.
-   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with the function's arguments. Otherwise, it is resolved with the function's return value.
    * @returns The task object.
    */
   schedule(fn: (() => unknown) | null | undefined): MicroTask;

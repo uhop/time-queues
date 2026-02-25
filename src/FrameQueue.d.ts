@@ -44,7 +44,7 @@ export declare class FrameQueue extends ListQueue {
 
   /**
    * Schedules a task to run in the next frame.
-   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with the function's arguments. Otherwise, it is resolved with the function's return value.
    * @returns The task object.
    */
   schedule(

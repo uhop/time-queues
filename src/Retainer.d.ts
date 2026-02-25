@@ -59,7 +59,7 @@ export declare class Retainer<T = unknown> implements RetainerOptions<T> {
 
   /**
    * Releases the retained value.
-   * @param immediately Whether to release the value immediately. Otherwise it'll be retained for the retention period.
+   * @param immediately Whether to release the value immediately. Otherwise, it will be retained for the retention period.
    * @returns The retainer object.
    */
   release(immediately?: boolean): Promise<this>;

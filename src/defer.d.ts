@@ -10,7 +10,7 @@
 export declare function defer(fn: () => void): void;
 
 /**
- * Schedules a function to be called when the next available time.
+ * Schedules a function to be called at the next available time.
  *
  * @param fn The function to schedule.
  * @returns A promise that resolves when the function is called.
@@ -18,7 +18,7 @@ export declare function defer(fn: () => void): void;
 export declare function scheduleDefer<R extends unknown>(fn: () => R): Promise<Awaited<R>>;
 
 /**
- * Schedules a function to be called when the next available time.
+ * Schedules a function to be called at the next available time.
  *
  * @param fn The function to schedule.
  * @returns A promise that resolves when the function is called.

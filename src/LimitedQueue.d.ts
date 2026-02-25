@@ -15,7 +15,7 @@ export declare class LimitedQueue extends ListQueue {
   stopQueue: (() => void) | null;
 
   /**
-   * Creates a new list queue.
+   * Creates a new limited queue.
    * @param limit The maximum number of tasks that can be run in parallel.
    * @param paused Whether the queue should start paused.
    */
@@ -33,7 +33,7 @@ export declare class LimitedQueue extends ListQueue {
 
   /**
    * Set the maximum number of tasks that can be run in parallel.
-   * @param limit The new maximum number of tasks that can be run in parallel. It can dynamically add more tasks if the current number of tasks is less than the new limit.
+   * @param limit The new maximum number of tasks that can be run in parallel. Setting a higher limit may immediately start additional tasks.
    */
   set taskLimit(limit: number);
 
@@ -48,7 +48,7 @@ export declare class LimitedQueue extends ListQueue {
   get isIdle(): boolean;
 
   /**
-   * Wait for queue to become idle.
+   * Waits for the queue to become idle.
    * @returns A promise that resolves when the queue becomes idle. If the queue is already idle, the promise is resolved immediately.
    */
   waitForIdle(): Promise<void>;
@@ -69,7 +69,7 @@ export declare class LimitedQueue extends ListQueue {
 
   /**
    * Schedules a microtask.
-   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with function's arguments. Otherwise, it is resolved with the function's return value.
+   * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with the function's arguments. Otherwise, it is resolved with the function's return value.
    * @returns The task object.
    */
   schedule(fn: (() => unknown) | null | undefined): Task;

@@ -84,14 +84,14 @@ export declare class Throttler implements ThrottlerOptions {
 
   /**
    * Starts the vacuum process.
-   * The vacuum process removes keys that expired.
+   * The vacuum process removes expired keys.
    * @returns The throttler object.
    */
   startVacuum(): this;
 
   /**
    * Stops the vacuum process.
-   * The vacuum process removes keys that expired.
+   * The vacuum process removes expired keys.
    * @returns The throttler object.
    */
   stopVacuum(): this;

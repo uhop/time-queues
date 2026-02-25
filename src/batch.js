@@ -1,7 +1,5 @@
 // @ts-self-types="./batch.d.ts"
 
-'use strict';
-
 const wrap = value => {
   if (typeof value == 'function') return Promise.resolve(value());
   if (value && typeof value.then == 'function') return value; // thenable

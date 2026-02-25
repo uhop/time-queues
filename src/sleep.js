@@ -1,7 +1,5 @@
 // @ts-self-types="./sleep.d.ts"
 
-'use strict';
-
 export const sleep = ms => {
   if (ms instanceof Date) {
     ms = ms.getTime() - Date.now();

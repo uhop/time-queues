@@ -1,7 +1,5 @@
 // @ts-self-types="./Retainer.d.ts"
 
-'use strict';
-
 export class Retainer {
   constructor({create, destroy, retentionPeriod = 1_000}) {
     if (!create || !destroy) throw new Error('Retainer: create and destroy are required');

@@ -1,5 +1,3 @@
-'use strict';
-
 import scheduler, {repeat} from '../../src/Scheduler.js';
 
 const startTime = Date.now();

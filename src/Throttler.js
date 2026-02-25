@@ -1,7 +1,5 @@
 // @ts-self-types="./Throttler.d.ts"
 
-'use strict';
-
 import sleep from './sleep.js';
 
 export class Throttler {

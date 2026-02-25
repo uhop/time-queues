@@ -1,7 +1,5 @@
 // @ts-self-types="./when-dom-loaded.d.ts"
 
-'use strict';
-
 import ValueList from 'list-toolkit/value-list.js';
 
 const waitingForDom = new ValueList();

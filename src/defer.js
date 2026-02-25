@@ -1,7 +1,5 @@
 // @ts-self-types="./defer.d.ts"
 
-'use strict';
-
 let deferImplementation = setTimeout;
 
 if (typeof requestIdleCallback == 'function') {

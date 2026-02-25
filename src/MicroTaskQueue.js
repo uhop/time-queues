@@ -1,7 +1,5 @@
 // @ts-self-types="./MicroTaskQueue.d.ts"
 
-'use strict';
-
 import MicroTask from './MicroTask.js';
 
 /**

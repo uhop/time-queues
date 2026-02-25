@@ -1,7 +1,5 @@
 // @ts-self-types="./sample.d.ts"
 
-'use strict';
-
 export const sample = (fn, ms) => {
   const started = Date.now();
   let handle = null,

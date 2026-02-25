@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'tape-six';
 
 import debounce from '../src/debounce.js';

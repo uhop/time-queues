@@ -1,7 +1,5 @@
 // @ts-self-types="./IdleQueue.d.ts"
 
-'use strict';
-
 import List from 'list-toolkit/list.js';
 import ListQueue from './ListQueue.js';
 

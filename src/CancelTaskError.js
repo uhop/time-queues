@@ -1,7 +1,5 @@
 // @ts-self-types="./CancelTaskError.d.ts"
 
-'use strict';
-
 export class CancelTaskError extends Error {
   constructor(message = 'Task was canceled', options) {
     super(message, options);

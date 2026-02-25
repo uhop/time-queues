@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'tape-six';
 
 import scheduler from '../src/Scheduler.js';

@@ -1,7 +1,5 @@
 // @ts-self-types="./Scheduler.d.ts"
 
-'use strict';
-
 import MinHeap from 'list-toolkit/heap.js';
 import MicroTask from './MicroTask.js';
 import MicroTaskQueue from './MicroTaskQueue.js';

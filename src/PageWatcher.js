@@ -1,7 +1,5 @@
 // @ts-self-types="./PageWatcher.d.ts"
 
-'use strict';
-
 import ListQueue from './ListQueue.js';
 
 // Based on information from https://developer.chrome.com/docs/web-platform/page-lifecycle-api

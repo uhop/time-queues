@@ -1,7 +1,5 @@
 // @ts-self-types="./Counter.d.ts"
 
-'use strict';
-
 export class Counter {
   constructor(initial = 0) {
     this.count = initial;

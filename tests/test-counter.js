@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'tape-six';
 
 import Counter from '../src/Counter.js';

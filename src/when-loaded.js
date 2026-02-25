@@ -1,7 +1,5 @@
 // @ts-self-types="./when-loaded.d.ts"
 
-'use strict';
-
 import ValueList from 'list-toolkit/value-list.js';
 
 const waitingForLoad = new ValueList();

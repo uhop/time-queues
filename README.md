@@ -140,6 +140,7 @@ BSD-3-Clause
 
 ## Release History
 
+- 1.3.1 _Fixed `.d.ts` declarations, consolidated TS typing tests, improved documentation._
 - 1.3.0 _Added `batch()`, `LimitedQueue`, random distributions and random sleep functions._
 - 1.2.4 _Updated dependencies._
 - 1.2.3 _Updated dependencies._

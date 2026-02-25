@@ -1,28 +1,20 @@
 import test from 'tape-six';
 
 import sample from '../src/sample.js';
-import sleep from '../src/sleep.js';
 
-test('sample', async t => {
-  t.equal(typeof sample, 'function');
+test('TS: sample() preserves argument types', t => {
+  const fn = (x: number, y: string) => {};
+  const sampled = sample(fn, 20);
 
-  const results: number[] = [];
-  const fn = (x: number) => results.push(x),
-    sampledFn = sample(fn, 20);
+  sampled(1, 'a');
 
-  sampledFn(1);
-  t.deepEqual(results, []);
+  if (0 as number) {
+    // @ts-expect-error — wrong argument type
+    sampled('bad', 'a');
 
-  await sleep(10);
-  sampledFn(2);
-  t.deepEqual(results, []);
+    // @ts-expect-error — missing argument
+    sampled(1);
+  }
 
-  await sleep(20);
-  t.deepEqual(results, [2]);
-
-  sampledFn(3);
-  t.deepEqual(results, [2]);
-
-  await sleep(20);
-  t.deepEqual(results, [2, 3]);
+  t.equal(typeof sampled, 'function');
 });

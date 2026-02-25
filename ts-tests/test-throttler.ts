@@ -1,48 +1,36 @@
 import test from 'tape-six';
 
 import Throttler from '../src/Throttler.js';
-import sleep from '../src/sleep.js';
 
-const THROTTLE_TIMEOUT = 10;
+test('TS: Throttler constructor accepts partial options', t => {
+  const t1 = new Throttler();
+  const t2 = new Throttler({throttleTimeout: 500});
+  const t3 = new Throttler({throttleTimeout: 500, neverSeenTimeout: 100, vacuumPeriod: 1500});
 
-test('Throttler', async t => {
-  t.equal(typeof Throttler, 'function');
+  t.ok(t1);
+  t.ok(t2);
+  t.ok(t3);
+  t1.stopVacuum();
+  t2.stopVacuum();
+  t3.stopVacuum();
+});
 
-  const throttler = new Throttler({
-    throttleTimeout: THROTTLE_TIMEOUT
-  });
-  t.equal(typeof throttler, 'object');
+test('TS: Throttler method and property types', t => {
+  const throttler = new Throttler();
 
-  t.equal(throttler.throttleTimeout, THROTTLE_TIMEOUT);
-  t.equal(throttler.neverSeenTimeout, 0);
-  t.equal(throttler.vacuumPeriod, 30);
+  const lastSeen: number = throttler.getLastSeen('a');
+  const delay: number = throttler.getDelay('a');
+  const p: Promise<void> = throttler.wait('a');
+  const isVac: boolean = throttler.isVacuuming;
+  const self1: Throttler = throttler.startVacuum();
+  const self2: Throttler = throttler.stopVacuum();
+  const map: Map<unknown, number> = throttler.lastSeen;
 
-  t.equal(throttler.lastSeen.size, 0);
-
-  t.equal(throttler.getLastSeen('a'), 0);
-  t.equal(throttler.getLastSeen('b'), 0);
-
-  const delay1 = throttler.getDelay('a');
-  t.equal(delay1, 0);
-  t.ok(throttler.getLastSeen('a') > 0);
-
-  const delay2 = throttler.getDelay('b');
-  t.equal(delay2, 0);
-  t.ok(throttler.getLastSeen('b') > 0);
-
-  t.equal(throttler.lastSeen.size, 2);
-
-  const delay3 = throttler.getDelay('a');
-  t.ok(delay3 > 0 && delay3 <= 2 * THROTTLE_TIMEOUT);
-  t.ok(throttler.getLastSeen('a') > 0);
-
-  t.equal(throttler.lastSeen.size, 2);
-
-  await sleep(4 * THROTTLE_TIMEOUT);
-  t.equal(throttler.getLastSeen('a'), 0);
-  t.equal(throttler.getLastSeen('b'), 0);
-
-  t.equal(throttler.lastSeen.size, 0);
-
-  throttler.stopVacuum();
+  t.equal(typeof lastSeen, 'number');
+  t.equal(typeof delay, 'number');
+  t.ok(p instanceof Promise);
+  t.equal(typeof isVac, 'boolean');
+  t.equal(self1, throttler);
+  t.equal(self2, throttler);
+  t.ok(map instanceof Map);
 });

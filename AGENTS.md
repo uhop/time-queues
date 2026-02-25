@@ -68,8 +68,7 @@ Standalone: Counter, Throttler, Retainer, CancelTaskError
 
 - Source: `src/<Name>.js` + `src/<Name>.d.ts` (classes) or `src/<name>.js` + `src/<name>.d.ts` (functions)
 - Tests: `tests/test-*.js`
-- TS static analysis: `ts-check/*.ts`
-- TS runtime tests: `ts-tests/test-*.ts`
+- TS typing tests: `ts-tests/test-*.ts`
 - Wiki docs: `wiki/` (git submodule)
 - Technical docs: `ARCHITECTURE.md`, `CONTRIBUTING.md`
 

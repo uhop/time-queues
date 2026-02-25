@@ -1,41 +1,42 @@
 import test from 'tape-six';
 
 import Retainer from '../src/Retainer.js';
-import sleep from '../src/sleep.js';
 
-test('Retainer', async t => {
-  t.equal(typeof Retainer, 'function');
-
+test('TS: Retainer generic type parameter', async t => {
   const retainer = new Retainer<number>({
     create: () => 1,
-    destroy: () => {},
-    retentionPeriod: 10
+    destroy: () => {}
   });
-  t.equal(typeof retainer, 'object');
-  t.equal(retainer.counter, 0);
-  t.equal(retainer.value, null);
 
-  const value1 = await retainer.get();
-  t.equal(value1, 1);
-  t.equal(retainer.counter, 1);
+  const value: number = await retainer.get();
+  t.equal(value, 1);
 
-  const value2 = await retainer.get();
-  t.equal(value2, 1);
-  t.equal(retainer.counter, 2);
+  const stored: number | null = retainer.value;
+  t.equal(stored, 1);
 
-  t.equal(retainer.value, 1);
+  const self: Promise<Retainer<number>> = retainer.release();
+  await self;
+});
 
-  await retainer.release();
-  t.equal(retainer.counter, 1);
+test('TS: Retainer with async create/destroy', t => {
+  const retainer = new Retainer<string>({
+    create: async () => 'hello',
+    destroy: async (_v: string) => {}
+  });
 
-  await retainer.release();
-  t.equal(retainer.counter, 0);
+  new Retainer<number>({
+    create: () => 1,
+    // @ts-expect-error — destroy expects number, not string
+    destroy: (_v: string) => {}
+  });
 
-  t.equal(retainer.value, 1);
+  t.ok(retainer);
+});
 
-  await sleep(5);
-  t.equal(retainer.value, 1);
+test('TS: Retainer retentionPeriod is optional', t => {
+  const r1 = new Retainer({create: () => 1, destroy: () => {}});
+  const r2 = new Retainer({create: () => 1, destroy: () => {}, retentionPeriod: 500});
 
-  await sleep(10);
-  t.equal(retainer.value, null);
+  t.ok(r1);
+  t.ok(r2);
 });

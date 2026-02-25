@@ -1,23 +1,20 @@
 import test from 'tape-six';
 
 import throttle from '../src/throttle.js';
-import sleep from '../src/sleep.js';
 
-test('throttle', async t => {
-  t.equal(typeof throttle, 'function');
+test('TS: throttle() preserves argument types', t => {
+  const fn = (x: number, y: string) => {};
+  const throttled = throttle(fn, 20);
 
-  let results: number[] = [];
-  const fn = (x: number) => results.push(x),
-    throttledFn = throttle(fn, 20);
+  throttled(1, 'a');
 
-  throttledFn(1);
-  t.deepEqual(results, [1]);
+  if (0 as number) {
+    // @ts-expect-error — wrong argument type
+    throttled('bad', 'a');
 
-  await sleep(10);
-  throttledFn(2);
-  t.deepEqual(results, [1]);
+    // @ts-expect-error — missing argument
+    throttled(1);
+  }
 
-  results = [];
-  await sleep(20);
-  t.deepEqual(results, []);
+  t.equal(typeof throttled, 'function');
 });

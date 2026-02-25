@@ -1,19 +1,25 @@
 import test from 'tape-six';
 
-import defer from '../src/defer.js';
+import defer, {scheduleDefer} from '../src/defer.js';
 
-test('defer', async t => {
-  t.equal(typeof defer, 'function');
+test('TS: defer() returns void', t => {
+  const result: void = defer(() => {});
 
-  let results: number[] = [];
+  if (0 as number) {
+    // @ts-expect-error — expects a function, not a string
+    defer('bad');
+  }
 
-  defer(() => results.push(1));
-  t.deepEqual(results, []);
+  t.equal(result, undefined);
+});
 
-  await new Promise<void>(resolve => {
-    defer(() => {
-      t.deepEqual(results, [1]);
-      resolve();
-    });
-  });
+test('TS: scheduleDefer() overload return types', async t => {
+  const p1: Promise<number> = scheduleDefer(() => 42);
+  const p2: Promise<void> = scheduleDefer(null);
+  const p3: Promise<void> = scheduleDefer(undefined);
+
+  const r1 = await p1;
+  t.equal(r1, 42);
+  await p2;
+  await p3;
 });

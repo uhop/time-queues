@@ -2,17 +2,16 @@ import test from 'tape-six';
 
 import {uniform, normal, expo, pareto} from '../src/random-dist.js';
 
-test('random distributions', async t => {
-  t.equal(typeof uniform, 'function');
-  t.equal(typeof uniform(0, 1), 'number');
+test('TS: random-dist return types are number', t => {
+  const u: number = uniform(0, 1);
+  const n1: number = normal(0, 1);
+  const n2: number = normal(0, 1, 0.5);
+  const e: number = expo(1);
+  const p: number = pareto(1, 1);
 
-  t.equal(typeof normal, 'function');
-  t.equal(typeof normal(0, 1), 'number');
-  t.equal(typeof normal(0, 1, 1), 'number');
-
-  t.equal(typeof expo, 'function');
-  t.equal(typeof expo(1), 'number');
-
-  t.equal(typeof pareto, 'function');
-  t.equal(typeof pareto(1, 1), 'number');
+  t.equal(typeof u, 'number');
+  t.equal(typeof n1, 'number');
+  t.equal(typeof n2, 'number');
+  t.equal(typeof e, 'number');
+  t.equal(typeof p, 'number');
 });

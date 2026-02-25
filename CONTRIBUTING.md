@@ -21,8 +21,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the design deep-dive.
 
 - `src/` — source code (ESM) and hand-written `.d.ts` type definitions
 - `tests/` — automated tests (`test-*.js`)
-- `ts-check/` — TypeScript static analysis files
-- `ts-tests/` — runtime TypeScript tests
+- `ts-tests/` — TypeScript typing tests (`test-*.ts`)
 - `wiki/` — GitHub wiki (git submodule)
 
 ## Development workflow

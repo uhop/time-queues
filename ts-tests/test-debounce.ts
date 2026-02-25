@@ -1,26 +1,20 @@
 import test from 'tape-six';
 
 import debounce from '../src/debounce.js';
-import sleep from '../src/sleep.js';
 
-test('debounce', async t => {
-  t.equal(typeof debounce, 'function');
+test('TS: debounce() preserves argument types', t => {
+  const fn = (x: number, y: string) => {};
+  const debounced = debounce(fn, 20);
 
-  let results: number[] = [];
-  const fn = (x: number) => results.push(x),
-    debouncedFn = debounce(fn, 20);
+  debounced(1, 'a');
 
-  debouncedFn(1);
-  await sleep(10);
-  debouncedFn(2);
-  await sleep(10);
-  debouncedFn(3);
+  if (0 as number) {
+    // @ts-expect-error — wrong argument type
+    debounced('bad', 'a');
 
-  t.deepEqual(results, []);
+    // @ts-expect-error — missing argument
+    debounced(1);
+  }
 
-  await sleep(10);
-  t.deepEqual(results, []);
-
-  await sleep(20);
-  t.deepEqual(results, [3]);
+  t.equal(typeof debounced, 'function');
 });

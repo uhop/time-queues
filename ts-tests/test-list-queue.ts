@@ -1,38 +1,32 @@
 import test from 'tape-six';
 
+import type {Task} from '../src/ListQueue.js';
 import ListQueue from '../src/ListQueue.js';
+import {MicroTask} from '../src/MicroTask.js';
+import {MicroTaskQueue} from '../src/MicroTaskQueue.js';
 
-test('ListQueue', t => {
-  t.equal(typeof ListQueue, 'function');
-
+test('TS: ListQueue extends MicroTaskQueue', t => {
   const queue = new ListQueue();
+  const asMTQ: MicroTaskQueue = queue;
+  t.ok(asMTQ);
+});
 
-  t.ok(queue.isEmpty);
-  t.notOk(queue.paused);
+test('TS: ListQueue.Task is MicroTask', t => {
+  const task: Task = new MicroTask(() => {});
+  t.ok(task);
+});
 
-  queue.pause();
-  t.ok(queue.paused);
-  queue.resume();
-  t.notOk(queue.paused);
+test('TS: ListQueue method return types for chaining', t => {
+  const queue = new ListQueue();
+  const task = queue.enqueue(() => {});
 
-  const fn = () => {},
-    fn1 = () => 1,
-    fn2 = () => 2;
+  const q1: ListQueue = queue.dequeue(task);
+  const q2: ListQueue = queue.clear();
+  const q3: ListQueue = queue.pause();
+  const q4: ListQueue = queue.resume();
 
-  const task = queue.enqueue(fn);
-  t.notOk(queue.isEmpty);
-  t.equal(task.fn, fn);
-
-  queue.clear();
-  t.ok(queue.isEmpty);
-
-  const task1 = queue.enqueue(fn1);
-  const task2 = queue.enqueue(fn2);
-  t.equal(task1.fn, fn1);
-  t.equal(task2.fn, fn2);
-
-  queue.dequeue(task2);
-  t.notOk(queue.isEmpty);
-  queue.dequeue(task1);
-  t.ok(queue.isEmpty);
+  t.equal(q1, queue);
+  t.equal(q2, queue);
+  t.equal(q3, queue);
+  t.equal(q4, queue);
 });

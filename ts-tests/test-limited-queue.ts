@@ -1,67 +1,42 @@
 import test from 'tape-six';
 
+import type {Task} from '../src/LimitedQueue.js';
 import {LimitedQueue} from '../src/LimitedQueue.js';
-import randomSleep from '../src/random-sleep.js';
+import ListQueue from '../src/ListQueue.js';
 
-test('LimitedQueue with random sleep', async t => {
-  t.equal(typeof LimitedQueue, 'function');
-
-  let counter = 0,
-    maxCount = 0;
-
-  const fn = (i: number) => async () => {
-    ++counter;
-    maxCount = Math.max(maxCount, counter);
-    await randomSleep(10, 5);
-    --counter;
-    return i;
-  };
-
-  const fs: Promise<number>[] = [],
-    N = 20,
-    M = 3;
-
-  const queue = new LimitedQueue(M);
-  t.ok(queue.isIdle);
-
-  for (let i = 0; i < N; ++i) {
-    const task = queue.schedule(fn(i));
-    fs.push(task.promise);
-  }
-
-  await Promise.all(fs);
-
-  await queue.waitForIdle();
-  t.ok(queue.isIdle);
-
-  t.equal(counter, 0);
-  t.equal(maxCount, M);
+test('TS: LimitedQueue extends ListQueue', t => {
+  const queue = new LimitedQueue(3);
+  const asLQ: ListQueue = queue;
+  t.ok(asLQ);
 });
 
-test('LimitedQueue with sync tasks', async t => {
-  let counter = 0,
-    maxCount = 0;
+test('TS: LimitedQueue property and getter types', t => {
+  const queue = new LimitedQueue(3);
 
-  const fn = (i: number) => () => {
-    ++counter;
-    maxCount = Math.max(maxCount, counter);
-    --counter;
-    return i;
-  };
+  const limit: number = queue.taskLimit;
+  const active: number = queue.activeTasks;
+  const idle: boolean = queue.isIdle;
+  const empty: boolean = queue.isEmpty;
 
-  const fs: Promise<number>[] = [],
-    N = 20,
-    M = 3;
+  queue.taskLimit = 5;
 
-  const queue = new LimitedQueue(M);
+  t.equal(typeof limit, 'number');
+  t.equal(typeof active, 'number');
+  t.equal(typeof idle, 'boolean');
+  t.equal(typeof empty, 'boolean');
+});
 
-  for (let i = 0; i < N; ++i) {
-    const task = queue.schedule(fn(i));
-    fs.push(task.promise);
-  }
+test('TS: LimitedQueue.waitForIdle() returns Promise<void>', async t => {
+  const queue = new LimitedQueue(3);
+  const p: Promise<void> = queue.waitForIdle();
+  await p;
+  t.ok(true);
+});
 
-  await Promise.all(fs);
-
-  t.equal(counter, 0);
-  t.ok(maxCount <= M);
+test('TS: LimitedQueue.schedule() returns Task with promise', async t => {
+  const queue = new LimitedQueue(3);
+  const task: Task = queue.schedule(() => 42);
+  const p: Promise<unknown> | null = task.promise;
+  t.ok(p instanceof Promise);
+  await p;
 });

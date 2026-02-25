@@ -1,55 +1,35 @@
 import test from 'tape-six';
 
 import Counter from '../src/Counter.js';
-import sleep from '../src/sleep.js';
 
-test('Counter', async t => {
-  t.equal(typeof Counter, 'function');
-
+test('TS: Counter property and method types', t => {
   const counter = new Counter();
-  t.equal(typeof counter, 'object');
-  t.equal(counter.count, 0);
-  t.equal(counter.value, 0);
+
+  const count: number = counter.count;
+  const value: number = counter.value;
+  counter.value = 5;
 
   counter.increment();
-  t.equal(counter.value, 1);
-
   counter.decrement();
-  t.equal(counter.value, 0);
-
   counter.advance(2);
-  t.equal(counter.value, 2);
-
   counter.clearWaiters();
-  t.equal(counter.value, 2);
 
-  setTimeout(async () => {
-    counter.decrement();
-    t.equal(counter.value, 1);
-    await sleep(10);
-    counter.decrement();
-    t.equal(counter.value, 0);
-  }, 10);
+  t.equal(typeof count, 'number');
+  t.equal(typeof value, 'number');
+});
 
-  await counter.waitForZero();
-  t.equal(counter.value, 0);
+test('TS: Counter.waitFor() callback signature', async t => {
+  const counter = new Counter();
 
-  setTimeout(() => {
-    counter.increment();
-    t.equal(counter.value, 1);
-  }, 10);
+  const p1: Promise<number> = counter.waitForZero();
+  const p2: Promise<number> = counter.waitFor((count: number) => count === 0);
 
-  await counter.waitFor(x => x === 1);
-  t.equal(counter.value, 1);
+  if (0 as number) {
+    // @ts-expect-error — callback must return boolean
+    counter.waitFor((count: number) => count);
+  }
 
-  counter.clearWaiters();
-  t.equal(counter.value, 1);
-
-  setTimeout(() => {
-    counter.decrement();
-    t.equal(counter.value, 0);
-  }, 10);
-
-  await counter.waitForZero();
-  t.equal(counter.value, 0);
+  const r1 = await p1;
+  t.equal(typeof r1, 'number');
+  await p2;
 });

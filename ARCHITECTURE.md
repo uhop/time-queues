@@ -226,8 +226,7 @@ The project uses [tape-six](https://github.com/nicklatkovich/tape-six) for testi
 
 ### TypeScript Validation
 
-- `ts-check/` directory: TypeScript compilation checks for static analysis using `tsc --noEmit`
-- `ts-tests/` directory: Directly runnable TypeScript tests in Node.js, Deno, and Bun environments (browsers require JavaScript transpilation)
+- `ts-tests/` directory: TypeScript typing tests that exercise tricky TS typings (generics, callback signatures, overloads, type constraints). Run via `npm run ts-test` or checked statically via `npm run ts-check` (`tsc --noEmit`)
 
 ## See Also
 

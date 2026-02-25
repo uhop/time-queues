@@ -1,22 +1,20 @@
 import test from 'tape-six';
 
 import audit from '../src/audit.js';
-import sleep from '../src/sleep.js';
 
-test('audit', async t => {
-  t.equal(typeof audit, 'function');
+test('TS: audit() preserves argument types', t => {
+  const fn = (x: number, y: string) => {};
+  const audited = audit(fn, 20);
 
-  let results: number[] = [];
-  const fn = (x: number) => results.push(x),
-    auditedFn = audit(fn, 20);
+  audited(1, 'a');
 
-  auditedFn(1);
-  t.deepEqual(results, []);
+  if (0 as number) {
+    // @ts-expect-error — wrong argument type
+    audited('bad', 'a');
 
-  await sleep(10);
-  auditedFn(2);
-  t.deepEqual(results, []);
+    // @ts-expect-error — missing argument
+    audited(1);
+  }
 
-  await sleep(20);
-  t.deepEqual(results, [2]);
+  t.equal(typeof audited, 'function');
 });

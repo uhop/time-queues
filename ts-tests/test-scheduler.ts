@@ -1,41 +1,58 @@
 import test from 'tape-six';
 
-import scheduler from '../src/Scheduler.js';
+import {Scheduler, Task, repeat, scheduler} from '../src/Scheduler.js';
+import {MicroTaskQueue} from '../src/MicroTaskQueue.js';
 
-test('Scheduler', t => {
-  t.equal(typeof scheduler, 'object');
-  t.ok(scheduler.isEmpty);
-  t.equal(scheduler.nextTime, Infinity);
-  t.notOk(scheduler.paused);
+test('TS: Scheduler is instanceof MicroTaskQueue', t => {
+  const s = new Scheduler();
+  t.ok(s instanceof MicroTaskQueue);
+});
 
-  scheduler.pause();
-  t.ok(scheduler.paused);
-  scheduler.resume();
-  t.notOk(scheduler.paused);
+test('TS: Task callback receives {task, scheduler}', t => {
+  const s = new Scheduler();
+  const task: Task = s.enqueue(({task, scheduler: sched}) => {
+    const _t: Task = task;
+    const _s: Scheduler = sched;
+    void _t;
+    void _s;
+  }, 1000);
 
-  const fn1 = () => 1,
-    fn2 = () => 2;
+  const time: number = task.time;
+  const delay: number = task.delay;
 
-  const task1 = scheduler.enqueue(fn1, 200);
-  t.equal(task1.fn, fn1);
-  t.equal(scheduler.nextTime, task1.time);
+  s.clear();
+  t.equal(typeof time, 'number');
+  t.equal(typeof delay, 'number');
+});
 
-  const task2 = scheduler.enqueue(fn2, 100);
-  t.equal(task2.fn, fn2);
-  t.equal(scheduler.nextTime, task2.time);
+test('TS: Scheduler.enqueue() delay accepts number or Date', t => {
+  const s = new Scheduler();
+  s.enqueue(() => {}, 100);
+  s.enqueue(() => {}, new Date(Date.now() + 100));
+  s.clear();
+  t.ok(true);
+});
 
-  scheduler.dequeue(task2);
-  t.equal(scheduler.nextTime, task1.time);
-  scheduler.dequeue(task1);
-  t.equal(scheduler.nextTime, Infinity);
-  t.ok(scheduler.isEmpty);
+test('TS: Scheduler.schedule() with null fn returns Task with promise', async t => {
+  const s = new Scheduler();
+  const task: Task = s.schedule(null, 10);
+  const p: Promise<unknown> | null = task.promise;
+  t.ok(p instanceof Promise);
+  await p;
+});
 
-  scheduler.enqueue(fn1, 200);
-  t.notOk(scheduler.isEmpty);
-  scheduler.enqueue(fn2, 100);
-  t.notOk(scheduler.isEmpty);
+test('TS: repeat() returns a scheduler callback', t => {
+  const fn = repeat(({task, scheduler: _s}) => {
+    void task;
+  }, 100);
 
-  scheduler.clear();
-  t.ok(scheduler.isEmpty);
-  t.equal(scheduler.nextTime, Infinity);
+  const s = new Scheduler();
+  s.enqueue(fn, 100);
+  s.clear();
+  t.equal(typeof fn, 'function');
+});
+
+test('TS: default export is scheduler instance', t => {
+  const s: Scheduler = scheduler;
+  t.ok(s instanceof Scheduler);
 });

@@ -1,31 +1,17 @@
 import test from 'tape-six';
 
 import batch from '../src/batch.js';
-import randomSleep from '../src/random-sleep.js';
 
-test('batch', async t => {
-  t.equal(typeof batch, 'function');
+test('TS: batch() accepts mixed input types', async t => {
+  const result: unknown[] = await batch(
+    [() => Promise.resolve(1), Promise.resolve(2), 'literal', 42],
+    2
+  );
+  t.equal(result.length, 4);
+});
 
-  let counter = 0,
-    maxCount = 0;
-
-  const fn = async () => {
-    ++counter;
-    maxCount = Math.max(maxCount, counter);
-    await randomSleep(10, 5);
-    --counter;
-  };
-
-  const fs = [],
-    N = 20,
-    M = 3;
-
-  for (let i = 0; i < N; ++i) {
-    fs.push(fn);
-  }
-
-  await batch(fs, M);
-
-  t.equal(counter, 0);
-  t.equal(maxCount, M);
+test('TS: batch() return type is Promise<unknown[]>', async t => {
+  const p: Promise<unknown[]> = batch([]);
+  const result = await p;
+  t.deepEqual(result, []);
 });

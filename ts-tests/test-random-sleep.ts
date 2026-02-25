@@ -1,5 +1,6 @@
 import test from 'tape-six';
 
+import type {RandomSleepFunction} from '../src/random-sleep.js';
 import {
   randomUniformSleep,
   randomNormalSleep,
@@ -8,31 +9,31 @@ import {
   randomSleep
 } from '../src/random-sleep.js';
 
-test('random sleep', async t => {
-  t.equal(typeof randomUniformSleep, 'function');
-  const u = randomUniformSleep(5, 15);
+test('TS: random-sleep factory return types', t => {
+  const u: RandomSleepFunction = randomUniformSleep(5, 15);
+  const n: RandomSleepFunction = randomNormalSleep(15, 5);
+  const e: RandomSleepFunction = randomExpoSleep(0.1, 10, 5);
+  const p: RandomSleepFunction = randomParetoSleep(5, 0.7);
+
   t.equal(typeof u, 'function');
-  await u();
-  await u();
-
-  t.equal(typeof randomNormalSleep, 'function');
-  const n = randomNormalSleep(15, 5);
   t.equal(typeof n, 'function');
-  await n();
-  await n();
-
-  t.equal(typeof randomExpoSleep, 'function');
-  const e = randomExpoSleep(0.1, 10, 5);
   t.equal(typeof e, 'function');
-  await e();
-  await e();
-
-  t.equal(typeof randomParetoSleep, 'function');
-  const p = randomParetoSleep(5, 0.7);
   t.equal(typeof p, 'function');
-  await p();
-  await p();
+});
 
-  t.equal(typeof randomSleep, 'function');
-  await randomSleep(20, 10);
+test('TS: randomSleep() returns Promise<void> directly', async t => {
+  const p: Promise<void> = randomSleep(10, 5);
+  await p;
+  t.ok(true);
+});
+
+test('TS: random-sleep optional parameters', async t => {
+  const n: RandomSleepFunction = randomNormalSleep(15, 5);
+  const e: RandomSleepFunction = randomExpoSleep(0.1, 10);
+  const p: RandomSleepFunction = randomParetoSleep(5);
+
+  await n();
+  await e();
+  await p();
+  t.ok(true);
 });

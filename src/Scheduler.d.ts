@@ -55,9 +55,10 @@ export declare class Task extends MicroTask {
   /**
    * Cancels the microtask, if a promise is created.
    * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
+   * @param error The optional error to use as the cause of the cancellation.
    * @returns The microtask.
    */
-  cancel(): this;
+  cancel(error?: Error): this;
 }
 
 /**

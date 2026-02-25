@@ -72,6 +72,11 @@ export declare class Throttler implements ThrottlerOptions {
   wait(key: unknown): Promise<void>;
 
   /**
+   * Removes expired keys from the last seen map.
+   */
+  vacuum(): void;
+
+  /**
    * Retrieves the vacuuming state.
    * @returns `true` if the vacuuming is active, `false` otherwise.
    */

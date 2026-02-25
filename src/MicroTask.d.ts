@@ -32,6 +32,11 @@ export declare class MicroTask {
   get promise(): Promise<unknown> | null;
 
   /**
+   * Whether the microtask has been settled (resolved or canceled).
+   */
+  get settled(): boolean;
+
+  /**
    * Resolves the microtask, if a promise is created.
    * @param value The value to resolve the microtask with.
    * @returns The microtask.

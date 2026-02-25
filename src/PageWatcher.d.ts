@@ -90,4 +90,4 @@ export declare const watchStates: (
  */
 export declare const pageWatcher: PageWatcher;
 
-export default PageWatcher;
+export default pageWatcher;

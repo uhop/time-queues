@@ -13,7 +13,7 @@ export declare interface RetainerOptions<T = unknown> {
   /**
    * The retention period in milliseconds.
    */
-  retentionPeriod: number;
+  retentionPeriod?: number;
 }
 
 /**
@@ -55,14 +55,14 @@ export declare class Retainer<T = unknown> implements RetainerOptions<T> {
    * Retrieves the retained value.
    * @returns The retained value as a promise.
    */
-  async get(): Promise<T>;
+  get(): Promise<T>;
 
   /**
    * Releases the retained value.
    * @param immediately Whether to release the value immediately. Otherwise it'll be retained for the retention period.
    * @returns The retainer object.
    */
-  async release(immediately?: boolean): Promise<this>;
+  release(immediately?: boolean): Promise<this>;
 }
 
 export default Retainer;

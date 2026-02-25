@@ -6,9 +6,8 @@
  * - `setTimeout()`
  *
  * @param fn The function to delay.
- * @returns A function that, when called, will execute the provided function.
  */
-export declare function defer<A extends unknown[]>(fn: (...args: A) => void): (...args: A) => void;
+export declare function defer(fn: () => void): void;
 
 /**
  * Schedules a function to be called when the next available time.

@@ -96,4 +96,4 @@ export const defer: (
   fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown
 ) => Task;
 
-export default IdleQueue;
+export default idleQueue;

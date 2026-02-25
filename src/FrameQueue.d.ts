@@ -82,4 +82,4 @@ export declare class FrameQueue extends ListQueue {
  */
 export const frameQueue: FrameQueue;
 
-export default FrameQueue;
+export default frameQueue;

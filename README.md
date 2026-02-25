@@ -34,9 +34,12 @@ await sleep(1000);
 
 // Run a task every 5 seconds
 const scheduler = new Scheduler();
-scheduler.enqueue(repeat(({task, scheduler}) => {
-  console.log('tick');
-}, 5000), 5000);
+scheduler.enqueue(
+  repeat(({task, scheduler}) => {
+    console.log('tick');
+  }, 5000),
+  5000
+);
 
 // Fetch 10 URLs, max 3 at a time
 const results = await batch(
@@ -53,50 +56,50 @@ The [project wiki](https://github.com/uhop/time-queues/wiki) has detailed docs f
 
 ### Queues
 
-| Component | Purpose |
-|---|---|
-| [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler) | Time-based task scheduling (delays, dates, repeats) |
-| [IdleQueue](https://github.com/uhop/time-queues/wiki/IdleQueue) | Run tasks during browser idle periods |
-| [FrameQueue](https://github.com/uhop/time-queues/wiki/FrameQueue) | Run tasks in animation frames |
-| [LimitedQueue](https://github.com/uhop/time-queues/wiki/LimitedQueue) | Concurrency-controlled async queue |
-| [PageWatcher](https://github.com/uhop/time-queues/wiki/PageWatcher) | React to page lifecycle changes |
+| Component                                                             | Purpose                                             |
+| --------------------------------------------------------------------- | --------------------------------------------------- |
+| [Scheduler](https://github.com/uhop/time-queues/wiki/Scheduler)       | Time-based task scheduling (delays, dates, repeats) |
+| [IdleQueue](https://github.com/uhop/time-queues/wiki/IdleQueue)       | Run tasks during browser idle periods               |
+| [FrameQueue](https://github.com/uhop/time-queues/wiki/FrameQueue)     | Run tasks in animation frames                       |
+| [LimitedQueue](https://github.com/uhop/time-queues/wiki/LimitedQueue) | Concurrency-controlled async queue                  |
+| [PageWatcher](https://github.com/uhop/time-queues/wiki/PageWatcher)   | React to page lifecycle changes                     |
 
 ### Utilities
 
-| Function | Purpose |
-|---|---|
-| [sleep()](<https://github.com/uhop/time-queues/wiki/sleep()>) | Promise-based delay |
-| [defer()](<https://github.com/uhop/time-queues/wiki/defer()>) | Execute on next tick |
+| Function                                                            | Purpose                                 |
+| ------------------------------------------------------------------- | --------------------------------------- |
+| [sleep()](<https://github.com/uhop/time-queues/wiki/sleep()>)       | Promise-based delay                     |
+| [defer()](<https://github.com/uhop/time-queues/wiki/defer()>)       | Execute on next tick                    |
 | [throttle()](<https://github.com/uhop/time-queues/wiki/throttle()>) | Rate-limit a function (first call wins) |
-| [debounce()](<https://github.com/uhop/time-queues/wiki/debounce()>) | Delay until input stabilizes |
-| [sample()](<https://github.com/uhop/time-queues/wiki/sample()>) | Sample at regular intervals |
-| [audit()](<https://github.com/uhop/time-queues/wiki/audit()>) | Collect then execute after delay |
-| [batch()](<https://github.com/uhop/time-queues/wiki/batch()>) | Run async ops with concurrency limit |
+| [debounce()](<https://github.com/uhop/time-queues/wiki/debounce()>) | Delay until input stabilizes            |
+| [sample()](<https://github.com/uhop/time-queues/wiki/sample()>)     | Sample at regular intervals             |
+| [audit()](<https://github.com/uhop/time-queues/wiki/audit()>)       | Collect then execute after delay        |
+| [batch()](<https://github.com/uhop/time-queues/wiki/batch()>)       | Run async ops with concurrency limit    |
 
 ### Supporting Classes
 
-| Component | Purpose |
-|---|---|
-| [Throttler](https://github.com/uhop/time-queues/wiki/Throttler) | Key-based rate limiting |
-| [Retainer](https://github.com/uhop/time-queues/wiki/Retainer) | Resource lifecycle management |
-| [Counter](https://github.com/uhop/time-queues/wiki/Counter) | Track pending task counts |
-| [MicroTask](https://github.com/uhop/time-queues/wiki/MicroTask) | Base task unit |
-| [MicroTaskQueue](https://github.com/uhop/time-queues/wiki/MicroTaskQueue) | Base queue class |
-| [ListQueue](https://github.com/uhop/time-queues/wiki/ListQueue) | List-based queue implementation |
+| Component                                                                 | Purpose                         |
+| ------------------------------------------------------------------------- | ------------------------------- |
+| [Throttler](https://github.com/uhop/time-queues/wiki/Throttler)           | Key-based rate limiting         |
+| [Retainer](https://github.com/uhop/time-queues/wiki/Retainer)             | Resource lifecycle management   |
+| [Counter](https://github.com/uhop/time-queues/wiki/Counter)               | Track pending task counts       |
+| [MicroTask](https://github.com/uhop/time-queues/wiki/MicroTask)           | Base task unit                  |
+| [MicroTaskQueue](https://github.com/uhop/time-queues/wiki/MicroTaskQueue) | Base queue class                |
+| [ListQueue](https://github.com/uhop/time-queues/wiki/ListQueue)           | List-based queue implementation |
 
 ### Random Utilities
 
-| Module | Purpose |
-|---|---|
-| [random-dist](https://github.com/uhop/time-queues/wiki/random-dist) | Random numbers (uniform, normal, exponential, Pareto) |
-| [random-sleep](https://github.com/uhop/time-queues/wiki/random-sleep) | Randomized delays from various distributions |
+| Module                                                                | Purpose                                               |
+| --------------------------------------------------------------------- | ----------------------------------------------------- |
+| [random-dist](https://github.com/uhop/time-queues/wiki/random-dist)   | Random numbers (uniform, normal, exponential, Pareto) |
+| [random-sleep](https://github.com/uhop/time-queues/wiki/random-sleep) | Randomized delays from various distributions          |
 
 ### Page Load Helpers
 
-| Function | Purpose |
-|---|---|
-| [whenDomLoaded()](<https://github.com/uhop/time-queues/wiki/whenDomLoaded()>) | Run code when DOM is ready |
-| [whenLoaded()](<https://github.com/uhop/time-queues/wiki/whenLoaded()>) | Run code when page is fully loaded |
+| Function                                                                      | Purpose                            |
+| ----------------------------------------------------------------------------- | ---------------------------------- |
+| [whenDomLoaded()](<https://github.com/uhop/time-queues/wiki/whenDomLoaded()>) | Run code when DOM is ready         |
+| [whenLoaded()](<https://github.com/uhop/time-queues/wiki/whenLoaded()>)       | Run code when page is fully loaded |
 
 ## Browser Notes
 

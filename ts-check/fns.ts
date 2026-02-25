@@ -1,10 +1,10 @@
-import audit from "../src/audit.js";
-import throttle from "../src/throttle.js";
-import sample from "../src/sample.js";
-import debounce from "../src/debounce.js";
-import sleep from "../src/sleep.js";
-import whenDomLoaded from "../src/when-dom-loaded.js";
-import whenLoaded from "../src/when-loaded.js";
+import audit from '../src/audit.js';
+import throttle from '../src/throttle.js';
+import sample from '../src/sample.js';
+import debounce from '../src/debounce.js';
+import sleep from '../src/sleep.js';
+import whenDomLoaded from '../src/when-dom-loaded.js';
+import whenLoaded from '../src/when-loaded.js';
 
 const main = async () => {
   // audit

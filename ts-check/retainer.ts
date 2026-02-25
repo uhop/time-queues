@@ -4,9 +4,9 @@ const main = async () => {
   const retainer = new Retainer({
     create: () => Promise.resolve(1),
     destroy: () => Promise.resolve(),
-    retentionPeriod: 1_000,
+    retentionPeriod: 1_000
   });
-  
+
   const value1 = await retainer.get();
   void value1;
   await retainer.release();

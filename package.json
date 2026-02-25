@@ -27,8 +27,8 @@
     "ts-test:seq": "tape6-seq --flags FO '/ts-tests/test-*.*ts'",
     "ts-test:seq:bun": "bun run `tape6-seq --self` --flags FO '/ts-tests/test-*.*ts'",
     "ts-test:seq:deno": "deno run -A `tape6-seq --self` --flags FO '/ts-tests/test-*.*ts'",
-    "lint": "prettier --check src/ tests/ wiki/",
-    "lint:fix": "prettier --write src/ tests/ wiki/",
+    "lint": "prettier --check .",
+    "lint:fix": "prettier --write .",
     "start": "tape6-server --trace"
   },
   "repository": {
@@ -86,12 +86,13 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^25.2.3",
-    "tape-six": "^1.7.0",
-    "tape-six-proc": "^1.2.2",
+    "@types/node": "^25.3.0",
+    "prettier": "^3.8.1",
+    "tape-six": "^1.7.2",
+    "tape-six-proc": "^1.2.3",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "list-toolkit": "^2.2.6"
+    "list-toolkit": "^2.3.0"
   }
 }

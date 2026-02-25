@@ -90,6 +90,7 @@ export class Scheduler extends MicroTaskQueue {
     this.queue.array.forEach(task => task.cancel());
     this.queue.clear();
     if (!paused) this.resume();
+    return this;
   }
 
   startQueue() {

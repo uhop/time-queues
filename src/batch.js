@@ -9,6 +9,7 @@ const wrap = value => {
 };
 
 export const batch = (fns, limit = 4) => {
+  if (!fns.length) return Promise.resolve([]);
   if (limit < 1) limit = 1;
 
   const result = [];

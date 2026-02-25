@@ -57,6 +57,7 @@ export class Throttler {
     this.handle = setInterval(() => {
       this.vacuum();
     }, this.vacuumPeriod);
+    if (this.handle.unref) this.handle.unref();
     return this;
   }
 

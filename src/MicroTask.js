@@ -18,6 +18,7 @@ export class MicroTask {
     this.#promise = null;
     this.#resolve = null;
     this.#reject = null;
+    this.#settled = false;
     this.isCanceled = false;
   }
   // AI-NOTE: Returns null until makePromise() is called - this is intentional

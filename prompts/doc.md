@@ -1,7 +1,7 @@
 Generate a comprehensive documentation file for the specified file, including a detailed description of its purpose, key features, technical specifications, usage instructions, and any relevant troubleshooting steps. Ensure the document is formatted for easy readability and includes clear headings and sections. Target the developers who will use the file. Be concise and do not include any unnecessary details.
 
 Before generating documentation:
-1. Review AI.md for project overview and patterns
+1. Review AGENTS.md for project overview and patterns
 2. Review src/INDEX.md to understand component relationships
 3. For classes, check the inheritance hierarchy (extends MicroTaskQueue/ListQueue)
 4. Check the actual source file (.js) and TypeScript definitions (.d.ts) for accuracy

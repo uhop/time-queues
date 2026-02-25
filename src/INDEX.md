@@ -43,9 +43,8 @@ MicroTask → MicroTaskQueue → ListQueue → [Specialized Queues]
 | `IdleQueue` | `ListQueue` | Browser idle callback |
 | `FrameQueue` | `ListQueue` | Animation frame sync |
 | `LimitedQueue` | `ListQueue` | Concurrency control |
-| `Scheduler` | `ListQueue` | Time-based execution |
-| `Throttler` | `MicroTaskQueue` | Rate limiting by key |
-| `PageWatcher` | `MicroTaskQueue` | Page lifecycle events |
+| `Scheduler` | `MicroTaskQueue` | Time-based execution |
+| `PageWatcher` | `ListQueue` | Page lifecycle events |
 
 ### Utility Functions
 
@@ -69,7 +68,6 @@ MicroTask → MicroTaskQueue → ListQueue → [Specialized Queues]
 
 ## Quick Links
 
-- **Architecture**: `../docs/technical/ARCHITECTURE.md`
-- **Full API**: `../docs/technical/API.md`
+- **Architecture**: `../ARCHITECTURE.md`
 - **Examples**: `../examples/README.md`
-- **AI Guide**: `../CLAUDE.md`
+- **AI Guide**: `../AGENTS.md`

@@ -1,0 +1,430 @@
+# time-queues
+
+> Lightweight async task scheduling and concurrency control for JavaScript: schedulers, idle/frame/limited queues, throttle, debounce, batch, page lifecycle, random delays.
+
+- NPM: https://npmjs.org/package/time-queues
+- GitHub: https://github.com/uhop/time-queues
+- Wiki: https://github.com/uhop/time-queues/wiki
+- License: BSD-3-Clause
+- Runtime: browsers, Node.js, Bun, Deno
+- Module system: ESM (`"type": "module"`)
+- TypeScript: built-in `.d.ts` declarations for all modules
+- Dependency: [list-toolkit](https://npmjs.org/package/list-toolkit) (zero-dep)
+
+## Installation
+
+```bash
+npm install time-queues
+```
+
+## Quick start
+
+```js
+import sleep from 'time-queues/sleep.js';
+import {Scheduler, repeat} from 'time-queues/Scheduler.js';
+import {batch} from 'time-queues/batch.js';
+
+await sleep(1000);
+
+const scheduler = new Scheduler();
+scheduler.enqueue(repeat(({task, scheduler}) => {
+  console.log('tick');
+}, 5000), 5000);
+
+const results = await batch(
+  urls.map(url => () => fetch(url).then(r => r.json())),
+  3
+);
+```
+
+## Architecture
+
+```
+MicroTask (single task with promise support)
+  └─ Task (Scheduler-specific, adds delay/time)
+
+MicroTaskQueue (abstract queue base)
+  ├─ Scheduler (time-based, uses min-heap)
+  └─ ListQueue (linked-list storage)
+       ├─ IdleQueue (requestIdleCallback)
+       ├─ FrameQueue (requestAnimationFrame)
+       ├─ LimitedQueue (concurrency control)
+       └─ PageWatcher (page lifecycle events)
+
+Standalone: Counter, Throttler, Retainer, CancelTaskError
+```
+
+All modules are ESM. Import as `import X from 'time-queues/<module>.js'`.
+
+## API Reference
+
+### CancelTaskError (`time-queues/CancelTaskError.js`)
+
+Error subclass for task cancellation signals.
+
+```ts
+class CancelTaskError extends Error {
+  constructor(message?: string, options?: ErrorOptions);
+}
+export default CancelTaskError;
+```
+
+### MicroTask (`time-queues/MicroTask.js`)
+
+Base task unit with lazy promise creation.
+
+```ts
+class MicroTask {
+  fn: () => unknown;
+  isCanceled: boolean;
+  get promise(): Promise<unknown> | null;
+  constructor(fn: () => unknown);
+  makePromise(): this;
+  resolve(value: unknown): this;
+  cancel(error?: Error): this;
+}
+export default MicroTask;
+```
+
+### MicroTaskQueue (`time-queues/MicroTaskQueue.js`)
+
+Abstract queue base class.
+
+```ts
+class MicroTaskQueue {
+  paused: boolean;
+  constructor(paused?: boolean);
+  get isEmpty(): boolean;
+  enqueue(fn: () => unknown): MicroTask;
+  dequeue(task: MicroTask): this;
+  schedule(fn: (() => unknown) | null | undefined, ...args: unknown[]): MicroTask;
+  clear(): this;
+  pause(): this;
+  resume(): this;
+}
+export default MicroTaskQueue;
+```
+
+### ListQueue (`time-queues/ListQueue.js`)
+
+Linked-list queue implementation. Extends `MicroTaskQueue`.
+
+```ts
+class ListQueue extends MicroTaskQueue {
+  paused: boolean;
+  stopQueue: (() => void) | null;
+  constructor(paused?: boolean);
+  get isEmpty(): boolean;
+  enqueue(fn: () => unknown): MicroTask;
+  dequeue(task: MicroTask): this;
+  schedule(fn: (() => unknown) | null | undefined): MicroTask;
+  clear(): this;
+  pause(): this;
+  resume(): this;
+  startQueue(): (() => void) | null;  // override in subclasses
+}
+export type Task = MicroTask;
+export default ListQueue;
+```
+
+### Scheduler (`time-queues/Scheduler.js`)
+
+Time-based task scheduling with min-heap. Extends `MicroTaskQueue`.
+
+```ts
+class Task extends MicroTask {
+  time: number;
+  delay: number;
+  constructor(delay: number | Date, fn: ({task: Task, scheduler: Scheduler}) => unknown);
+}
+
+class Scheduler extends MicroTaskQueue {
+  paused: boolean;
+  tolerance: number;
+  constructor(paused?: boolean, tolerance?: number);
+  get isEmpty(): boolean;
+  get nextTime(): number;
+  enqueue(fn: ({task: Task, scheduler: Scheduler}) => unknown, delay: number | Date): Task;
+  dequeue(task: Task): this;
+  schedule(fn: (({task: Task, scheduler: Scheduler}) => unknown) | null | undefined, delay: number | Date): Task;
+  clear(): this;
+  pause(): this;
+  resume(): this;
+}
+
+const repeat: (fn: ({task: Task, scheduler: Scheduler}) => void, delay: number | Date) => ({task: Task, scheduler: Scheduler}) => void;
+const scheduler: Scheduler;  // global instance
+export default scheduler;
+```
+
+Callback receives `{task, scheduler}` as a destructured object.
+
+### IdleQueue (`time-queues/IdleQueue.js`)
+
+Run tasks during browser idle periods via `requestIdleCallback()`. Extends `ListQueue`.
+
+```ts
+class IdleQueue extends ListQueue {
+  timeoutBatch: number | undefined;
+  options: IdleCallbackOptions | undefined;
+  constructor(paused?: boolean, timeoutBatchInMs?: number, options?: IdleCallbackOptions);
+  enqueue(fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown): Task;
+  schedule(fn: (({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown) | null | undefined): Task;
+}
+
+const idleQueue: IdleQueue;   // global instance
+const defer: (fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown) => Task;
+export default IdleQueue;
+```
+
+### FrameQueue (`time-queues/FrameQueue.js`)
+
+Run tasks in animation frames via `requestAnimationFrame()`. Extends `ListQueue`.
+
+```ts
+class FrameQueue extends ListQueue {
+  batch: number | undefined;
+  constructor(paused?: boolean, batchInMs?: number);
+  enqueue(fn: ({timeStamp: number, task: Task, queue: FrameQueue}) => unknown): Task;
+  schedule(fn: (({timeStamp: number, task: Task, queue: FrameQueue}) => unknown) | null | undefined): Task;
+}
+
+const frameQueue: FrameQueue;  // global instance
+export default FrameQueue;
+```
+
+### LimitedQueue (`time-queues/LimitedQueue.js`)
+
+Concurrency-controlled async queue. Extends `ListQueue`.
+
+```ts
+class LimitedQueue extends ListQueue {
+  constructor(limit: number, paused?: boolean);
+  get taskLimit(): number;
+  set taskLimit(limit: number);
+  get activeTasks(): number;
+  get isIdle(): boolean;
+  waitForIdle(): Promise<void>;
+  enqueue(fn: () => unknown): Task;
+  schedule(fn: (() => unknown) | null | undefined): Task;
+}
+export { Task };
+export default LimitedQueue;
+```
+
+### PageWatcher (`time-queues/PageWatcher.js`)
+
+React to page lifecycle changes. Extends `ListQueue`.
+
+```ts
+type PageState = 'active' | 'passive' | 'hidden' | 'frozen' | 'terminated';
+
+class PageWatcher extends ListQueue {
+  currentState: PageState;
+  constructor(started?: boolean);
+  enqueue(fn: (state: PageState, previousState: PageState, task: Task, queue: ListQueue) => void, initialize?: boolean): Task;
+  schedule(): never;  // always throws
+}
+
+const watchStates: (queue: ListQueue, resumeStatesList?: PageState[]) => (state: PageState) => void;
+const pageWatcher: PageWatcher;  // global instance
+export default PageWatcher;
+```
+
+### Counter (`time-queues/Counter.js`)
+
+Numeric counter with async waiting.
+
+```ts
+class Counter {
+  count: number;
+  constructor(initial?: number);
+  get value(): number;
+  set value(value: number);
+  increment(): void;
+  decrement(): void;
+  advance(amount?: number): void;
+  waitForZero(): Promise<number>;
+  waitFor(fn: (count: number) => boolean): Promise<number>;
+  clearWaiters(): void;
+}
+export default Counter;
+```
+
+### Throttler (`time-queues/Throttler.js`)
+
+Key-based rate limiting with vacuum cleanup.
+
+```ts
+type ThrottlerOptions = {
+  throttleTimeout?: number;   // default: 1000
+  neverSeenTimeout?: number;  // default: 0
+  vacuumPeriod?: number;      // default: throttleTimeout * 3
+};
+
+class Throttler implements ThrottlerOptions {
+  throttleTimeout: number;
+  neverSeenTimeout: number;
+  vacuumPeriod: number;
+  lastSeen: Map<unknown, number>;
+  constructor(options?: ThrottlerOptions);
+  getLastSeen(key: unknown): number;
+  getDelay(key: unknown): number;
+  wait(key: unknown): Promise<void>;
+  get isVacuuming(): boolean;
+  startVacuum(): this;
+  stopVacuum(): this;
+}
+export default Throttler;
+```
+
+### Retainer (`time-queues/Retainer.js`)
+
+Resource lifecycle management with reference counting.
+
+```ts
+interface RetainerOptions<T = unknown> {
+  create: () => Promise<T> | T;
+  destroy: (value: T) => Promise<void> | void;
+  retentionPeriod: number;
+}
+
+class Retainer<T = unknown> implements RetainerOptions<T> {
+  counter: number;
+  value: T | null;
+  create: () => Promise<T> | T;
+  destroy: (value: T) => Promise<void> | void;
+  retentionPeriod: number;
+  constructor(options: RetainerOptions<T>);
+  async get(): Promise<T>;
+  async release(immediately?: boolean): Promise<this>;
+}
+export default Retainer;
+```
+
+### sleep (`time-queues/sleep.js`)
+
+```ts
+function sleep(ms: number | Date): Promise<void>;
+export default sleep;
+```
+
+### defer (`time-queues/defer.js`)
+
+Next-tick execution via `requestIdleCallback` / `setImmediate` / `setTimeout`.
+
+```ts
+function defer<A extends unknown[]>(fn: (...args: A) => void): (...args: A) => void;
+function scheduleDefer<R>(fn: () => R): Promise<Awaited<R>>;
+function scheduleDefer(fn: null | undefined): Promise<void>;
+export default defer;
+```
+
+### throttle (`time-queues/throttle.js`)
+
+Execute immediately, ignore calls until timeout expires. Uses first seen args.
+
+```ts
+function throttle<A extends unknown[]>(fn: (...args: A) => void, ms: number): (...args: A) => void;
+export default throttle;
+```
+
+### debounce (`time-queues/debounce.js`)
+
+Delay until input stabilizes. Each call resets the timeout. Uses last seen args.
+
+```ts
+function debounce<A extends unknown[]>(fn: (...args: A) => void, ms: number): (...args: A) => void;
+export default debounce;
+```
+
+### sample (`time-queues/sample.js`)
+
+Execute at regular intervals with last seen args. Intervals never reset and never stop.
+
+```ts
+function sample<A extends unknown[]>(fn: (...args: A) => void, ms: number): (...args: A) => void;
+export default sample;
+```
+
+### audit (`time-queues/audit.js`)
+
+First call starts timeout, then executes with last seen args. Similar to throttle but uses last args.
+
+```ts
+function audit<A extends unknown[]>(fn: (...args: A) => void, ms: number): (...args: A) => void;
+export default audit;
+```
+
+### batch (`time-queues/batch.js`)
+
+Run async operations with concurrency limit. Modelled after `Promise.all()`.
+
+```ts
+function batch(
+  fns: ((() => PromiseLike<unknown>) | PromiseLike<unknown> | unknown)[],
+  limit?: number  // default: 4
+): Promise<unknown[]>;
+export default batch;
+```
+
+### random-dist (`time-queues/random-dist.js`)
+
+Random number distributions.
+
+```ts
+function uniform(min: number, max: number): number;
+function normal(mean: number, stdDev: number, skewness?: number): number;
+function expo(lambda: number): number;
+function pareto(min: number, alpha: number): number;
+```
+
+### random-sleep (`time-queues/random-sleep.js`)
+
+Randomized delays from various distributions. Each factory returns `() => Promise<void>`.
+
+```ts
+type RandomSleepFunction = () => Promise<void>;
+
+function randomUniformSleep(min: number, max: number): RandomSleepFunction;
+function randomNormalSleep(mean: number, stdDev: number, skewness?: number): RandomSleepFunction;
+function randomExpoSleep(rate: number, range: number, base?: number): RandomSleepFunction;
+function randomParetoSleep(min: number, ratio?: number): RandomSleepFunction;
+function randomSleep(max: number, min?: number): Promise<void>;
+export default randomSleep;
+```
+
+### whenDomLoaded (`time-queues/when-dom-loaded.js`)
+
+```ts
+function whenDomLoaded(fn: () => void): void;
+function remove(fn: () => void): boolean;
+function scheduleWhenDomLoaded<R>(fn: () => R): Promise<Awaited<R>>;
+function scheduleWhenDomLoaded(fn?: null): Promise<void>;
+export default whenDomLoaded;
+```
+
+### whenLoaded (`time-queues/when-loaded.js`)
+
+```ts
+function whenLoaded(fn: () => void): void;
+function remove(fn: () => void): boolean;
+function scheduleWhenLoaded<R>(fn: () => R): Promise<Awaited<R>>;
+function scheduleWhenLoaded(fn?: null): Promise<void>;
+export default whenLoaded;
+```
+
+## Key concepts
+
+- All modules are **ESM** with `import ... from 'time-queues/<module>.js'`.
+- **Inheritance**: `MicroTaskQueue` → `ListQueue` → specialized queues. `Scheduler` extends `MicroTaskQueue` directly (uses min-heap, not linked list).
+- **Lazy promises** — only created when `.makePromise()` is called or via `schedule()`.
+- **Clean cancellation** — all tasks support cancellation via `CancelTaskError`.
+- **Graceful degradation** — feature detection for browser APIs, works in Node.js/Bun/Deno.
+- **Callback signatures** — queue callbacks receive a destructured context object: `({task, scheduler})` for Scheduler, `({deadline, task, queue})` for IdleQueue, `({timeStamp, task, queue})` for FrameQueue, `(state, prevState, task, queue)` for PageWatcher.
+
+## Links
+
+- Docs: https://github.com/uhop/time-queues/wiki
+- npm: https://www.npmjs.com/package/time-queues
+- Summary: https://github.com/uhop/time-queues/blob/master/llms.txt

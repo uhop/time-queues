@@ -1,7 +1,7 @@
 {
   "name": "time-queues",
   "version": "1.3.0",
-  "description": "Time queues to organize multitasking and scheduled tasks.",
+  "description": "Lightweight async task scheduling and concurrency control: schedulers, idle/frame/limited queues, throttle, debounce, batch, page lifecycle, random delays. Browsers, Node.js, Deno, Bun.",
   "type": "module",
   "types": "./src/index.d.ts",
   "exports": {
@@ -36,9 +36,25 @@
     "url": "git+ssh://git@github.com/uhop/time-queues.git"
   },
   "keywords": [
+    "scheduler",
+    "task-queue",
+    "async-queue",
+    "concurrency",
+    "throttle",
+    "debounce",
+    "rate-limit",
+    "batch",
+    "sleep",
+    "defer",
+    "idle-queue",
+    "requestIdleCallback",
+    "requestAnimationFrame",
+    "page-lifecycle",
     "timer",
     "time",
-    "queue"
+    "queue",
+    "esm",
+    "typescript"
   ],
   "author": "Eugene Lazutkin <eugene.lazutkin@gmail.com> (https://www.lazutkin.com/)",
   "funding": "https://github.com/sponsors/uhop",
@@ -46,24 +62,16 @@
   "bugs": {
     "url": "https://github.com/uhop/time-queues/issues"
   },
+  "github": "https://github.com/uhop/time-queues",
   "homepage": "https://github.com/uhop/time-queues#readme",
-  "aiHints": {
-    "entryPoints": [
-      "src/MicroTask.js",
-      "src/MicroTaskQueue.js",
-      "src/ListQueue.js"
-    ],
-    "architectureDoc": "docs/technical/ARCHITECTURE.md",
-    "apiDoc": "docs/technical/API.md",
-    "contributingDoc": "docs/technical/CONTRIBUTING.md",
-    "aiGuide": "CLAUDE.md",
-    "testCommand": "npm test",
-    "tsCheckCommand": "npm run ts-check"
-  },
+  "llms": "https://raw.githubusercontent.com/uhop/time-queues/master/llms.txt",
+  "llmsFull": "https://raw.githubusercontent.com/uhop/time-queues/master/llms-full.txt",
   "files": [
     "/src",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "llms.txt",
+    "llms-full.txt"
   ],
   "tape6": {
     "tests": [

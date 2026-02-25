@@ -1,0 +1,95 @@
+# time-queues
+
+> Lightweight async task scheduling and concurrency control for JavaScript: schedulers, idle/frame/limited queues, throttle, debounce, batch, page lifecycle, random delays.
+
+- NPM: https://npmjs.org/package/time-queues
+- GitHub: https://github.com/uhop/time-queues
+- Wiki: https://github.com/uhop/time-queues/wiki
+- License: BSD-3-Clause
+
+## Install
+
+```bash
+npm install time-queues
+```
+
+## Quick start
+
+```js
+import sleep from 'time-queues/sleep.js';
+import {Scheduler, repeat} from 'time-queues/Scheduler.js';
+import {batch} from 'time-queues/batch.js';
+
+// Simple delay
+await sleep(1000);
+
+// Run a task every 5 seconds
+const scheduler = new Scheduler();
+scheduler.enqueue(repeat(({task, scheduler}) => {
+  console.log('tick');
+}, 5000), 5000);
+
+// Fetch URLs, max 3 at a time
+const results = await batch(
+  urls.map(url => () => fetch(url).then(r => r.json())),
+  3
+);
+```
+
+## Modules
+
+### Queues
+
+- **Scheduler** (`time-queues/Scheduler.js`) — time-based task scheduling with delays, dates, and repeats. Extends MicroTaskQueue. Uses a min-heap. Exports: `Scheduler`, `Task`, `repeat(fn, delay)`, `scheduler` (global instance).
+- **IdleQueue** (`time-queues/IdleQueue.js`) — run tasks during browser idle periods via `requestIdleCallback()`. Extends ListQueue. Exports: `IdleQueue`, `idleQueue` (global instance), `defer(fn)`.
+- **FrameQueue** (`time-queues/FrameQueue.js`) — run tasks in animation frames via `requestAnimationFrame()`. Extends ListQueue. Exports: `FrameQueue`, `frameQueue` (global instance).
+- **LimitedQueue** (`time-queues/LimitedQueue.js`) — concurrency-controlled async queue. Extends ListQueue. Exports: `LimitedQueue`, `Task`.
+- **PageWatcher** (`time-queues/PageWatcher.js`) — react to page lifecycle changes (active, passive, hidden, frozen, terminated). Extends ListQueue. Exports: `PageWatcher`, `watchStates(states, fn)`, `pageWatcher` (global instance).
+
+### Utility functions
+
+- **sleep** (`time-queues/sleep.js`) — `sleep(ms | Date): Promise<void>`. Promise-based delay.
+- **defer** (`time-queues/defer.js`) — `defer(fn): void`. Execute on next tick via `requestIdleCallback`/`setImmediate`/`setTimeout`. Also exports `scheduleDefer(fn): Promise`.
+- **throttle** (`time-queues/throttle.js`) — `throttle(fn, ms): fn`. Rate-limit: execute immediately, ignore calls until timeout expires.
+- **debounce** (`time-queues/debounce.js`) — `debounce(fn, ms): fn`. Delay until input stabilizes.
+- **sample** (`time-queues/sample.js`) — `sample(fn, ms): fn`. Execute at regular intervals with last seen args.
+- **audit** (`time-queues/audit.js`) — `audit(fn, ms): fn`. Collect then execute after delay with last seen args.
+- **batch** (`time-queues/batch.js`) — `batch(fns, limit?): Promise<results[]>`. Run async operations with concurrency limit (default: 5).
+
+### Supporting classes
+
+- **Throttler** (`time-queues/Throttler.js`) — key-based rate limiting with vacuum cleanup. Methods: `getDelay(key)`, `wait(key)`, `startVacuum()`, `stopVacuum()`.
+- **Retainer** (`time-queues/Retainer.js`) — resource lifecycle management with reference counting. Methods: `get(): Promise<value>`, `release(): Promise<void>`.
+- **Counter** (`time-queues/Counter.js`) — numeric counter with async waiting. Methods: `increment()`, `decrement()`, `advance(delta)`, `waitForZero()`, `waitFor(target)`.
+- **CancelTaskError** (`time-queues/CancelTaskError.js`) — `Error` subclass for task cancellation signals.
+
+### Base classes
+
+- **MicroTask** (`time-queues/MicroTask.js`) — base task unit with lazy promise creation. Methods: `makePromise()`, `resolve(value)`, `cancel(error)`.
+- **MicroTaskQueue** (`time-queues/MicroTaskQueue.js`) — abstract queue base class. Methods: `enqueue(fn)`, `dequeue(task)`, `schedule(fn)`, `clear()`, `pause()`, `resume()`.
+- **ListQueue** (`time-queues/ListQueue.js`) — linked-list queue implementation extending MicroTaskQueue. Adds `startQueue()` lifecycle.
+
+### Random utilities
+
+- **random-dist** (`time-queues/random-dist.js`) — `uniform(min, max)`, `normal(mean, stdDev, skewness?)`, `expo(lambda)`, `pareto(min, alpha)`.
+- **random-sleep** (`time-queues/random-sleep.js`) — `randomUniformSleep(min, max)`, `randomNormalSleep(mean, stdDev)`, `randomExpoSleep(lambda, scale)`, `randomParetoSleep(min, ratio)`, `randomSleep(max)`. Each returns `() => Promise<void>`.
+
+### Page load helpers
+
+- **whenDomLoaded** (`time-queues/when-dom-loaded.js`) — `whenDomLoaded(fn)`. Also exports `scheduleWhenDomLoaded(fn): Promise`, `remove(fn): boolean`.
+- **whenLoaded** (`time-queues/when-loaded.js`) — `whenLoaded(fn)`. Also exports `scheduleWhenLoaded(fn): Promise`, `remove(fn): boolean`.
+
+## Key concepts
+
+- All modules are **ESM** with `import ... from 'time-queues/<module>.js'`.
+- **Inheritance**: `MicroTaskQueue` → `ListQueue` → `IdleQueue`/`FrameQueue`/`LimitedQueue`/`PageWatcher`. `Scheduler` extends `MicroTaskQueue` directly.
+- **Lazy promises** — only created when `.makePromise()` is called or via `schedule()`.
+- **Clean cancellation** — all tasks support cancellation via `CancelTaskError`.
+- **Graceful degradation** — feature detection for browser APIs, works in Node.js/Bun/Deno.
+- **TypeScript** — built-in `.d.ts` declarations for all modules.
+
+## Links
+
+- Docs: https://github.com/uhop/time-queues/wiki
+- npm: https://www.npmjs.com/package/time-queues
+- Full LLM reference: https://github.com/uhop/time-queues/blob/master/llms-full.txt

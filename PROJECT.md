@@ -1,6 +1,6 @@
 # Project Overview
 
-*Technical reference for contributors and AI agents. For the end-user overview see [README.md](README.md). For AI-specific guidance see [CLAUDE.md](CLAUDE.md).*
+*Technical reference for contributors and AI agents. For the end-user overview see [README.md](README.md). For AI-specific guidance see [AGENTS.md](AGENTS.md).*
 
 ## Project Structure
 
@@ -37,9 +37,10 @@ time-queues/
 ├── ts-tests/
 │   └── test-*.ts                   # Runtime TypeScript tests
 ├── wiki/                           # GitHub wiki source (git submodule)
-├── docs/technical/                  # Technical docs (architecture, API, contributing)
 ├── examples/                        # Copy-pasteable usage examples
-├── prompts/                         # Documentation generation prompts
+├── ARCHITECTURE.md                  # Design deep-dive
+├── CONTRIBUTING.md                  # Contributor guide
+├── AGENTS.md                        # AI agent rules
 └── package.json
 ```
 

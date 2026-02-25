@@ -118,6 +118,10 @@ Run `npm start` and open [http://localhost:3000/tests/web/](http://localhost:300
 open the console, switch tabs, navigate away and back to see queues in action.
 Source: [tests/web/test.js](https://github.com/uhop/time-queues/blob/main/tests/web/test.js).
 
+## AI Integration
+
+This project ships [llms.txt](llms.txt) and [llms-full.txt](llms-full.txt) for AI agents and LLMs. Contributors and AI coding assistants should see [AGENTS.md](AGENTS.md) for project conventions.
+
 ## Development
 
 ```sh

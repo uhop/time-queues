@@ -1,4 +1,3 @@
-<!-- Canonical source: AGENTS.md — keep this file in sync -->
 # time-queues — AI Agent Rules
 
 ## Project identity

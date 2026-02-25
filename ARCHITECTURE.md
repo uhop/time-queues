@@ -202,8 +202,9 @@ The project uses [tape-six](https://github.com/nicklatkovich/tape-six) for testi
 
 ## See Also
 
-- [README](../../README.md) - User-facing documentation
-- [PROJECT.md](../../PROJECT.md) - High-level project description
-- [AI.md](../../AI.md) - AI agent guide
-- [Wiki](https://github.com/uhop/time-queues/wiki) - Component documentation
-- [Examples](../../examples/README.md) - Usage examples
+- [README](./README.md) — user-facing documentation
+- [PROJECT.md](./PROJECT.md) — high-level project description
+- [AGENTS.md](./AGENTS.md) — AI agent guide
+- [CONTRIBUTING.md](./CONTRIBUTING.md) — contributor guide
+- [Wiki](https://github.com/uhop/time-queues/wiki) — component documentation
+- [Examples](./examples/README.md) — usage examples

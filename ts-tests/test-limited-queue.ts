@@ -35,7 +35,7 @@ test('TS: LimitedQueue.waitForIdle() returns Promise<void>', async t => {
 
 test('TS: LimitedQueue.schedule() returns Task with promise', async t => {
   const queue = new LimitedQueue(3);
-  const task: Task = queue.schedule(() => 42);
+  const task: Task = queue.schedule(({task, queue}) => 42);
   const p: Promise<unknown> | null = task.promise;
   t.ok(p instanceof Promise);
   await p;

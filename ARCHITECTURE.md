@@ -113,8 +113,8 @@ The library abstracts various browser APIs with graceful fallbacks:
 
 ### DOM Utilities
 
-- `whenDomLoaded(fn)`: Execute callback when DOM content is loaded (or immediately if already loaded). Also exports `domLoaded` Promise.
-- `whenLoaded(fn)`: Execute callback when page is fully loaded (or immediately if already loaded). Also exports `loaded` Promise.
+- `whenDomLoaded(fn)`: Execute callback when DOM content is loaded (or immediately if already loaded). Also exports `scheduleWhenDomLoaded(fn)` (Promise-based) and `remove(fn)`.
+- `whenLoaded(fn)`: Execute callback when page is fully loaded (or immediately if already loaded). Also exports `scheduleWhenLoaded(fn)` (Promise-based) and `remove(fn)`.
 
 ### Random Distribution Utilities
 
@@ -201,8 +201,8 @@ await retainer.release();
 
 ### External Dependencies
 
-- **[list-toolkit](https://github.com/nicklatkovich/list-toolkit)**: Core dependency for `List` (doubly-linked list) and `MinHeap` data structures
-- **[tape-six](https://github.com/nicklatkovich/tape-six)**: Test framework (dev dependency)
+- **[list-toolkit](https://github.com/uhop/list-toolkit)**: Core dependency for `List` (doubly-linked list) and `MinHeap` data structures
+- **[tape-six](https://github.com/uhop/tape-six)**: Test framework (dev dependency)
 
 ### Browser APIs Used
 
@@ -218,11 +218,11 @@ The library is designed to work in browsers, Node.js, Bun, and Deno environments
 
 ## Testing Approach
 
-The project uses [tape-six](https://github.com/nicklatkovich/tape-six) for testing:
+The project uses [tape-six](https://github.com/uhop/tape-six) for testing:
 
-- Unit tests for all core components in `tests/` directory
-- Browser-specific tests in `tests/web/`
-- Manual tests in `tests/manual/`
+- Unit tests for all core components in `tests/` directory (`test-*.js`, `test-*.mjs`)
+- CommonJS tests in `tests/` directory (`test-*.cjs`)
+- Browser-specific manual tests in `tests/web/`
 
 ### TypeScript Validation
 

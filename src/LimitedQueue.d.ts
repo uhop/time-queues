@@ -58,7 +58,7 @@ export declare class LimitedQueue extends ListQueue {
    * @param fn The function to execute when the microtask is scheduled.
    * @returns The enqueued microtask.
    */
-  enqueue(fn: () => unknown): Task;
+  enqueue(fn: (arg: {task: Task; queue: LimitedQueue}) => unknown): Task;
 
   /**
    * Dequeues a microtask.
@@ -72,7 +72,7 @@ export declare class LimitedQueue extends ListQueue {
    * @param fn The function to execute. If `undefined` or `null`, the task's promise will be resolved with the function's arguments. Otherwise, it is resolved with the function's return value.
    * @returns The task object.
    */
-  schedule(fn: (() => unknown) | null | undefined): Task;
+  schedule(fn: ((arg: {task: Task; queue: LimitedQueue}) => unknown) | null | undefined): Task;
 
   /**
    * Clears the queue.

@@ -75,7 +75,11 @@
   ],
   "tape6": {
     "tests": [
-      "/tests/test-*.*js"
+      "/tests/test-*.js",
+      "/tests/test-*.mjs"
+    ],
+    "cli": [
+      "/tests/test-*.cjs"
     ],
     "importmap": {
       "imports": {

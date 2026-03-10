@@ -24,6 +24,11 @@ npm install
 - `npm run ts-check` — TypeScript type checking (tsc --noEmit)
 - `npm run ts-test` — run TS typing tests
 - `npm run lint` — Prettier format check
+- `npm run lint:fix` — Prettier auto-format
+
+## Writing tests
+
+Tests use [tape-six](https://github.com/uhop/tape-six). JS tests (`tests/test-*.js`) cover functionality; TS tests (`ts-tests/test-*.ts`) cover typing only. See `node_modules/tape-six/TESTING.md` for the full testing API and patterns.
 
 ## Critical rules
 

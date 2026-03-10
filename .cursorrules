@@ -23,7 +23,13 @@ npm install
 - `npm run test:bun` — run with Bun
 - `npm run test:deno` — run with Deno
 - `npm run ts-check` — TypeScript type checking (tsc --noEmit)
+- `npm run ts-test` — run TS typing tests
 - `npm run lint` — Prettier format check
+- `npm run lint:fix` — Prettier auto-format
+
+## Writing tests
+
+Tests use [tape-six](https://github.com/uhop/tape-six). JS tests (`tests/test-*.js`) cover functionality; TS tests (`ts-tests/test-*.ts`) cover typing only. See `node_modules/tape-six/TESTING.md` for the full testing API and patterns.
 
 ## Critical rules
 
@@ -69,8 +75,7 @@ Standalone: Counter, Throttler, Retainer, CancelTaskError
 
 - Source: `src/<Name>.js` + `src/<Name>.d.ts` (classes) or `src/<name>.js` + `src/<name>.d.ts` (functions)
 - Tests: `tests/test-*.js`
-- TS static analysis: `ts-check/*.ts`
-- TS runtime tests: `ts-tests/test-*.ts`
+- TS typing tests: `ts-tests/test-*.ts`
 - Wiki docs: `wiki/` (git submodule)
 - Technical docs: `ARCHITECTURE.md`, `CONTRIBUTING.md`
 

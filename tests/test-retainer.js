@@ -41,3 +41,64 @@ test('Retainer', async t => {
   await sleep(10);
   t.equal(retainer.value, null);
 });
+
+test('Retainer: immediate release', async t => {
+  let destroyed = null;
+  const retainer = new Retainer({
+    create: () => 'resource',
+    destroy: v => (destroyed = v),
+    retentionPeriod: 1000
+  });
+
+  await retainer.get();
+  t.equal(retainer.value, 'resource');
+
+  await retainer.release(true);
+  t.equal(retainer.value, null);
+  t.equal(destroyed, 'resource');
+});
+
+test('Retainer: over-release throws', async t => {
+  const retainer = new Retainer({
+    create: () => 1,
+    destroy: () => {},
+    retentionPeriod: 10
+  });
+
+  try {
+    await retainer.release();
+    t.fail('should have thrown');
+  } catch (e) {
+    t.ok(e instanceof Error);
+    t.ok(e.message.includes('zero'));
+  }
+});
+
+test('Retainer: re-get during retention reuses value', async t => {
+  let createCount = 0;
+  const retainer = new Retainer({
+    create: () => ++createCount,
+    destroy: () => {},
+    retentionPeriod: 50
+  });
+
+  const v1 = await retainer.get();
+  t.equal(v1, 1);
+  await retainer.release();
+
+  await sleep(10);
+  const v2 = await retainer.get();
+  t.equal(v2, 1);
+  t.equal(createCount, 1);
+
+  await retainer.release(true);
+});
+
+test('Retainer: requires create and destroy', t => {
+  try {
+    new Retainer({});
+    t.fail('should have thrown');
+  } catch (e) {
+    t.ok(e instanceof Error);
+  }
+});

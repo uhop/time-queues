@@ -53,3 +53,47 @@ test('Counter', async t => {
   await counter.waitForZero();
   t.equal(counter.value, 0);
 });
+
+test('Counter: initial value', t => {
+  const counter = new Counter(5);
+  t.equal(counter.value, 5);
+  t.equal(counter.count, 5);
+});
+
+test('Counter: value setter', async t => {
+  const counter = new Counter();
+
+  counter.value = 10;
+  t.equal(counter.value, 10);
+
+  setTimeout(() => (counter.value = 0), 10);
+  await counter.waitForZero();
+  t.equal(counter.value, 0);
+});
+
+test('Counter: advance with negative', t => {
+  const counter = new Counter(5);
+  counter.advance(-3);
+  t.equal(counter.value, 2);
+});
+
+test('Counter: clearWaiters resolves with NaN', async t => {
+  const counter = new Counter(1);
+
+  const p = counter.waitForZero();
+  counter.clearWaiters();
+  const result = await p;
+  t.ok(Number.isNaN(result));
+});
+
+test('Counter: waitFor resolves immediately if true', async t => {
+  const counter = new Counter(5);
+  const result = await counter.waitFor(x => x === 5);
+  t.equal(result, 5);
+});
+
+test('Counter: waitForZero resolves immediately if zero', async t => {
+  const counter = new Counter(0);
+  const result = await counter.waitForZero();
+  t.equal(result, 0);
+});

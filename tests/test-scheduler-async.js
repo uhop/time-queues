@@ -92,3 +92,33 @@ test('Scheduler: pause/resume delays execution', async t => {
   await sleep(30);
   t.deepEqual(results, ['a']);
 });
+
+test('Scheduler: repeat() helper', async t => {
+  const scheduler = new Scheduler();
+  const results = [];
+
+  const fn = repeat(({scheduler}) => {
+    results.push(results.length + 1);
+    if (results.length >= 3) scheduler.pause().clear();
+  }, 15);
+
+  scheduler.enqueue(fn, 15);
+
+  await sleep(120);
+  t.equal(results.length, 3);
+  t.deepEqual(results, [1, 2, 3]);
+});
+
+test('Scheduler: dequeue task before execution', async t => {
+  const scheduler = new Scheduler();
+  const results = [];
+
+  const task = scheduler.schedule(() => results.push('should not run'), 20);
+  task.promise.catch(() => {});
+  scheduler.dequeue(task);
+
+  await sleep(40);
+  t.deepEqual(results, []);
+  t.ok(task.isCanceled);
+  t.ok(scheduler.isEmpty);
+});

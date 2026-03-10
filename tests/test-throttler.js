@@ -46,3 +46,64 @@ test('Throttler', async t => {
 
   throttler.stopVacuum();
 });
+
+test('Throttler: neverSeenTimeout', t => {
+  const throttler = new Throttler({
+    throttleTimeout: 100,
+    neverSeenTimeout: 50
+  });
+
+  const delay = throttler.getDelay('new-key');
+  t.equal(delay, 50);
+
+  throttler.stopVacuum();
+});
+
+test('Throttler: wait()', async t => {
+  const throttler = new Throttler({throttleTimeout: 10});
+
+  const start = Date.now();
+  await throttler.wait('x');
+  const elapsed1 = Date.now() - start;
+  t.ok(elapsed1 < 10);
+
+  const start2 = Date.now();
+  await throttler.wait('x');
+  const elapsed2 = Date.now() - start2;
+  t.ok(elapsed2 >= 5);
+
+  throttler.stopVacuum();
+});
+
+test('Throttler: isVacuuming and start/stop chaining', t => {
+  const throttler = new Throttler({throttleTimeout: 100, vacuumPeriod: 0});
+  t.notOk(throttler.isVacuuming);
+
+  const result1 = throttler.startVacuum();
+  t.equal(result1, throttler);
+  t.ok(throttler.isVacuuming);
+
+  throttler.startVacuum();
+  t.ok(throttler.isVacuuming);
+
+  const result2 = throttler.stopVacuum();
+  t.equal(result2, throttler);
+  t.notOk(throttler.isVacuuming);
+
+  throttler.stopVacuum();
+  t.notOk(throttler.isVacuuming);
+});
+
+test('Throttler: no auto-vacuum when vacuumPeriod is 0', t => {
+  const throttler = new Throttler({throttleTimeout: 10, vacuumPeriod: 0});
+  t.notOk(throttler.isVacuuming);
+});
+
+test('Throttler: default options', t => {
+  const throttler = new Throttler();
+  t.equal(throttler.throttleTimeout, 1000);
+  t.equal(throttler.neverSeenTimeout, 0);
+  t.equal(throttler.vacuumPeriod, 3000);
+  t.ok(throttler.isVacuuming);
+  throttler.stopVacuum();
+});

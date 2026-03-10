@@ -5,7 +5,7 @@ export declare class MicroTask {
   /**
    * The function to execute when the microtask is scheduled.
    */
-  fn: () => unknown;
+  fn: (...args: any[]) => unknown;
 
   /**
    * Whether the microtask has been canceled.
@@ -16,7 +16,7 @@ export declare class MicroTask {
    * Creates a new microtask.
    * @param fn The function to execute when the microtask is scheduled.
    */
-  constructor(fn: () => unknown);
+  constructor(fn: (...args: any[]) => unknown);
 
   /**
    * Makes a promise that will be resolved when the microtask is executed.

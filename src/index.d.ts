@@ -1,29 +1,27 @@
-declare module 'time-queues' {
-  export * from './audit';
-  export * from './batch';
-  export * from './debounce';
-  export * from './defer';
-  export * from './sample';
-  export * from './sleep';
-  export * from './throttle';
+export * from './audit.js';
+export * from './batch.js';
+export * from './debounce.js';
+export * from './defer.js';
+export * from './sample.js';
+export * from './sleep.js';
+export * from './throttle.js';
 
-  export * from './CancelTaskError';
-  export * from './MicroTask';
-  export * from './MicroTaskQueue';
-  export * from './LimitedQueue';
-  export * from './ListQueue';
-  export * from './FrameQueue';
-  export * from './IdleQueue';
+export * from './CancelTaskError.js';
+export * from './MicroTask.js';
+export * from './MicroTaskQueue.js';
+export * from './LimitedQueue.js';
+export * from './ListQueue.js';
+export * from './FrameQueue.js';
+export {IdleQueue, idleQueue} from './IdleQueue.js';
 
-  export * from './Counter';
-  export * from './PageWatcher';
-  export * from './Retainer';
-  export * from './Scheduler';
-  export * from './Throttler';
+export * from './Counter.js';
+export * from './PageWatcher.js';
+export * from './Retainer.js';
+export {Task as SchedulerTask, Scheduler, repeat, scheduler} from './Scheduler.js';
+export * from './Throttler.js';
 
-  export * from './random-dist';
-  export * from './random-sleep';
+export * from './random-dist.js';
+export * from './random-sleep.js';
 
-  export * from './when-dom-loaded';
-  export * from './when-loaded';
-}
+export * from './when-dom-loaded.js';
+export {whenLoaded, scheduleWhenLoaded} from './when-loaded.js';

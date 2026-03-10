@@ -1,4 +1,4 @@
-import {ListQueue, Task} from './ListQueue';
+import {ListQueue, Task} from './ListQueue.js';
 
 /**
  * A page state.
@@ -82,7 +82,7 @@ export declare class PageWatcher extends ListQueue {
  */
 export declare const watchStates: (
   queue: ListQueue,
-  resumeStatesList: PageState[] = ['active']
+  resumeStatesList?: PageState[]
 ) => (state: PageState) => void;
 
 /**

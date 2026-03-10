@@ -21,7 +21,7 @@ export declare function randomUniformSleep(min: number, max: number): RandomSlee
 export declare function randomNormalSleep(
   mean: number,
   stdDev: number,
-  skewness: number = 0
+  skewness?: number
 ): RandomSleepFunction;
 
 /**
@@ -34,7 +34,7 @@ export declare function randomNormalSleep(
 export declare function randomExpoSleep(
   rate: number,
   range: number,
-  base: number = 0
+  base?: number
 ): RandomSleepFunction;
 
 /**
@@ -44,7 +44,7 @@ export declare function randomExpoSleep(
  * @returns A sleep function.
  * @throws Error if the ratio is not between 0.5 and 1.
  */
-export declare function randomParetoSleep(min: number, ratio: number = 0.8): RandomSleepFunction;
+export declare function randomParetoSleep(min: number, ratio?: number): RandomSleepFunction;
 
 /**
  * A simple sleep function that uses a uniform distribution.
@@ -52,6 +52,6 @@ export declare function randomParetoSleep(min: number, ratio: number = 0.8): Ran
  * @param min The minimum delay in milliseconds.
  * @returns A promise that resolves after the delay.
  */
-export declare function randomSleep(max: number, min: number = 0): Promise<void>;
+export declare function randomSleep(max: number, min?: number): Promise<void>;
 
 export default randomSleep;

@@ -1,4 +1,4 @@
-import {ListQueue, Task} from './ListQueue';
+import {ListQueue, Task} from './ListQueue.js';
 
 export {Task};
 

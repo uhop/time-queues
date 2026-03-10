@@ -1,4 +1,4 @@
-import {ListQueue, Task} from './ListQueue';
+import {ListQueue, Task} from './ListQueue.js';
 
 /**
  * A queue based on [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame).
@@ -33,7 +33,7 @@ export declare class FrameQueue extends ListQueue {
    * @param fn The function to execute.
    * @returns The task object.
    */
-  enqueue(fn: ({timeStamp: number, task: Task, queue: FrameQueue}) => unknown): Task;
+  enqueue(fn: (arg: {timeStamp: number; task: Task; queue: FrameQueue}) => unknown): Task;
 
   /**
    * Dequeues a task.
@@ -48,7 +48,7 @@ export declare class FrameQueue extends ListQueue {
    * @returns The task object.
    */
   schedule(
-    fn: (({timeStamp: number, task: Task, queue: FrameQueue}) => unknown) | null | undefined
+    fn: ((arg: {timeStamp: number; task: Task; queue: FrameQueue}) => unknown) | null | undefined
   ): Task;
 
   /**

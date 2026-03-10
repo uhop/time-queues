@@ -22,7 +22,7 @@ export declare class Counter {
    * Sets the counter to a specific value.
    * @param value The new value for the counter.
    */
-  set value(value: number): void;
+  set value(value: number);
 
   /**
    * Increments the counter.

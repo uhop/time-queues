@@ -13,7 +13,7 @@ export declare function uniform(min: number, max: number): number;
  * @param skewness The skewness of the distribution.
  * @returns A random number from the normal distribution.
  */
-export declare function normal(mean: number, stdDev: number, skewness: number = 0): number;
+export declare function normal(mean: number, stdDev: number, skewness?: number): number;
 
 /**
  * Generate a random number from an exponential distribution.

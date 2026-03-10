@@ -1,4 +1,4 @@
-import MicroTask from './MicroTask';
+import MicroTask from './MicroTask.js';
 
 /**
  * A queue of microtasks that will be executed when scheduled.
@@ -29,7 +29,7 @@ export declare class MicroTaskQueue {
    * @param fn The function to execute when the microtask is scheduled.
    * @returns The enqueued microtask.
    */
-  enqueue(fn: () => unknown): MicroTask;
+  enqueue(fn: (...args: any[]) => unknown, ...args: unknown[]): MicroTask;
 
   /**
    * Dequeues a microtask from the queue.
@@ -46,7 +46,7 @@ export declare class MicroTaskQueue {
    * @param args Additional arguments to pass to `enqueue()`. They are there to accommodate custom implementations in subclasses.
    * @returns The scheduled microtask.
    */
-  schedule(fn: (() => unknown) | null | undefined, ...args: unknown[]): MicroTask;
+  schedule(fn: ((...args: any[]) => unknown) | null | undefined, ...args: unknown[]): MicroTask;
 
   /**
    * Clears all tasks from the queue.

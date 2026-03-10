@@ -1,4 +1,4 @@
-import {ListQueue, Task} from './ListQueue';
+import {ListQueue, Task} from './ListQueue.js';
 
 /**
  * A queue based on [requestIdleCallback()](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback).
@@ -20,7 +20,7 @@ export declare class IdleQueue extends ListQueue {
   /**
    * The options passed to `requestIdleCallback()`.
    */
-  options: IdleCallbackOptions | undefined;
+  options: IdleRequestOptions | undefined;
 
   /**
    * Creates a new idle queue.
@@ -28,7 +28,7 @@ export declare class IdleQueue extends ListQueue {
    * @param timeoutBatchInMs The timeout batch size in milliseconds.
    * @param options The options passed to `requestIdleCallback()`.
    */
-  constructor(paused?: boolean, timeoutBatchInMs?: number, options?: IdleCallbackOptions);
+  constructor(paused?: boolean, timeoutBatchInMs?: number, options?: IdleRequestOptions);
 
   /**
    * Whether the queue is empty.
@@ -40,7 +40,7 @@ export declare class IdleQueue extends ListQueue {
    * @param fn The function to execute.
    * @returns The task object.
    */
-  enqueue(fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown): Task;
+  enqueue(fn: (arg: {deadline: IdleDeadline; task: Task; queue: IdleQueue}) => unknown): Task;
 
   /**
    * Dequeues a task.
@@ -55,7 +55,10 @@ export declare class IdleQueue extends ListQueue {
    * @returns The task object.
    */
   schedule(
-    fn: (({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown) | null | undefined
+    fn:
+      | ((arg: {deadline: IdleDeadline; task: Task; queue: IdleQueue}) => unknown)
+      | null
+      | undefined
   ): Task;
 
   /**
@@ -93,7 +96,7 @@ export const idleQueue: IdleQueue;
  * A function that schedules a task to run in the next idle period.
  */
 export const defer: (
-  fn: ({deadline: IdleDeadline, task: Task, queue: IdleQueue}) => unknown
+  fn: (arg: {deadline: IdleDeadline; task: Task; queue: IdleQueue}) => unknown
 ) => Task;
 
 export default idleQueue;

@@ -1,5 +1,5 @@
-import MicroTask from './MicroTask';
-import MicroTaskQueue from './MicroTaskQueue';
+import MicroTask from './MicroTask.js';
+import MicroTaskQueue from './MicroTaskQueue.js';
 
 /**
  * A task that will be executed at a later time by `Scheduler`.
@@ -8,7 +8,7 @@ export declare class Task extends MicroTask {
   /**
    * The function to execute.
    */
-  fn: ({task: Task, scheduler: Scheduler}) => unknown;
+  fn: (arg: {task: Task; scheduler: Scheduler}) => unknown;
 
   /**
    * Whether the task has been canceled.
@@ -30,7 +30,7 @@ export declare class Task extends MicroTask {
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
    * @param fn The function to execute.
    */
-  constructor(delay: number | Date, fn: ({task: Task, scheduler: Scheduler}) => unknown);
+  constructor(delay: number | Date, fn: (arg: {task: Task; scheduler: Scheduler}) => unknown);
 
   /**
    * Makes a promise that will be resolved when the microtask is executed.
@@ -102,14 +102,14 @@ export declare class Scheduler extends MicroTaskQueue {
    * @param delay The delay before the task is executed. It can be a number of milliseconds or a `Date` object as an absolute time.
    * @returns The task object that was enqueued.
    */
-  enqueue(fn: ({task: Task, scheduler: Scheduler}) => unknown, delay: number | Date): Task;
+  enqueue(fn: (arg: {task: Task; scheduler: Scheduler}) => unknown, delay: number | Date): Task;
 
   /**
    * Removes a task from the scheduler.
    * @param task The task to remove.
    * @returns The scheduler object for chaining.
    */
-  dequeue(task: Task): this;
+  dequeue(task: MicroTask): this;
 
   /**
    * Schedules a task to run in the future.
@@ -118,7 +118,7 @@ export declare class Scheduler extends MicroTaskQueue {
    * @returns The task object that was scheduled.
    */
   schedule(
-    fn: (({task: Task, scheduler: Scheduler}) => unknown) | null | undefined,
+    fn: ((arg: {task: Task; scheduler: Scheduler}) => unknown) | null | undefined,
     delay: number | Date
   ): Task;
 
@@ -150,9 +150,9 @@ export declare class Scheduler extends MicroTaskQueue {
  * @returns A function that can be used to enqueue the task to the scheduler.
  */
 export declare const repeat: (
-  fn: ({task: Task, scheduler: Scheduler}) => void,
+  fn: (arg: {task: Task; scheduler: Scheduler}) => void,
   delay: number | Date
-) => ({task: Task, scheduler: Scheduler}) => void;
+) => (arg: {task: Task; scheduler: Scheduler}) => void;
 
 /**
  * A scheduler instance usually used as a global scheduler.

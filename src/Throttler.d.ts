@@ -44,11 +44,7 @@ export declare class Throttler implements ThrottlerOptions {
    * Creates a new throttler.
    * @param options The options for the throttler.
    */
-  constructor({
-    throttleTimeout = 1_000,
-    neverSeenTimeout = 0,
-    vacuumPeriod = throttleTimeout * 3
-  }: ThrottlerOptions = {});
+  constructor(options?: ThrottlerOptions);
 
   /**
    * Retrieves the last seen time for a key as a timestamp in milliseconds.

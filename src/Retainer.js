@@ -33,11 +33,13 @@ export class Retainer {
       await this.destroy(value);
       return this;
     }
-    this.handle = setTimeout(async () => {
+    this.handle = setTimeout(() => {
       const value = this.value;
       this.value = null;
       this.handle = null;
-      await this.destroy(value);
+      Promise.resolve()
+        .then(() => this.destroy(value))
+        .catch(() => {});
     }, this.retentionPeriod);
     return this;
   }

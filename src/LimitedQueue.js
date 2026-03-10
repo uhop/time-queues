@@ -9,7 +9,7 @@ export class LimitedQueue extends ListQueue {
 
   constructor(limit, paused) {
     super(paused);
-    this.#taskLimit = limit;
+    this.#taskLimit = Math.max(1, limit);
     this.#activeTasks = 0;
     this.#idleWaiters = [];
   }

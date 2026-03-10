@@ -27,7 +27,6 @@ export class PageWatcher extends ListQueue {
   }
 
   pause() {
-    this.paused = true;
     watchedEvents.forEach(type => removeEventListener(type, this, eventHandlerOptions));
     return super.pause();
   }
@@ -50,7 +49,10 @@ export class PageWatcher extends ListQueue {
   }
 
   clear() {
-    this.list.clear();
+    while (!this.list.isEmpty) {
+      const task = this.list.popFront();
+      task.cancel();
+    }
     return this;
   }
 

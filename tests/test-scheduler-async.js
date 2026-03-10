@@ -109,6 +109,33 @@ test('Scheduler: repeat() helper', async t => {
   t.deepEqual(results, [1, 2, 3]);
 });
 
+test('Scheduler: repeat() stops when task is canceled', async t => {
+  const scheduler = new Scheduler();
+  const results = [];
+
+  const fn = repeat(({task}) => {
+    results.push(results.length + 1);
+    if (results.length >= 3) task.isCanceled = true;
+  }, 15);
+
+  scheduler.enqueue(fn, 15);
+
+  await sleep(120);
+  t.equal(results.length, 3);
+  t.deepEqual(results, [1, 2, 3]);
+});
+
+test('Scheduler: processTasks skips canceled tasks', async t => {
+  const scheduler = new Scheduler();
+  const results = [];
+
+  const task = scheduler.enqueue(() => results.push('should not run'), 15);
+  task.isCanceled = true;
+
+  await sleep(30);
+  t.deepEqual(results, []);
+});
+
 test('Scheduler: dequeue task before execution', async t => {
   const scheduler = new Scheduler();
   const results = [];

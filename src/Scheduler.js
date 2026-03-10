@@ -70,6 +70,7 @@ export class Scheduler extends MicroTaskQueue {
   dequeue(task) {
     task.cancel();
     if (this.queue.isEmpty) return this;
+    if (!this.queue.has(task)) return this;
     if (this.paused || this.queue.top !== task) {
       this.queue.remove(task);
       return this;
@@ -108,6 +109,7 @@ export class Scheduler extends MicroTaskQueue {
       this.queue.top.time <= Date.now() + this.tolerance
     ) {
       const task = this.queue.pop();
+      if (task.isCanceled) continue;
       task.fn({task, scheduler: this});
     }
 
@@ -118,7 +120,7 @@ export class Scheduler extends MicroTaskQueue {
 export const repeat = (fn, delay) => {
   const repeatableFunction = ({task, scheduler}) => {
     fn({task, scheduler});
-    scheduler.enqueue(repeatableFunction, isNaN(delay) ? task.delay : delay);
+    if (!task.isCanceled) scheduler.enqueue(repeatableFunction, isNaN(delay) ? task.delay : delay);
   };
   return repeatableFunction;
 };

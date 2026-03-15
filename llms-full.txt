@@ -205,8 +205,8 @@ class LimitedQueue extends ListQueue {
   get activeTasks(): number;
   get isIdle(): boolean;
   waitForIdle(): Promise<void>;
-  enqueue(fn: () => unknown): Task;
-  schedule(fn: (() => unknown) | null | undefined): Task;
+  enqueue(fn: (arg: {task: Task, queue: LimitedQueue}) => unknown): Task;
+  schedule(fn: ((arg: {task: Task, queue: LimitedQueue}) => unknown) | null | undefined): Task;
 }
 export { Task };
 export default LimitedQueue;

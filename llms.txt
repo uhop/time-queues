@@ -54,7 +54,7 @@ const results = await batch(
 - **debounce** (`time-queues/debounce.js`) — `debounce(fn, ms): fn`. Delay until input stabilizes.
 - **sample** (`time-queues/sample.js`) — `sample(fn, ms): fn`. Execute at regular intervals with last seen args.
 - **audit** (`time-queues/audit.js`) — `audit(fn, ms): fn`. Collect then execute after delay with last seen args.
-- **batch** (`time-queues/batch.js`) — `batch(fns, limit?): Promise<results[]>`. Run async operations with concurrency limit (default: 5).
+- **batch** (`time-queues/batch.js`) — `batch(fns, limit?): Promise<results[]>`. Run async operations with concurrency limit (default: 4).
 
 ### Supporting classes
 

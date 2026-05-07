@@ -80,6 +80,15 @@ export declare class ListQueue extends MicroTaskQueue {
    * @returns The function that stops the queue.
    */
   startQueue(): (() => void) | null;
+
+  /**
+   * Internal helper used by subclasses (FrameQueue, IdleQueue) to drain pending
+   * tasks. If `batchMs` is finite, runs tasks until that many milliseconds have
+   * elapsed; otherwise swaps in a fresh list and drains the captured one
+   * entirely.
+   * @internal
+   */
+  _drainBatch(batchMs: number, taskContext: object): void;
 }
 
 /**

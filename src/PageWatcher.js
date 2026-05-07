@@ -46,6 +46,11 @@ export class PageWatcher extends ListQueue {
     throw new Error('Not implemented');
   }
 
+  // Override of ListQueue.clear() that skips the parent's pause/resume cycle.
+  // PageWatcher.pause/resume add and remove DOM event listeners on every call,
+  // so bouncing them around an internal clear() just to drain the task list
+  // would thrash listeners for no reason. The watching state is independent
+  // of whether tasks are pending.
   clear() {
     while (!this.list.isEmpty) {
       const task = this.list.popFront();

@@ -7,21 +7,24 @@ export class MicroTask {
   #resolve;
   #reject;
   #settled;
+  #cancelError;
   constructor(fn) {
     this.fn = fn;
-    // AI-NOTE: Private fields initialized to null - lazy initialization pattern
     this.#promise = null;
     this.#resolve = null;
     this.#reject = null;
     this.#settled = false;
+    this.#cancelError = null;
     this.isCanceled = false;
   }
-  // AI-NOTE: Returns null until makePromise() is called - this is intentional
   get promise() {
     return this.#promise;
   }
   get settled() {
     return this.#settled;
+  }
+  get cancelError() {
+    return this.#cancelError;
   }
   makePromise() {
     if (this.#promise) return this;
@@ -36,6 +39,14 @@ export class MicroTask {
         this.#resolve = resolve;
         this.#reject = reject;
       });
+    }
+    if (this.isCanceled) {
+      this.#reject(
+        new CancelTaskError(undefined, this.#cancelError ? {cause: this.#cancelError} : undefined)
+      );
+      this.#resolve = null;
+      this.#reject = null;
+      this.#settled = true;
     }
     return this;
   }
@@ -53,8 +64,13 @@ export class MicroTask {
   }
   cancel(error) {
     this.isCanceled = true;
+    if (error !== undefined && this.#cancelError === null) {
+      this.#cancelError = error;
+    }
     if (this.#reject) {
-      this.#reject(new CancelTaskError(undefined, error ? {cause: error} : undefined));
+      this.#reject(
+        new CancelTaskError(undefined, this.#cancelError ? {cause: this.#cancelError} : undefined)
+      );
       this.#resolve = null;
       this.#reject = null;
       this.#settled = true;

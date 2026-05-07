@@ -2,12 +2,13 @@
 
 import MicroTask from './MicroTask.js';
 
+const returnArgs = (...args) => args;
+
 export class MicroTaskQueue {
   constructor(paused) {
     this.paused = Boolean(paused);
   }
-  // API to be overridden in subclasses
-  // AI-NOTE: Base implementation returns true - subclasses override with actual logic
+  // overridden in subclasses
   get isEmpty() {
     return true;
   }
@@ -30,25 +31,22 @@ export class MicroTaskQueue {
   clear() {
     return this;
   }
-  schedule(fn, ...args) {
-    fn ||= MicroTaskQueue.returnArgs;
+  schedule(fn, ...scheduleArgs) {
+    fn ||= returnArgs;
     const task = this.enqueue(
-      function (...args) {
+      function (...invocationArgs) {
         this.makePromise();
         try {
-          this.resolve(fn(...args));
+          this.resolve(fn(...invocationArgs));
         } catch (error) {
           this.cancel(error);
         }
         return this.promise;
       },
-      ...args
+      ...scheduleArgs
     );
     task.makePromise();
     return task;
-  }
-  static returnArgs(...args) {
-    return args;
   }
 }
 

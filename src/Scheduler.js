@@ -73,8 +73,8 @@ export class Scheduler extends MicroTaskQueue {
   dequeue(task) {
     task.cancel();
     if (this.queue.isEmpty) return this;
-    if (!this.queue.has(task)) return this;
     if (this.paused || this.queue.top !== task) {
+      // MinHeap.remove no-ops on missing items, so no pre-check needed
       this.queue.remove(task);
       return this;
     }

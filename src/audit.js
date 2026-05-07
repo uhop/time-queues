@@ -4,7 +4,7 @@ export const audit = (fn, ms) => {
   let handle = null,
     lastSeenArgs = null;
   return (...args) => {
-    lastSeenArgs = [...args];
+    lastSeenArgs = args;
     if (handle) return;
     handle = setTimeout(() => {
       handle = null;

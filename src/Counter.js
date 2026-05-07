@@ -4,15 +4,15 @@ export class Counter {
   constructor(initial = 0) {
     this.count = initial;
     this.zeroWaiters = [];
-    this.functionWaiters = new Set();
+    this.functionWaiters = [];
   }
 
   get value() {
     return this.count;
   }
 
-  set value(value) {
-    this.count = value;
+  set value(newValue) {
+    this.count = newValue;
     this.notify();
   }
 
@@ -38,7 +38,7 @@ export class Counter {
 
   waitFor(fn) {
     if (fn(this.count)) return Promise.resolve(this.count);
-    return new Promise(resolve => this.functionWaiters.add({fn, resolve}));
+    return new Promise(resolve => this.functionWaiters.push({fn, resolve}));
   }
 
   clearWaiters() {
@@ -49,9 +49,9 @@ export class Counter {
         resolve(NaN);
       }
     }
-    if (this.functionWaiters.size > 0) {
+    if (this.functionWaiters.length > 0) {
       const functionWaiters = this.functionWaiters;
-      this.functionWaiters = new Set();
+      this.functionWaiters = [];
       for (const {resolve} of functionWaiters) {
         resolve(NaN);
       }
@@ -66,17 +66,16 @@ export class Counter {
         resolve(0);
       }
     }
-    if (this.functionWaiters.size > 0) {
-      const ready = [];
+    if (this.functionWaiters.length > 0) {
+      const remaining = [];
       for (const waiter of this.functionWaiters) {
-        if (waiter.fn(this.count)) ready.push(waiter);
-      }
-      if (ready.length > 0) {
-        for (const waiter of ready) {
+        if (waiter.fn(this.count)) {
           waiter.resolve(this.count);
-          this.functionWaiters.delete(waiter);
+        } else {
+          remaining.push(waiter);
         }
       }
+      this.functionWaiters = remaining;
     }
   }
 }

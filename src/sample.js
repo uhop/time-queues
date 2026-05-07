@@ -6,7 +6,7 @@ export const sample = (fn, ms) => {
     lastSeenArgs = null,
     timeout = ms;
   return (...args) => {
-    lastSeenArgs = [...args];
+    lastSeenArgs = args;
     if (handle) return;
     const diff = (Date.now() - started) % ms,
       delay = diff ? ms - diff : timeout;

@@ -1,6 +1,5 @@
 // @ts-self-types="./FrameQueue.d.ts"
 
-import List from 'list-toolkit/list.js';
 import ListQueue from './ListQueue.js';
 
 export class FrameQueue extends ListQueue {
@@ -19,22 +18,7 @@ export class FrameQueue extends ListQueue {
       this.stopQueue();
       this.stopQueue = null;
     }
-
-    if (!isNaN(this.batch)) {
-      const start = Date.now();
-      while (Date.now() - start < this.batch && !this.list.isEmpty) {
-        const task = this.list.popFront();
-        task.fn({timeStamp, task, queue: this});
-      }
-    } else {
-      const list = this.list;
-      this.list = new List();
-      while (!list.isEmpty) {
-        const task = list.popFront();
-        task.fn({timeStamp, task, queue: this});
-      }
-    }
-
+    this._drainBatch(this.batch, {timeStamp});
     if (!this.list.isEmpty) this.stopQueue = this.startQueue();
   }
 }

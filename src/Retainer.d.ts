@@ -26,9 +26,11 @@ export declare class Retainer<T = unknown> implements RetainerOptions<T> {
   counter: number;
 
   /**
-   * The value currently retained.
+   * The value currently retained. Read-only — managed internally by `get()`
+   * and `release()`. Reads return the live value or `null` when nothing is
+   * currently held.
    */
-  value: T | null;
+  readonly value: T | null;
 
   /**
    * The function to create a value.

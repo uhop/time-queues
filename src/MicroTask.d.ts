@@ -19,7 +19,11 @@ export declare class MicroTask {
   constructor(fn: (...args: any[]) => unknown);
 
   /**
-   * Makes a promise that will be resolved when the microtask is executed.
+   * Creates the promise lazily. Idempotent — subsequent calls return `this`
+   * without changing state. If the task was already canceled (via `cancel()`
+   * before `makePromise()` ran), the freshly-created promise is settled
+   * immediately as a `CancelTaskError` rejection, carrying any `cancelError`
+   * stored from the earlier `cancel()` call as `cause`.
    * @returns The microtask.
    */
   makePromise(): this;
@@ -37,6 +41,13 @@ export declare class MicroTask {
   get settled(): boolean;
 
   /**
+   * The error supplied to the first `cancel(error)` call, or `null` if the task
+   * has not been canceled with a reason. Useful for inspecting why a non-promised
+   * task was canceled (when there is no rejection to carry the cause).
+   */
+  get cancelError(): Error | null;
+
+  /**
    * Resolves the microtask. The promise must already exist — call `makePromise()`
    * first, or invoke this only from inside a `schedule()`-wrapped callback (which
    * makes the promise eagerly).
@@ -52,9 +63,10 @@ export declare class MicroTask {
    * Cancels the microtask. Always sets `isCanceled = true` so queues skip the task.
    * Additionally rejects the promise with a `CancelTaskError` if `makePromise()`
    * has been called.
-   * Note: when called pre-`makePromise()`, the optional `error` argument is dropped
-   * (no promise rejection to attach `cause` to). Pass `error` only after the
-   * promise has been created if you need it preserved.
+   * The first `error` passed is stored on the instance and accessible via
+   * `cancelError`. If `cancel(error)` runs before `makePromise()`, the stored
+   * error is replayed when the promise is later created — `makePromise()` will
+   * settle the fresh promise with `CancelTaskError(cause: error)` immediately.
    * It can be overridden in subclasses.
    * @param error The optional error to use as the cause of the cancellation.
    * @returns The microtask.

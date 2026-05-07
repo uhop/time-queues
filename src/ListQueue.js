@@ -7,10 +7,8 @@ import MicroTaskQueue from './MicroTaskQueue.js';
 export class ListQueue extends MicroTaskQueue {
   constructor(paused) {
     super(paused);
-    // AI-NOTE: Using list-toolkit List for O(1) push/pop operations
     /** @type {List<MicroTask>} */
     this.list = new List();
-    // AI-NOTE: stopQueue holds the stop function returned by startQueue(), or null
     this.stopQueue = null;
   }
 
@@ -21,7 +19,6 @@ export class ListQueue extends MicroTaskQueue {
   pause() {
     if (!this.paused) {
       super.pause();
-      // AI-NOTE: Pattern: call stop function, then null it
       if (this.stopQueue) this.stopQueue = (this.stopQueue(), null);
     }
     return this;
@@ -30,7 +27,6 @@ export class ListQueue extends MicroTaskQueue {
   resume() {
     if (this.paused) {
       super.resume();
-      // AI-NOTE: Auto-start processing if tasks exist and not already running
       if (!this.list.isEmpty) {
         this.stopQueue = this.startQueue();
       }
@@ -41,7 +37,6 @@ export class ListQueue extends MicroTaskQueue {
   enqueue(fn) {
     const task = super.enqueue(fn);
     this.list.pushBack(task);
-    // AI-NOTE: Auto-start queue on first task if not paused and not running
     if (!this.paused && !this.stopQueue) this.stopQueue = this.startQueue();
     return task;
   }
@@ -49,7 +44,6 @@ export class ListQueue extends MicroTaskQueue {
   dequeue(task) {
     task.cancel();
     this.list.removeNode(task);
-    // AI-NOTE: Auto-stop queue when empty (unless paused)
     if (!this.paused && this.list.isEmpty && this.stopQueue)
       this.stopQueue = (this.stopQueue(), null);
     return this;
@@ -68,6 +62,27 @@ export class ListQueue extends MicroTaskQueue {
 
   startQueue() {
     return null;
+  }
+
+  // Drains pending tasks. If batchMs is a finite number, runs tasks until that
+  // many milliseconds have elapsed; otherwise swaps in a fresh list and drains
+  // the captured one entirely (so tasks enqueued during draining run on the
+  // next tick rather than this one).
+  _drainBatch(batchMs, taskContext) {
+    if (!isNaN(batchMs)) {
+      const start = Date.now();
+      while (Date.now() - start < batchMs && !this.list.isEmpty) {
+        const task = this.list.popFront();
+        task.fn({...taskContext, task, queue: this});
+      }
+    } else {
+      const list = this.list;
+      this.list = new List();
+      while (!list.isEmpty) {
+        const task = list.popFront();
+        task.fn({...taskContext, task, queue: this});
+      }
+    }
   }
 }
 

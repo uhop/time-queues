@@ -76,6 +76,43 @@ test('MicroTask: cancel() without promise', t => {
   task.cancel();
   t.equal(task.isCanceled, true);
   t.equal(task.settled, false);
+  t.equal(task.cancelError, null);
+});
+
+test('MicroTask: cancel(error) before makePromise stores cause for replay', async t => {
+  const task = new MicroTask(() => {});
+  const cause = new Error('user abort');
+
+  task.cancel(cause);
+  t.equal(task.isCanceled, true);
+  t.equal(task.settled, false);
+  t.equal(task.cancelError, cause);
+
+  task.makePromise();
+  t.equal(task.settled, true);
+
+  try {
+    await task.promise;
+    t.fail('should have rejected');
+  } catch (error) {
+    t.ok(error instanceof CancelTaskError);
+    t.equal(error.cause, cause);
+  }
+});
+
+test('MicroTask: cancel() then makePromise() rejects without cause', async t => {
+  const task = new MicroTask(() => {});
+
+  task.cancel();
+  task.makePromise();
+
+  try {
+    await task.promise;
+    t.fail('should have rejected');
+  } catch (error) {
+    t.ok(error instanceof CancelTaskError);
+    t.equal(error.cause, undefined);
+  }
 });
 
 test('MicroTask: resolve() without promise throws', t => {

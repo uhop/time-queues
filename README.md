@@ -140,6 +140,7 @@ BSD-3-Clause
 
 ## Release History
 
+- 1.4.0 _Multiple fixes that improve edge cases, minor additive API changes for edge cases._
 - 1.3.2 _Bug fixes (Scheduler, LimitedQueue, PageWatcher, Retainer), corrected `.d.ts` declarations, expanded tests, documentation fixes._
 - 1.3.1 _Fixed `.d.ts` declarations, consolidated TS typing tests, improved documentation._
 - 1.3.0 _Added `batch()`, `LimitedQueue`, random distributions and random sleep functions._

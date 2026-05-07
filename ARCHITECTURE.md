@@ -35,12 +35,12 @@ The library provides multiple queue implementations optimized for different use 
 
 - **IdleQueue**: Uses `requestIdleCallback()` for background task execution during browser idle periods. Configurable timeout batching for consistent performance. Requires `requestIdleCallback` to be available in the environment.
 - **FrameQueue**: Uses `requestAnimationFrame()` for animation frame-based execution. Optional time-based batching to limit execution time per frame. Processes tasks in FIFO order within each frame.
-- **LimitedQueue**: Concurrency-controlled queue that limits simultaneous task execution. Uses internal active task counter and idle waiter patterns. Asynchronous task wrapping via `LimitedQueue.wrap()` ensures proper error handling. _(Since version 1.3.0.)_
+- **LimitedQueue**: Concurrency-controlled queue that limits simultaneous task execution. Uses internal active task counter and idle waiter patterns. Asynchronous task wrapping via a module-private `wrap` helper ensures `task.fn()` rejections route through the same `.finally()` cleanup as resolutions. _(Since version 1.3.0.)_
 - **PageWatcher**: Monitors page lifecycle state changes (`active`, `passive`, `hidden`, `frozen`, `terminated`). Registers/deregisters event listeners on resume/pause. Does not support `schedule()`.
 
 ### Utility Classes
 
-- **Counter**: Tracks numeric values with async waiting capabilities. Supports `waitForZero()` and `waitFor(fn)` for condition-based waiting. Uses arrays for zero waiters and Sets for function waiters.
+- **Counter**: Tracks numeric values with async waiting capabilities. Supports `waitForZero()` and `waitFor(fn)` for condition-based waiting. Uses arrays for both zero waiters and function waiters; `clearWaiters()` resolves pending waiters with `NaN` as a "queue cleared" sentinel.
 - **Throttler**: Rate limiting based on keys using a Map to track last-seen times. Configurable throttle timeout, never-seen timeout, and vacuum period. Automatic periodic cleanup of stale entries. _(Since version 1.1.0.)_
 - **Retainer**: Resource lifecycle management with retention periods. Creates resources on demand, retains them after release for a configurable period, then destroys them. Uses a simple numeric counter (not the Counter class). _(Since version 1.1.0.)_
 
@@ -54,6 +54,8 @@ All tasks are wrapped in MicroTask objects that provide promise-based interfaces
 - Tasks can be resolved or canceled with proper cleanup of internal references
 - Cancellation uses a custom `CancelTaskError` exception with optional cause chaining
 - `enqueue()` does not create a promise; `schedule()` does (calls both `enqueue()` and `makePromise()`)
+- `cancel(error)` called before `makePromise()` stores the error reason on the instance and replays it as `cause` if the promise is later created. Read via `task.cancelError`.
+- `resolve()` called before `makePromise()` throws — guards against silent value loss that would hang any later subscriber.
 
 ### 2. Start/Stop Queue Pattern
 
@@ -88,10 +90,11 @@ The library abstracts various browser APIs with graceful fallbacks:
 - Extends `MicroTaskQueue` directly (uses min-heap instead of linked list)
 - Exports `Task` class (extends `MicroTask` with `time` and `delay` properties)
 - `enqueue(fn, delay)` accepts a function and a delay (ms or Date object)
-- Provides `repeat(fn, delay)` for creating recurring tasks
+- Provides `repeat(fn, delay)` for creating recurring tasks (delay is clamped to ≥1ms to prevent infinite loops)
 - Exports a default `scheduler` singleton instance
 - Handles timing precision with configurable tolerance (default 4ms)
 - Automatic timer rescheduling when earlier tasks are added
+- Optional `onError(error, task)` callback handles per-task exceptions; loop continues regardless. When unset, exceptions surface via the unhandled-rejection channel.
 
 ### Throttler
 
@@ -118,7 +121,7 @@ The library abstracts various browser APIs with graceful fallbacks:
 
 ### Random Distribution Utilities
 
-- `random-dist`: Generate random numbers from various probability distributions: `uniform(min, max)`, `normal(mean, stdDev, skewness)`, `expo(lambda)`, `pareto(min, alpha)`. _(Since version 1.3.0.)_
+- `random-dist`: Generate random numbers from various probability distributions: `uniform(min, max)`, `normal(mean, stdDev, skewness)`, `expo(lambda)`, `pareto(min, alpha)`. The skew-normal mode uses two N(0,1) samples derived from a single Box-Muller pair (cos + sin arms), per Azzalini's standard form. _(Since version 1.3.0.)_
 - `random-sleep`: Create randomized delays: `randomUniformSleep`, `randomNormalSleep`, `randomExpoSleep`, `randomParetoSleep` (factory functions returning sleep functions), and `randomSleep(max, min)` (direct Promise). _(Since version 1.3.0.)_
 
 ## Implementation Details

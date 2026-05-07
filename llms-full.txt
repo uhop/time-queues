@@ -20,6 +20,10 @@ npm install time-queues
 ## Quick start
 
 ```js
+// Bare imports work as a barrel:
+import {sleep, Scheduler, repeat, batch} from 'time-queues';
+
+// Or subpath imports for tree-shaking-friendly use:
 import sleep from 'time-queues/sleep.js';
 import {Scheduler, repeat} from 'time-queues/Scheduler.js';
 import {batch} from 'time-queues/batch.js';
@@ -54,7 +58,7 @@ MicroTaskQueue (abstract queue base)
 Standalone: Counter, Throttler, Retainer, CancelTaskError
 ```
 
-All modules are ESM. Import as `import X from 'time-queues/<module>.js'`.
+All modules are ESM. Bare imports (`from 'time-queues'`) and subpath imports (`from 'time-queues/<module>.js'`) are both supported.
 
 ## API Reference
 
@@ -78,10 +82,12 @@ class MicroTask {
   fn: () => unknown;
   isCanceled: boolean;
   get promise(): Promise<unknown> | null;
+  get settled(): boolean;
+  get cancelError(): Error | null;
   constructor(fn: () => unknown);
-  makePromise(): this;
-  resolve(value: unknown): this;
-  cancel(error?: Error): this;
+  makePromise(): this;          // idempotent; if already canceled, fresh promise settles immediately as CancelTaskError
+  resolve(value: unknown): this; // throws if makePromise() has not been called
+  cancel(error?: Error): this;   // stores first error reason; replayed on later makePromise() if no promise yet
 }
 export default MicroTask;
 ```
@@ -141,6 +147,9 @@ class Task extends MicroTask {
 class Scheduler extends MicroTaskQueue {
   paused: boolean;
   tolerance: number;
+  queue: MinHeap<Task>;                          // pending tasks ordered by `time`
+  stopQueue: (() => void) | null;
+  onError: ((error: unknown, task: Task) => void) | null;  // optional per-task error handler; default null surfaces via unhandled-rejection
   constructor(paused?: boolean, tolerance?: number);
   get isEmpty(): boolean;
   get nextTime(): number;
@@ -244,9 +253,10 @@ class Counter {
   increment(): void;
   decrement(): void;
   advance(amount?: number): void;
-  waitForZero(): Promise<number>;
+  waitForZero(): Promise<number>;                       // resolves with NaN if clearWaiters() called first
   waitFor(fn: (count: number) => boolean): Promise<number>;
   clearWaiters(): void;
+  notify(): void;                                       // call after direct `count` mutation
 }
 export default Counter;
 ```
@@ -291,12 +301,12 @@ interface RetainerOptions<T = unknown> {
 
 class Retainer<T = unknown> implements RetainerOptions<T> {
   counter: number;
-  value: T | null;
+  readonly value: T | null;
   create: () => Promise<T> | T;
   destroy: (value: T) => Promise<void> | void;
   retentionPeriod: number;
   constructor(options: RetainerOptions<T>);
-  async get(): Promise<T>;
+  async get(): Promise<T>;                          // concurrent get() calls share one create()
   async release(immediately?: boolean): Promise<this>;
 }
 export default Retainer;

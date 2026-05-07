@@ -16,6 +16,10 @@ npm install time-queues
 ## Quick start
 
 ```js
+// Bare imports work as a barrel:
+import {sleep, Scheduler, repeat, batch} from 'time-queues';
+
+// Or subpath imports for tree-shaking-friendly use:
 import sleep from 'time-queues/sleep.js';
 import {Scheduler, repeat} from 'time-queues/Scheduler.js';
 import {batch} from 'time-queues/batch.js';
@@ -40,7 +44,7 @@ const results = await batch(
 
 ### Queues
 
-- **Scheduler** (`time-queues/Scheduler.js`) — time-based task scheduling with delays, dates, and repeats. Extends MicroTaskQueue. Uses a min-heap. Exports: `Scheduler`, `Task`, `repeat(fn, delay)`, `scheduler` (global instance).
+- **Scheduler** (`time-queues/Scheduler.js`) — time-based task scheduling with delays, dates, and repeats. Extends MicroTaskQueue. Uses a min-heap. Exports: `Scheduler`, `Task`, `repeat(fn, delay)`, `scheduler` (global instance). Optional `scheduler.onError(error, task)` callback handles per-task exceptions; loop continues regardless.
 - **IdleQueue** (`time-queues/IdleQueue.js`) — run tasks during browser idle periods via `requestIdleCallback()`. Extends ListQueue. Exports: `IdleQueue`, `idleQueue` (global instance), `defer(fn)`.
 - **FrameQueue** (`time-queues/FrameQueue.js`) — run tasks in animation frames via `requestAnimationFrame()`. Extends ListQueue. Exports: `FrameQueue`, `frameQueue` (global instance).
 - **LimitedQueue** (`time-queues/LimitedQueue.js`) — concurrency-controlled async queue. Extends ListQueue. Exports: `LimitedQueue`, `Task`.
@@ -60,12 +64,12 @@ const results = await batch(
 
 - **Throttler** (`time-queues/Throttler.js`) — key-based rate limiting with vacuum cleanup. Methods: `getDelay(key)`, `wait(key)`, `startVacuum()`, `stopVacuum()`.
 - **Retainer** (`time-queues/Retainer.js`) — resource lifecycle management with reference counting. Methods: `get(): Promise<value>`, `release(): Promise<void>`.
-- **Counter** (`time-queues/Counter.js`) — numeric counter with async waiting. Methods: `increment()`, `decrement()`, `advance(delta)`, `waitForZero()`, `waitFor(target)`.
+- **Counter** (`time-queues/Counter.js`) — numeric counter with async waiting. Methods: `increment()`, `decrement()`, `advance(delta)`, `waitForZero()`, `waitFor(predicate)`, `clearWaiters()` (resolves pending with `NaN`), `notify()` (call after direct `count` mutation).
 - **CancelTaskError** (`time-queues/CancelTaskError.js`) — `Error` subclass for task cancellation signals.
 
 ### Base classes
 
-- **MicroTask** (`time-queues/MicroTask.js`) — base task unit with lazy promise creation. Methods: `makePromise()`, `resolve(value)`, `cancel(error)`.
+- **MicroTask** (`time-queues/MicroTask.js`) — base task unit with lazy promise creation. Methods: `makePromise()`, `resolve(value)` (throws if no promise yet), `cancel(error)` (stores `error`, replays as `cause` on later `makePromise()`). Getters: `promise`, `settled`, `cancelError`.
 - **MicroTaskQueue** (`time-queues/MicroTaskQueue.js`) — abstract queue base class. Methods: `enqueue(fn)`, `dequeue(task)`, `schedule(fn)`, `clear()`, `pause()`, `resume()`.
 - **ListQueue** (`time-queues/ListQueue.js`) — linked-list queue implementation extending MicroTaskQueue. Adds `startQueue()` lifecycle.
 
@@ -81,7 +85,7 @@ const results = await batch(
 
 ## Key concepts
 
-- All modules are **ESM** with `import ... from 'time-queues/<module>.js'`.
+- All modules are **ESM**. Bare imports (`from 'time-queues'`) and subpath imports (`from 'time-queues/<module>.js'`) both work.
 - **Inheritance**: `MicroTaskQueue` → `ListQueue` → `IdleQueue`/`FrameQueue`/`LimitedQueue`/`PageWatcher`. `Scheduler` extends `MicroTaskQueue` directly.
 - **Lazy promises** — only created when `.makePromise()` is called or via `schedule()`.
 - **Clean cancellation** — all tasks support cancellation via `CancelTaskError`.

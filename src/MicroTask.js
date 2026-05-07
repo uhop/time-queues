@@ -40,6 +40,9 @@ export class MicroTask {
     return this;
   }
   resolve(value) {
+    if (!this.#promise) {
+      throw new Error('MicroTask: resolve() called before makePromise()');
+    }
     if (this.#resolve) {
       this.#resolve(value);
       this.#resolve = null;

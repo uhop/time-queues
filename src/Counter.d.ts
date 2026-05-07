@@ -42,19 +42,25 @@ export declare class Counter {
 
   /**
    * Waits for the counter to reach zero. If the counter is already zero, the promise is resolved immediately.
+   * Resolves with `0` on a normal wait, or with `NaN` if `clearWaiters()` is called before the counter reaches zero.
    * @returns A promise that resolves when the counter reaches zero.
    */
   waitForZero(): Promise<number>;
 
   /**
    * Waits for the counter to reach a specific value. If the counter is already at the desired value, the promise is resolved immediately.
+   * Resolves with the matching count, or with `NaN` if `clearWaiters()` is called before the predicate matches.
    * @param fn A function that returns `true` when the counter reaches the desired value.
    * @returns A promise that resolves when the counter reaches the desired value.
    */
   waitFor(fn: (count: number) => boolean): Promise<number>;
 
   /**
-   * Clears all waiters.
+   * Clears all pending waiters by resolving them with `NaN`.
+   * Use `Number.isNaN(value)` to distinguish "queue cleared" from a real count of zero.
+   * Most consumers `await` the result without inspecting it; checking is only needed
+   * when you both clear waiters during teardown and have downstream arithmetic that
+   * shouldn't be NaN-poisoned.
    */
   clearWaiters(): void;
 }

@@ -26,6 +26,7 @@ test('TS: MicroTask.makePromise() returns this', t => {
 
 test('TS: MicroTask.resolve() returns this', t => {
   const task = new MicroTask(() => {});
+  task.makePromise();
   const result: MicroTask = task.resolve(42);
   t.equal(result, task);
 });

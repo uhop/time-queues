@@ -78,9 +78,15 @@ test('MicroTask: cancel() without promise', t => {
   t.equal(task.settled, false);
 });
 
-test('MicroTask: resolve() without promise', t => {
+test('MicroTask: resolve() without promise throws', t => {
   const task = new MicroTask(() => {});
 
-  task.resolve(42);
+  try {
+    task.resolve(42);
+    t.fail('should have thrown');
+  } catch (error) {
+    t.ok(error instanceof Error);
+    t.ok(error.message.includes('makePromise'));
+  }
   t.equal(task.settled, false);
 });

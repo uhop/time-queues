@@ -17,7 +17,20 @@ export declare type ThrottlerOptions = {
 };
 
 /**
- * A throttler that throttles the execution of tasks based on a key.
+ * A throttler that paces the execution of work based on a key.
+ *
+ * Despite the name, this is **rate-limiting / pacing**, not classical
+ * "drop excess" throttle. `Throttler` does not execute functions; it
+ * exposes `wait(key)` and the caller decides what to do once awaited.
+ * Because there is nothing for `Throttler` to drop, every call is honored
+ * — N rapid calls produce delays roughly `0, throttleTimeout,
+ * 2*throttleTimeout, …`, spacing the work out across time. Use it when
+ * you need every operation to run but no faster than `throttleTimeout`
+ * apart per key.
+ *
+ * If you want React/Lodash-style "fire-leading-edge-only-then-drop"
+ * semantics, wrap your callback with `throttle()` from this package
+ * instead.
  */
 export declare class Throttler implements ThrottlerOptions {
   /**
@@ -54,16 +67,20 @@ export declare class Throttler implements ThrottlerOptions {
   getLastSeen(key: unknown): number;
 
   /**
-   * Retrieves the delay for a key.
+   * Retrieves the delay for a key and reserves the next slot.
+   * Each call extends the per-key queue: stored state advances by the returned
+   * delay, so the next call for the same key waits at least `throttleTimeout`
+   * past the slot just allocated. Returns the delay in milliseconds.
    * @param key The key to retrieve the delay for.
-   * @returns The delay for the key in milliseconds.
+   * @returns The delay before this caller's slot opens, in milliseconds.
    */
   getDelay(key: unknown): number;
 
   /**
-   * Waits for a key to be available.
+   * Waits until this caller's slot for `key` opens. See class docs for the
+   * pacing semantics — every call is queued, none are dropped.
    * @param key The key to wait for.
-   * @returns A promise that resolves when the key is available.
+   * @returns A promise that resolves when the slot is available.
    */
   wait(key: unknown): Promise<void>;
 

@@ -149,3 +149,35 @@ test('Scheduler: dequeue task before execution', async t => {
   t.ok(task.isCanceled);
   t.ok(scheduler.isEmpty);
 });
+
+test('Scheduler: uncaught task exception does not stall the queue', async t => {
+  const scheduler = new Scheduler();
+  const captured = [];
+  scheduler.onError = err => captured.push(err);
+  const results = [];
+
+  scheduler.enqueue(() => {
+    throw new Error('boom');
+  }, 10);
+  scheduler.enqueue(() => results.push('after'), 20);
+
+  await sleep(60);
+  t.deepEqual(results, ['after']);
+  t.equal(captured.length, 1);
+  t.equal(captured[0].message, 'boom');
+  t.ok(scheduler.isEmpty);
+});
+
+test('Scheduler: repeat(0) clamps to non-zero delay', async t => {
+  const scheduler = new Scheduler();
+  let count = 0;
+
+  const fn = repeat(({task}) => {
+    if (++count >= 3) task.isCanceled = true;
+  }, 0);
+
+  scheduler.enqueue(fn, 0);
+  await sleep(50);
+  t.ok(count >= 3);
+  scheduler.clear();
+});

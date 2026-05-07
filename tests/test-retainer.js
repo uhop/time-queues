@@ -102,3 +102,26 @@ test('Retainer: requires create and destroy', t => {
     t.ok(e instanceof Error);
   }
 });
+
+test('Retainer: concurrent gets share one create()', async t => {
+  let creates = 0;
+  const retainer = new Retainer({
+    create: async () => {
+      ++creates;
+      await sleep(5);
+      return {id: creates};
+    },
+    destroy: () => {}
+  });
+
+  const [a, b, c] = await Promise.all([retainer.get(), retainer.get(), retainer.get()]);
+
+  t.equal(creates, 1);
+  t.equal(retainer.counter, 3);
+  t.strictEqual(a, b);
+  t.strictEqual(b, c);
+
+  await retainer.release(true);
+  await retainer.release(true);
+  await retainer.release(true);
+});

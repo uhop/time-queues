@@ -84,6 +84,14 @@ export declare class Scheduler extends MicroTaskQueue {
   stopQueue: (() => void) | null;
 
   /**
+   * Optional handler invoked when a scheduled `task.fn` throws.
+   * If unset, exceptions are surfaced via `Promise.reject(error)` so they
+   * fire the standard unhandled-rejection channel; the scheduler loop
+   * always continues regardless.
+   */
+  onError: ((error: unknown, task: Task) => void) | null;
+
+  /**
    * The tolerance for comparing starting times of tasks.
    * This allows for small timing differences in task execution.
    */

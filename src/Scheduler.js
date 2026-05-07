@@ -25,6 +25,7 @@ export class Scheduler extends MicroTaskQueue {
     this.queue = new MinHeap({less});
     this.tolerance = tolerance;
     this.stopQueue = null;
+    this.onError = null;
   }
 
   get isEmpty() {
@@ -112,7 +113,18 @@ export class Scheduler extends MicroTaskQueue {
     ) {
       const task = this.queue.pop();
       if (task.isCanceled) continue;
-      task.fn({task, scheduler: this});
+      try {
+        task.fn({task, scheduler: this});
+      } catch (error) {
+        // keep the loop alive; surface via onError callback or unhandled-rejection channel
+        if (this.onError) {
+          try {
+            this.onError(error, task);
+          } catch {}
+        } else {
+          Promise.reject(error);
+        }
+      }
     }
 
     if (!this.paused && !this.queue.isEmpty) this.stopQueue = this.startQueue();
@@ -122,7 +134,9 @@ export class Scheduler extends MicroTaskQueue {
 export const repeat = (fn, delay) => {
   const repeatableFunction = ({task, scheduler}) => {
     fn({task, scheduler});
-    if (!task.isCanceled) scheduler.enqueue(repeatableFunction, isNaN(delay) ? task.delay : delay);
+    if (task.isCanceled) return;
+    const next = isNaN(delay) ? task.delay : delay;
+    scheduler.enqueue(repeatableFunction, typeof next == 'number' && next < 1 ? 1 : next);
   };
   return repeatableFunction;
 };

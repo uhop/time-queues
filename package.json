@@ -5,6 +5,7 @@
   "type": "module",
   "types": "./src/index.d.ts",
   "exports": {
+    ".": "./src/index.js",
     "./*": "./src/*"
   },
   "scripts": {

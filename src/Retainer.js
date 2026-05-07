@@ -9,6 +9,7 @@ export class Retainer {
     this.counter = 0;
     this.handle = null;
     this.value = null;
+    this.creating = null;
   }
 
   async get() {
@@ -17,7 +18,12 @@ export class Retainer {
         clearTimeout(this.handle);
         this.handle = null;
       } else {
-        this.value = await this.create();
+        if (!this.creating) this.creating = this.create();
+        try {
+          this.value = await this.creating;
+        } finally {
+          this.creating = null;
+        }
       }
     }
     ++this.counter;

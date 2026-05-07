@@ -10,12 +10,9 @@ const eventHandlerOptions = {capture: true},
 // valid states: active, passive, hidden, frozen, terminated
 
 const getState = () => {
-  if (document.visibilityState === 'hidden') {
-    return 'hidden';
-  }
-  if (document.hasFocus()) {
-    return 'active';
-  }
+  if (typeof document == 'undefined') return 'active';
+  if (document.visibilityState === 'hidden') return 'hidden';
+  if (document.hasFocus()) return 'active';
   return 'passive';
 };
 

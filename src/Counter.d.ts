@@ -63,6 +63,14 @@ export declare class Counter {
    * shouldn't be NaN-poisoned.
    */
   clearWaiters(): void;
+
+  /**
+   * Re-evaluates pending waiters against the current `count` and resolves any
+   * whose predicate now matches. Called automatically by `value`, `increment`,
+   * `decrement`, and `advance`. Call manually only when mutating `count`
+   * directly (which bypasses the setter).
+   */
+  notify(): void;
 }
 
 export default Counter;

@@ -97,3 +97,22 @@ test('Counter: waitForZero resolves immediately if zero', async t => {
   const result = await counter.waitForZero();
   t.equal(result, 0);
 });
+
+test('Counter: notify() flushes waiters after direct count mutation', async t => {
+  const counter = new Counter(3);
+
+  let resolved = false;
+  const p = counter.waitForZero().then(value => {
+    resolved = true;
+    return value;
+  });
+
+  counter.count = 0; // direct field mutation bypasses the setter
+  await Promise.resolve();
+  t.equal(resolved, false);
+
+  counter.notify();
+  const value = await p;
+  t.equal(resolved, true);
+  t.equal(value, 0);
+});

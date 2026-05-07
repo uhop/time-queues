@@ -2,6 +2,15 @@
 
 import ListQueue from './ListQueue.js';
 
+const wrap = fn =>
+  new Promise((resolve, reject) => {
+    try {
+      resolve(fn());
+    } catch (error) {
+      reject(error);
+    }
+  });
+
 export class LimitedQueue extends ListQueue {
   #taskLimit;
   #activeTasks;
@@ -57,21 +66,11 @@ export class LimitedQueue extends ListQueue {
     while (this.#activeTasks < this.#taskLimit && !this.list.isEmpty) {
       const task = this.list.popFront();
       ++this.#activeTasks;
-      LimitedQueue.wrap(() => task.fn({task, queue: this})).finally(() => {
+      wrap(() => task.fn({task, queue: this})).finally(() => {
         --this.#activeTasks;
         this.#processTasks();
       });
     }
-  }
-
-  static wrap(fn) {
-    return new Promise((resolve, reject) => {
-      try {
-        resolve(fn());
-      } catch (error) {
-        reject(error);
-      }
-    });
   }
 }
 

@@ -4,17 +4,14 @@ import MicroTaskQueue from './MicroTaskQueue.js';
 
 /**
  * A task that will be executed at a later time by `Scheduler`.
+ * Inherits `makePromise()`, `promise`, `settled`, `cancelError`, `resolve()`,
+ * and `cancel()` from `MicroTask` — see `MicroTask.d.ts` for their contracts.
  */
 export declare class Task extends MicroTask {
   /**
-   * The function to execute.
+   * The function to execute. Narrower signature than `MicroTask.fn`.
    */
   fn: (arg: {task: Task; scheduler: Scheduler}) => unknown;
-
-  /**
-   * Whether the task has been canceled.
-   */
-  isCanceled: boolean;
 
   /**
    * The time in milliseconds (Unix timestamp) when the task is scheduled to run.
@@ -32,34 +29,6 @@ export declare class Task extends MicroTask {
    * @param fn The function to execute.
    */
   constructor(delay: number | Date, fn: (arg: {task: Task; scheduler: Scheduler}) => unknown);
-
-  /**
-   * Makes a promise that will be resolved when the microtask is executed.
-   * @returns The microtask.
-   */
-  makePromise(): this;
-
-  /**
-   * The promise that could be resolved when the microtask is executed.
-   * This is a queue-specific promise. It may be created when there is an associated asynchronous task.
-   * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
-   */
-  get promise(): Promise<unknown> | null;
-
-  /**
-   * Resolves the microtask, if a promise is created.
-   * @param value The value to resolve the microtask with.
-   * @returns The microtask.
-   */
-  resolve(value: unknown): this;
-
-  /**
-   * Cancels the microtask, if a promise is created.
-   * If the microtask is canceled, the promise will be rejected with a CancelTaskError.
-   * @param error The optional error to use as the cause of the cancellation.
-   * @returns The microtask.
-   */
-  cancel(error?: Error): this;
 }
 
 /**
@@ -161,6 +130,19 @@ export declare class Scheduler extends MicroTaskQueue {
    * @returns The scheduler instance for chaining.
    */
   resume(): this;
+
+  /**
+   * Starts the scheduler loop by arming a `setTimeout` for the next-due task.
+   * Used internally by `enqueue()` and `resume()`.
+   * @returns The function that stops the scheduler loop.
+   */
+  startQueue(): (() => void) | null;
+
+  /**
+   * Processes due tasks. Called by the scheduler's internal `setTimeout`
+   * timer — not part of the typical user surface.
+   */
+  processTasks(): void;
 }
 
 /**

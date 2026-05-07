@@ -2,6 +2,9 @@
 
 export class Retainer {
   #value = null;
+  #handle = null;
+  /** @type {Promise<*> | null} */
+  #creating = null;
 
   constructor({create, destroy, retentionPeriod = 1_000}) {
     if (!create || !destroy) throw new Error('Retainer: create and destroy are required');
@@ -9,8 +12,6 @@ export class Retainer {
     this.destroy = destroy;
     this.retentionPeriod = retentionPeriod;
     this.counter = 0;
-    this.handle = null;
-    this.creating = null;
   }
 
   get value() {
@@ -19,15 +20,15 @@ export class Retainer {
 
   async get() {
     if (!this.counter) {
-      if (this.handle) {
-        clearTimeout(this.handle);
-        this.handle = null;
+      if (this.#handle) {
+        clearTimeout(this.#handle);
+        this.#handle = null;
       } else {
-        if (!this.creating) this.creating = this.create();
+        if (!this.#creating) this.#creating = this.create();
         try {
-          this.#value = await this.creating;
+          this.#value = await this.#creating;
         } finally {
-          this.creating = null;
+          this.#creating = null;
         }
       }
     }
@@ -44,10 +45,10 @@ export class Retainer {
       await this.destroy(value);
       return this;
     }
-    this.handle = setTimeout(async () => {
+    this.#handle = setTimeout(async () => {
       const value = this.#value;
       this.#value = null;
-      this.handle = null;
+      this.#handle = null;
       await this.destroy(value);
     }, this.retentionPeriod);
     return this;

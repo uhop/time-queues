@@ -85,6 +85,13 @@ export declare class IdleQueue extends ListQueue {
    * @returns The function that stops the queue.
    */
   startQueue(): (() => void) | null;
+
+  /**
+   * Processes pending tasks. Called by `requestIdleCallback()` — not part of
+   * the typical user surface; documented for subclasses that need to override.
+   * @param deadline The `IdleDeadline` from the rIC callback.
+   */
+  processTasks(deadline: IdleDeadline): void;
 }
 
 /**

@@ -48,13 +48,6 @@ export declare class Retainer<T = unknown> implements RetainerOptions<T> {
   retentionPeriod: number;
 
   /**
-   * The in-flight `create()` promise, shared across concurrent `get()` calls
-   * so a single resource is created when the counter is zero.
-   * `null` once create has resolved.
-   */
-  creating: Promise<T> | null;
-
-  /**
    * Creates a new retainer.
    * @param options The options for the retainer.
    */

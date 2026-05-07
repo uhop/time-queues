@@ -3,6 +3,8 @@
 import sleep from './sleep.js';
 
 export class Throttler {
+  #handle = null;
+
   constructor({
     throttleTimeout = 1_000,
     neverSeenTimeout = 0,
@@ -12,7 +14,6 @@ export class Throttler {
     this.neverSeenTimeout = neverSeenTimeout;
     this.vacuumPeriod = vacuumPeriod;
     this.lastSeen = new Map();
-    this.handle = null;
     if (this.vacuumPeriod) this.startVacuum();
   }
 
@@ -38,7 +39,7 @@ export class Throttler {
   }
 
   get isVacuuming() {
-    return !!this.handle;
+    return !!this.#handle;
   }
 
   vacuum() {
@@ -51,18 +52,18 @@ export class Throttler {
   }
 
   startVacuum() {
-    if (this.handle) return this;
-    this.handle = setInterval(() => {
+    if (this.#handle) return this;
+    this.#handle = setInterval(() => {
       this.vacuum();
     }, this.vacuumPeriod);
-    if (this.handle.unref) this.handle.unref();
+    if (this.#handle.unref) this.#handle.unref();
     return this;
   }
 
   stopVacuum() {
-    if (!this.handle) return this;
-    clearInterval(this.handle);
-    this.handle = null;
+    if (!this.#handle) return this;
+    clearInterval(this.#handle);
+    this.#handle = null;
     return this;
   }
 }

@@ -75,6 +75,13 @@ export declare class FrameQueue extends ListQueue {
    * @returns The function that stops the queue.
    */
   startQueue(): (() => void) | null;
+
+  /**
+   * Processes pending tasks. Called by `requestAnimationFrame()` — not part of
+   * the typical user surface; documented for subclasses that need to override.
+   * @param timeStamp The high-resolution timestamp from the rAF callback.
+   */
+  processTasks(timeStamp: number): void;
 }
 
 /**

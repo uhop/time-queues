@@ -1,3 +1,4 @@
+import List from 'list-toolkit/list.js';
 import {MicroTask} from './MicroTask.js';
 import {MicroTaskQueue} from './MicroTaskQueue.js';
 
@@ -10,6 +11,11 @@ export declare class ListQueue extends MicroTaskQueue {
    * Whether the queue is paused.
    */
   paused: boolean;
+
+  /**
+   * The linked list of pending microtasks.
+   */
+  list: List<MicroTask>;
 
   /**
    * The function that stops the queue.

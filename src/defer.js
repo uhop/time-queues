@@ -1,5 +1,6 @@
 // @ts-self-types="./defer.d.ts"
 
+/** @type {(...args: any[]) => any} */
 let deferImplementation = setTimeout;
 
 if (typeof requestIdleCallback == 'function') {

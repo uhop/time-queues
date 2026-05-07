@@ -1,0 +1,22 @@
+{
+  "include": ["src/**/*.js"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2024", "DOM"],
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "strict": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
+  }
+}

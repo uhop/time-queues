@@ -1,3 +1,4 @@
+import MinHeap from 'list-toolkit/heap.js';
 import MicroTask from './MicroTask.js';
 import MicroTaskQueue from './MicroTaskQueue.js';
 
@@ -70,6 +71,17 @@ export declare class Scheduler extends MicroTaskQueue {
    * When paused, new tasks are queued but not executed immediately.
    */
   paused: boolean;
+
+  /**
+   * The min-heap of pending tasks ordered by `time`.
+   */
+  queue: MinHeap<Task>;
+
+  /**
+   * The function that stops the scheduler loop.
+   * It is used internally by `pause()` and `resume()`.
+   */
+  stopQueue: (() => void) | null;
 
   /**
    * The tolerance for comparing starting times of tasks.

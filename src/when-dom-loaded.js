@@ -2,10 +2,11 @@
 
 import ValueList from 'list-toolkit/value-list.js';
 
+/** @type {ValueList<() => void>} */
 const waitingForDom = new ValueList();
 
 export const remove = fn => {
-  for (const node of waitingForDom.getNodeIterable()) {
+  for (const node of waitingForDom.getNodeIterator()) {
     if (node.value === fn) {
       waitingForDom.removeNode(node);
       return true;

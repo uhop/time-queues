@@ -20,7 +20,9 @@ export class Task extends MicroTask {
 export class Scheduler extends MicroTaskQueue {
   constructor(paused, tolerance = 4) {
     super(paused);
-    this.queue = new MinHeap({less: (a, b) => a.time < b.time});
+    /** @type {(a: Task, b: Task) => boolean} */
+    const less = (a, b) => a.time < b.time;
+    this.queue = new MinHeap({less});
     this.tolerance = tolerance;
     this.stopQueue = null;
   }

@@ -1,12 +1,14 @@
 // @ts-self-types="./ListQueue.d.ts"
 
 import List from 'list-toolkit/list.js';
+import MicroTask from './MicroTask.js';
 import MicroTaskQueue from './MicroTaskQueue.js';
 
 export class ListQueue extends MicroTaskQueue {
   constructor(paused) {
     super(paused);
     // AI-NOTE: Using list-toolkit List for O(1) push/pop operations
+    /** @type {List<MicroTask>} */
     this.list = new List();
     // AI-NOTE: stopQueue holds the stop function returned by startQueue(), or null
     this.stopQueue = null;

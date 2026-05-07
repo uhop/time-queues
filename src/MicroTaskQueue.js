@@ -19,7 +19,7 @@ export class MicroTaskQueue {
     this.paused = false;
     return this;
   }
-  enqueue(fn) {
+  enqueue(fn, ..._args) {
     const task = new MicroTask(fn);
     return task;
   }

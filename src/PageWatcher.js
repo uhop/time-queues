@@ -44,7 +44,8 @@ export class PageWatcher extends ListQueue {
 
   // Implemented in ListQueue: dequeue()
 
-  schedule() {
+  /** @returns {never} */
+  schedule(_fn) {
     throw new Error('Not implemented');
   }
 

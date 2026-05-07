@@ -3,12 +3,6 @@
 import List from 'list-toolkit/list.js';
 import MicroTaskQueue from './MicroTaskQueue.js';
 
-/**
- * ListQueue extends MicroTaskQueue with linked-list task storage.
- * AI-NOTE: This is the concrete base class most specialized queues extend.
- * Key pattern: startQueue() returns a stop function (or null if not started).
- * @see IdleQueue, FrameQueue, LimitedQueue, Scheduler - All extend ListQueue
- */
 export class ListQueue extends MicroTaskQueue {
   constructor(paused) {
     super(paused);
@@ -70,12 +64,6 @@ export class ListQueue extends MicroTaskQueue {
     return this;
   }
 
-  /**
-   * Start processing the queue - MUST be overridden by subclasses.
-   * AI-NOTE: This is the abstract method pattern - base returns null.
-   * Subclasses return a function that stops the processing.
-   * @returns {Function|null} Stop function or null if not started
-   */
   startQueue() {
     return null;
   }

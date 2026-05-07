@@ -10,7 +10,7 @@ For detailed usage docs and API references see the [wiki](https://github.com/uho
 ## Setup
 
 ```bash
-git clone --recurse-submodules git@github.com:uhop/time-queues.git
+git clone --recurse-submodules https://github.com/uhop/time-queues.git
 cd time-queues
 npm install
 ```

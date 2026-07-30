@@ -1,7 +1,7 @@
 {
   "name": "time-queues",
-  "version": "1.4.0",
-  "description": "Lightweight async task scheduling and concurrency control: schedulers, idle/frame/limited queues, throttle, debounce, batch, page lifecycle, random delays. Browsers, Node.js, Deno, Bun.",
+  "version": "1.5.0",
+  "description": "Lightweight async task scheduling and concurrency control: schedulers, idle/frame/limited queues, throttle, debounce, batch, condition polling, page lifecycle, random delays. Browsers, Node.js, Deno, Bun.",
   "type": "module",
   "types": "./src/index.d.ts",
   "exports": {
@@ -49,6 +49,8 @@
     "debounce",
     "rate-limit",
     "batch",
+    "wait-for",
+    "polling",
     "sleep",
     "defer",
     "idle-queue",

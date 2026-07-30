@@ -87,6 +87,16 @@
     "importmap": {
       "imports": {
         "tape-six": "/node_modules/tape-six/index.js",
+        "tape-six/Tester.js": "/node_modules/tape-six/src/Tester.js",
+        "tape-six-fast-check": "/node_modules/tape-six-fast-check/index.js",
+        "fast-check": "/node_modules/fast-check/lib/fast-check.js",
+        "pure-rand/distribution/uniformBigInt": "/node_modules/pure-rand/lib/esm/distribution/uniformBigInt.js",
+        "pure-rand/distribution/uniformInt": "/node_modules/pure-rand/lib/esm/distribution/uniformInt.js",
+        "pure-rand/generator/congruential32": "/node_modules/pure-rand/lib/esm/generator/congruential32.js",
+        "pure-rand/generator/mersenne": "/node_modules/pure-rand/lib/esm/generator/mersenne.js",
+        "pure-rand/generator/xoroshiro128plus": "/node_modules/pure-rand/lib/esm/generator/xoroshiro128plus.js",
+        "pure-rand/generator/xorshift128plus": "/node_modules/pure-rand/lib/esm/generator/xorshift128plus.js",
+        "pure-rand/utils/skipN": "/node_modules/pure-rand/lib/esm/utils/skipN.js",
         "list-toolkit/": "/node_modules/list-toolkit/src/",
         "time-queues/": "/src/"
       }
@@ -94,8 +104,10 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
+    "fast-check": "^4.9.0",
     "prettier": "^3.9.6",
     "tape-six": "^1.16.2",
+    "tape-six-fast-check": "^1.0.0",
     "tape-six-proc": "^1.3.1",
     "typescript": "^7.0.2"
   },

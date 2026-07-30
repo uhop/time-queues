@@ -31,6 +31,8 @@ npm install
 
 Tests use [tape-six](https://github.com/uhop/tape-six). JS tests (`tests/test-*.js`) cover functionality; TS tests (`ts-tests/test-*.ts`) cover typing only. See `node_modules/tape-six/TESTING.md` for the full testing API and patterns.
 
+Race-condition property tests (`tests/test-race-*.js`) use [tape-six-fast-check](https://github.com/uhop/tape-six-fast-check) (`t.prop` / `t.scheduler`) with fast-check's cooperative scheduler. Drain queue outcomes with `await s.waitFor(promise)` — never `s.waitAll()` followed by an outcome await: tasks scheduled from deep `.then`/`.finally` continuations can land after `waitAll` settles, deadlocking the test.
+
 ## Critical rules
 
 - **ESM-only.** The project is `"type": "module"`.

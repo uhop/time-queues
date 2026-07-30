@@ -26,6 +26,7 @@ test('index barrel: bare-import surface exposes all top-level symbols', t => {
     'audit',
     'sample',
     'batch',
+    'waitFor',
     'repeat',
     'uniform',
     'normal',

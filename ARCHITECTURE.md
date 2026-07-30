@@ -113,6 +113,7 @@ The library abstracts various browser APIs with graceful fallbacks:
 - `sample(fn, ms)`: Execute function at regular intervals with time-drift correction for consistent timing.
 - `audit(fn, ms)`: Execute function after specified delay with argument caching for last invocation.
 - `batch(fns, limit)`: Execute async operations with controlled concurrency (default limit: 4) using sliding window pattern. Accepts arrays of functions, promises, or values. _(Since version 1.3.0.)_
+- `waitFor(predicate, options)`: Poll a sync/async predicate until it turns truthy, with a configurable interval (default: 50ms), an optional timeout, and `AbortSignal` support.
 
 ### DOM Utilities
 

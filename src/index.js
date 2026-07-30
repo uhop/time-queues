@@ -7,6 +7,7 @@ export * from './defer.js';
 export * from './sample.js';
 export * from './sleep.js';
 export * from './throttle.js';
+export * from './wait-for.js';
 
 export * from './CancelTaskError.js';
 export * from './MicroTask.js';

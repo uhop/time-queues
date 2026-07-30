@@ -378,6 +378,20 @@ function batch(
 export default batch;
 ```
 
+### waitFor (`time-queues/wait-for.js`)
+
+Polls a predicate until it returns a truthy value. The predicate can be sync or async; it is called immediately, then every `interval` ms after the previous check settles. A thrown exception or a rejected promise rejects the wait.
+
+```ts
+interface WaitForOptions {
+  timeout?: number; // reject with Error after this many ms; no timeout when omitted
+  interval?: number; // polling period in ms, default: 50
+  signal?: AbortSignal; // reject with signal.reason on abort
+}
+function waitFor<T>(predicate: () => T | Promise<T>, options?: WaitForOptions): Promise<T>;
+export default waitFor;
+```
+
 ### random-dist (`time-queues/random-dist.js`)
 
 Random number distributions.

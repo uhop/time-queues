@@ -18,6 +18,8 @@
     "test:seq": "tape6-seq --flags FO",
     "test:seq:bun": "bun run `tape6-seq --self` --flags FO",
     "test:seq:deno": "deno run -A `tape6-seq --self` --flags FO",
+    "test:browser": "tape6-playwright --start-server --flags FO '/tests/browser/test-*.js'",
+    "test:browser:all": "tape6-playwright --start-server --browsers all --flags FO '/tests/browser/test-*.js'",
     "ts-check": "tsc --noEmit",
     "js-check": "tsc --project tsconfig.check.json",
     "ts-test": "tape6 --flags FO '/ts-tests/test-*.*ts'",
@@ -108,10 +110,14 @@
     "prettier": "^3.9.6",
     "tape-six": "^1.16.2",
     "tape-six-fast-check": "^1.0.0",
+    "tape-six-playwright": "^1.2.2",
     "tape-six-proc": "^1.3.1",
     "typescript": "^7.0.2"
   },
   "dependencies": {
     "list-toolkit": "^2.4.1"
+  },
+  "allowScripts": {
+    "tape-six-playwright@1.2.2": true
   }
 }

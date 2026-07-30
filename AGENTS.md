@@ -24,6 +24,7 @@ npm install
 - `npm run ts-check` — TypeScript type checking (tsc --noEmit)
 - `npm run js-check` — JS lint via TypeScript (`tsconfig.check.json`: unused vars / undeclared refs / missing returns / unreachable code)
 - `npm run ts-test` — run TS typing tests
+- `npm run test:browser` — DOM-driven browser tests via Playwright (headless Chromium; `test:browser:all` fans out to Firefox + WebKit)
 - `npm run lint` — Prettier format check
 - `npm run lint:fix` — Prettier auto-format
 

@@ -59,6 +59,7 @@ const results = await batch(
 - **sample** (`time-queues/sample.js`) — `sample(fn, ms): fn`. Execute at regular intervals with last seen args.
 - **audit** (`time-queues/audit.js`) — `audit(fn, ms): fn`. Collect then execute after delay with last seen args.
 - **batch** (`time-queues/batch.js`) — `batch(fns, limit?): Promise<results[]>`. Run async operations with concurrency limit (default: 4).
+- **waitFor** (`time-queues/wait-for.js`) — `waitFor(predicate, {timeout, interval, signal}?): Promise<T>`. Poll a sync/async predicate every `interval` ms (default: 50) until truthy; rejects on timeout, abort, or predicate error.
 
 ### Supporting classes
 

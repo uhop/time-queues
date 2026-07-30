@@ -75,6 +75,7 @@ Full documentation is in the **[wiki](https://github.com/uhop/time-queues/wiki)*
 | [sample()](<https://github.com/uhop/time-queues/wiki/sample()>)     | Sample at regular intervals             |
 | [audit()](<https://github.com/uhop/time-queues/wiki/audit()>)       | Collect then execute after delay        |
 | [batch()](<https://github.com/uhop/time-queues/wiki/batch()>)       | Run async ops with concurrency limit    |
+| [waitFor()](<https://github.com/uhop/time-queues/wiki/waitFor()>)   | Poll a condition until it turns truthy  |
 
 ### Supporting Classes
 

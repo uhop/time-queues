@@ -51,7 +51,9 @@ npm run lint:fix                  # Auto-format
 ### Browser tests
 
 ```bash
-npm start                         # Start dev server
+npm run test:browser              # Automated DOM tests (headless Chromium)
+npm run test:browser:all          # The same on Chromium + Firefox + WebKit
+npm start                         # Start dev server (manual visual demo)
 # Open http://localhost:3000/tests/web/
 ```
 

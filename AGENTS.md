@@ -36,10 +36,10 @@ Tests use [tape-six](https://github.com/uhop/tape-six). JS tests (`tests/test-*.
 - **ESM-only.** The project is `"type": "module"`.
 - **Hand-written `.d.ts` files.** They are NOT generated. When modifying a public API, update both the `.js` and `.d.ts` files.
 - **Do not modify or delete test expectations** without understanding why they changed.
-- **Do not add comments or remove comments** unless explicitly asked.
 
 ## Code style
 
+- **No narrating comments.** Comments are short _why_-markers only: a non-trivial decision or constraint, an algorithm reference, or requested JSDoc. Never narrate _what_ the code does.
 - Prettier: 100 char width, single quotes, no bracket spacing, no trailing commas, arrow parens "avoid" (see `.prettierrc`).
 - 2-space indentation.
 - PascalCase classes (`MicroTask`, `ListQueue`), camelCase functions (`defer`, `sleep`).

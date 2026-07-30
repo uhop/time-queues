@@ -22,7 +22,7 @@ import {sleep, Scheduler, repeat, batch} from 'time-queues';
 // Or subpath imports for tree-shaking-friendly use:
 import sleep from 'time-queues/sleep.js';
 import {Scheduler, repeat} from 'time-queues/Scheduler.js';
-import {batch} from 'time-queues/batch.js';
+import batch from 'time-queues/batch.js';
 
 // Simple delay
 await sleep(1000);
@@ -96,4 +96,4 @@ const results = await batch(
 
 - Docs: https://github.com/uhop/time-queues/wiki
 - npm: https://www.npmjs.com/package/time-queues
-- Full LLM reference: https://github.com/uhop/time-queues/blob/master/llms-full.txt
+- Full LLM reference: https://github.com/uhop/time-queues/blob/main/llms-full.txt

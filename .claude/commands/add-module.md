@@ -13,7 +13,6 @@ Follow these steps when adding a new public module.
    - Add `// @ts-self-types="./<Name>.d.ts"` as the first line.
 2. Create a matching `src/<Name>.d.ts` (hand-written, not generated).
 3. Create `tests/test-<name>.js` with automated tests (tape-six).
-   // turbo
 4. Run the new test: `node tests/test-<name>.js`
 5. Create `ts-tests/test-<name>.ts` with TypeScript typing tests exercising generics, callback signatures, overloads, and type constraints.
 
@@ -32,10 +31,6 @@ Follow these steps when adding a new public module.
 
 ## Verification
 
-    // turbo
-
 13. Run the full test suite: `npm test`
-    // turbo
 14. Run the TS typing tests: `npm run ts-test`
-    // turbo
 15. Run the TypeScript type check: `npm run ts-check`

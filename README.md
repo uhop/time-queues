@@ -27,7 +27,7 @@ npm install time-queues
 ```js
 import sleep from 'time-queues/sleep.js';
 import {Scheduler, repeat} from 'time-queues/Scheduler.js';
-import {batch} from 'time-queues/batch.js';
+import batch from 'time-queues/batch.js';
 
 // Simple delay
 await sleep(1000);
@@ -52,7 +52,7 @@ See the [wiki](https://github.com/uhop/time-queues/wiki) for more use cases.
 
 ## Documentation
 
-The [project wiki](https://github.com/uhop/time-queues/wiki) has detailed docs for every component.
+Full documentation is in the **[wiki](https://github.com/uhop/time-queues/wiki)** &mdash; browse the [index](https://github.com/uhop/time-queues/wiki/Home), or [search it](https://uhop.github.io/wiki-search/app/?wiki=uhop/time-queues) by name.
 
 ### Queues
 

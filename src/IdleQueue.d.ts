@@ -56,9 +56,7 @@ export declare class IdleQueue extends ListQueue {
    */
   schedule(
     fn:
-      | ((arg: {deadline: IdleDeadline; task: Task; queue: IdleQueue}) => unknown)
-      | null
-      | undefined
+      ((arg: {deadline: IdleDeadline; task: Task; queue: IdleQueue}) => unknown) | null | undefined
   ): Task;
 
   /**

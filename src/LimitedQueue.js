@@ -41,13 +41,15 @@ export class LimitedQueue extends ListQueue {
   }
 
   waitForIdle() {
-    return new Promise(resolve => {
+    /** @type {Promise<void>} */
+    const promise = new Promise(resolve => {
       if (this.isIdle) {
         resolve();
       } else {
         this.#idleWaiters.push(resolve);
       }
     });
+    return promise;
   }
 
   startQueue() {

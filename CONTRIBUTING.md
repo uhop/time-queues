@@ -8,7 +8,7 @@
 ## Setup
 
 ```bash
-git clone --recurse-submodules git@github.com:uhop/time-queues.git
+git clone --recurse-submodules https://github.com/uhop/time-queues.git
 cd time-queues
 npm install
 ```
@@ -102,6 +102,13 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for core concepts (inheritance hierarch
 2. TypeScript checks pass (`npm run ts-check`).
 3. Code is formatted (`npm run lint`).
 4. Documentation updated (wiki) as needed.
+
+## License
+
+This project is distributed under the [BSD-3-Clause license](./LICENSE).
+External contributions are accepted only under licenses compatible with
+BSD-3-Clause; submissions under fundamentally incompatible licenses cannot
+be merged.
 
 ## AI agents
 
